@@ -9,7 +9,7 @@ import { cn } from '../../lib/utils';
  * - 支持动态高度的节点内容，通过测量 DOM 元素实时更新高度
  * - 通过 `renderItem` 外部渲染每个节点内容，满足高度自定义需求
  */
-export interface EnhancedListProps<T = any> {
+export interface ListProps<T = any> {
   /** 列表数据源（必填） */
   dataSource: T[];
   /** 自定义节点渲染函数（必填） */
@@ -45,7 +45,7 @@ export const List = <T extends unknown = any>({
   style,
   itemGap = 0,
   itemKey,
-}: EnhancedListProps<T>) => {
+}: ListProps<T>) => {
   const parentRef = React.useRef<HTMLDivElement | null>(null);
 
   const virtualizer = useVirtualizer({
@@ -112,6 +112,6 @@ export const List = <T extends unknown = any>({
   );
 };
 
-List.displayName = 'EnhancedList';
+List.displayName = 'ListPropsList';
 
 export type ListItem = unknown;

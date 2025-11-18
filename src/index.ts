@@ -284,6 +284,16 @@ export { Timeline } from './components/enhance-ui/Timeline';
 export { EnhancedTooltip } from './components/enhance-ui/Tooltip';
 export { Tree } from './components/enhance-ui/Tree';
 export { Upload } from './components/enhance-ui/Upload';
+export { List, ListProps, ListItem } from './components/enhance-ui/List';
+
+export {
+  openTipsModal,
+  openModalError,
+  openModalWarning,
+  TipsModalProps,
+  openModalWarning02,
+} from './components/TipsModal';
+export { ErrorBoundary } from './components/ErrorBoundary';
 
 // Enhanced UI Component Types
 export type { EnhancedAvatarProps } from './components/enhance-ui/Avatar';

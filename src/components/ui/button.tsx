@@ -56,7 +56,7 @@ function Button({
         buttonVariants({
           variant,
           size,
-          className: `cursor-pointer ${className}`,
+          className: `cursor-pointer xxxxx ${className}`,
         })
       )}
       {...props}
