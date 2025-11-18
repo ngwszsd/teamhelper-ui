@@ -2,7 +2,6 @@ import { defineConfig } from 'rollup';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import dts from 'rollup-plugin-dts';
 import { readFileSync } from 'fs';
@@ -20,7 +19,6 @@ export default defineConfig([
       exports: 'named',
     },
     plugins: [
-      peerDepsExternal(),
       resolve(),
       commonjs({
         ignoreDynamicRequires: true,
@@ -35,7 +33,7 @@ export default defineConfig([
         extract: 'index.css', // 提取CSS到单独文件
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: Object.keys(packageJson.peerDependencies || {}),
     onwarn(warning, warn) {
       // 忽略 "use client" 指令警告
       if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
@@ -53,7 +51,6 @@ export default defineConfig([
       sourcemap: true,
     },
     plugins: [
-      peerDepsExternal(),
       resolve(),
       commonjs({
         ignoreDynamicRequires: true,
@@ -68,7 +65,7 @@ export default defineConfig([
         extract: 'index.css', // 提取CSS到单独文件
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: Object.keys(packageJson.peerDependencies || {}),
     onwarn(warning, warn) {
       // 忽略 "use client" 指令警告
       if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
