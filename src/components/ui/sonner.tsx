@@ -4,16 +4,16 @@ import {
   Loader2Icon,
   OctagonXIcon,
   TriangleAlertIcon,
-} from "lucide-react";
+} from 'lucide-react';
 // theme context not available in library; default to system
-import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const actualTheme = "system" as const;
+  const actualTheme = 'system' as const;
 
   return (
     <Sonner
-      theme={actualTheme as ToasterProps["theme"]}
+      theme={actualTheme as ToasterProps['theme']}
       className="toaster group"
       position="top-center"
       icons={{
@@ -25,10 +25,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          '--normal-bg': 'var(--popover)',
+          '--normal-text': 'var(--popover-foreground)',
+          '--normal-border': 'var(--border)',
+          '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
       {...props}

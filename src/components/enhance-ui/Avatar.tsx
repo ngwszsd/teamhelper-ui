@@ -1,15 +1,15 @@
-import * as React from "react";
-import { cn } from "../../lib/utils";
+import * as React from 'react';
+import { cn } from '../../lib/utils';
 
 export interface EnhancedAvatarProps {
-  shape?: "circle" | "square";
-  size?: number | "small" | "default" | "large" | "xlarge" | "26" | "18";
+  shape?: 'circle' | 'square';
+  size?: number | 'small' | 'default' | 'large' | 'xlarge' | '26' | '18';
   icon?: React.ReactNode;
   src?: React.ReactNode;
   srcSet?: string;
   alt?: string;
   draggable?: boolean;
-  crossOrigin?: "anonymous" | "use-credentials";
+  crossOrigin?: 'anonymous' | 'use-credentials';
   className?: string;
   children?: React.ReactNode;
   /**
@@ -24,17 +24,17 @@ export interface EnhancedAvatarProps {
 
 // 顶层工具函数（与 sizeClasses 同级）
 const sizeClasses = {
-  small: "h-6 w-6 text-xs",
-  default: "h-8 w-8 text-sm",
-  large: "h-10 w-10 text-base",
-  xlarge: "h-12 w-12 text-lg",
-  "26": "h-[26px] w-[26px] text-xs",
-  "18": "h-[18px] w-[18px] text-xs",
+  small: 'h-6 w-6 text-xs',
+  default: 'h-8 w-8 text-sm',
+  large: 'h-10 w-10 text-base',
+  xlarge: 'h-12 w-12 text-lg',
+  '26': 'h-[26px] w-[26px] text-xs',
+  '18': 'h-[18px] w-[18px] text-xs',
 };
 
 export const Avatar: React.FC<EnhancedAvatarProps> = ({
-  shape = "circle",
-  size = "default",
+  shape = 'circle',
+  size = 'default',
   icon,
   src,
   srcSet,
@@ -89,19 +89,19 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
   }, [imgVisible, src, icon, alt, children, size, measure]);
 
   React.useEffect(() => {
-    if (typeof ResizeObserver !== "undefined") {
+    if (typeof ResizeObserver !== 'undefined') {
       const ro = new ResizeObserver(() => measure());
       if (containerRef.current) ro.observe(containerRef.current);
       return () => ro.disconnect();
     } else {
       const handler = () => measure();
-      window.addEventListener("resize", handler);
-      return () => window.removeEventListener("resize", handler);
+      window.addEventListener('resize', handler);
+      return () => window.removeEventListener('resize', handler);
     }
   }, [measure]);
 
   const isPlainTextNode = (node: React.ReactNode): node is string | number =>
-    typeof node === "string" || typeof node === "number";
+    typeof node === 'string' || typeof node === 'number';
 
   // 基于实际展示的文本计算颜色种子（考虑 initialOnly）
   const textSeed = React.useMemo(() => {
@@ -109,11 +109,11 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
     if (icon && React.isValidElement(icon)) return null;
 
     const getInitial = (value: string | number | undefined) => {
-      const s = String(value ?? "");
+      const s = String(value ?? '');
       const ch = s.trim().charAt(0);
       return ch
         ? ch.toUpperCase()
-        : (alt || "").trim().charAt(0)?.toUpperCase() || "?";
+        : (alt || '').trim().charAt(0)?.toUpperCase() || '?';
     };
 
     if (isPlainTextNode(children))
@@ -121,7 +121,7 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
     if (icon && isPlainTextNode(icon))
       return initialOnly ? getInitial(icon) : String(icon);
 
-    const initial = (alt || "")?.trim?.()?.charAt?.(0)?.toUpperCase?.() || "?";
+    const initial = (alt || '')?.trim?.()?.charAt?.(0)?.toUpperCase?.() || '?';
     return initial;
   }, [src, imgVisible, icon, children, alt, initialOnly]);
 
@@ -144,7 +144,7 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
       } else if (imgVisible) {
         return (
           <img
-            src={String(src || "")}
+            src={String(src || '')}
             srcSet={srcSet}
             alt={alt}
             crossOrigin={crossOrigin}
@@ -164,10 +164,10 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
       }
     }
 
-    const text = children || String(alt || "") || "";
+    const text = children || String(alt || '') || '';
     const displayText = isPlainTextNode(text)
       ? initialOnly
-        ? String(text).trim().charAt(0)?.toUpperCase() || "?"
+        ? String(text).trim().charAt(0)?.toUpperCase() || '?'
         : text
       : text;
 
@@ -177,7 +177,7 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
         className="inline-block whitespace-nowrap leading-none"
         style={{
           transform: `scale(${scale})`,
-          transformOrigin: "center",
+          transformOrigin: 'center',
         }}
       >
         {displayText}
@@ -189,15 +189,15 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
     <div
       ref={containerRef}
       className={cn(
-        "inline-flex items-center justify-center overflow-hidden select-none align-middle",
-        "bg-foreground/30 text-card font-medium",
-        shape === "circle" ? "rounded-full" : "rounded-md",
-        size && typeof size === "number" ? `text-lg ` : "text-sm",
-        size && typeof size === "string" && sizeClasses[size],
-        className,
+        'inline-flex items-center justify-center overflow-hidden select-none align-middle',
+        'bg-foreground/30 text-card font-medium',
+        shape === 'circle' ? 'rounded-full' : 'rounded-md',
+        size && typeof size === 'number' ? `text-lg ` : 'text-sm',
+        size && typeof size === 'string' && sizeClasses[size],
+        className
       )}
       style={{
-        ...(size && typeof size === "number"
+        ...(size && typeof size === 'number'
           ? {
               width: size,
               height: size,
@@ -212,7 +212,7 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
   );
 };
 
-Avatar.displayName = "EnhancedAvatar";
+Avatar.displayName = 'EnhancedAvatar';
 
 export type { EnhancedAvatarProps as AvatarProps };
 
@@ -220,7 +220,7 @@ function generateAvatarColor(text: string): {
   backgroundColor: string;
   color: string;
 } {
-  text = String(text || "").trim();
+  text = String(text || '').trim();
 
   // 简单的哈希函数，基于字符串内容生成数值
   let hash = 0;

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -8,10 +8,10 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "../ui/dropdown-menu";
-import { cn } from "../../lib/utils";
-import { Button, type EnhancedButtonProps } from "./Button";
-import { ChevronDown } from "lucide-react";
+} from '../ui/dropdown-menu';
+import { cn } from '../../lib/utils';
+import { Button, type EnhancedButtonProps } from './Button';
+import { ChevronDown } from 'lucide-react';
 
 export interface DropdownMenuItem {
   key: string;
@@ -31,14 +31,14 @@ export interface EnhancedDropdownProps {
     items: DropdownMenuItem[];
     onClick?: (info: { key: string; domEvent: React.MouseEvent }) => void;
   };
-  trigger?: ("click" | "hover" | "contextMenu")[];
+  trigger?: ('click' | 'hover' | 'contextMenu')[];
   placement?:
-    | "bottom"
-    | "bottomLeft"
-    | "bottomRight"
-    | "top"
-    | "topLeft"
-    | "topRight";
+    | 'bottom'
+    | 'bottomLeft'
+    | 'bottomRight'
+    | 'top'
+    | 'topLeft'
+    | 'topRight';
   arrow?: boolean | { pointAtCenter?: boolean };
   autoAdjustOverflow?: boolean;
   autoFocus?: boolean;
@@ -57,8 +57,8 @@ export interface EnhancedDropdownProps {
 const Dropdown: React.FC<EnhancedDropdownProps> = ({
   children,
   menu,
-  trigger = ["click"],
-  placement = "bottomLeft",
+  trigger = ['click'],
+  placement = 'bottomLeft',
   disabled = false,
   overlayClassName,
   overlayStyle,
@@ -71,7 +71,9 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
   const [internalOpen, setInternalOpen] = React.useState(false);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
-  const hoverTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!isControlled) {
@@ -81,7 +83,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
   };
 
   const handleMouseEnter = () => {
-    if (trigger.includes("hover")) {
+    if (trigger.includes('hover')) {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
@@ -90,9 +92,11 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
   };
 
   const handleMouseLeave = () => {
-    if (trigger.includes("hover")) {
+    if (trigger.includes('hover')) {
       (
-        hoverTimeoutRef as React.MutableRefObject<ReturnType<typeof setTimeout> | null>
+        hoverTimeoutRef as React.MutableRefObject<ReturnType<
+          typeof setTimeout
+        > | null>
       ).current = setTimeout(() => {
         handleOpenChange(false);
       }, 100); // 100ms延迟，避免鼠标快速移动时闪烁
@@ -109,20 +113,20 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
 
   const getSideAndAlign = () => {
     switch (placement) {
-      case "top":
-        return { side: "top" as const, align: "center" as const };
-      case "topLeft":
-        return { side: "top" as const, align: "start" as const };
-      case "topRight":
-        return { side: "top" as const, align: "end" as const };
-      case "bottom":
-        return { side: "bottom" as const, align: "center" as const };
-      case "bottomLeft":
-        return { side: "bottom" as const, align: "start" as const };
-      case "bottomRight":
-        return { side: "bottom" as const, align: "end" as const };
+      case 'top':
+        return { side: 'top' as const, align: 'center' as const };
+      case 'topLeft':
+        return { side: 'top' as const, align: 'start' as const };
+      case 'topRight':
+        return { side: 'top' as const, align: 'end' as const };
+      case 'bottom':
+        return { side: 'bottom' as const, align: 'center' as const };
+      case 'bottomLeft':
+        return { side: 'bottom' as const, align: 'start' as const };
+      case 'bottomRight':
+        return { side: 'bottom' as const, align: 'end' as const };
       default:
-        return { side: "bottom" as const, align: "start" as const };
+        return { side: 'bottom' as const, align: 'start' as const };
     }
   };
 
@@ -134,12 +138,12 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
         <DropdownMenuSub key={item.key}>
           <DropdownMenuSubTrigger
             className={cn(
-              "text-xs",
+              'text-xs',
               item.disabled
-                ? "opacity-50 cursor-not-allowed"
-                : (cursorPointer || item.cursorPointer) && "cursor-pointer",
+                ? 'opacity-50 cursor-not-allowed'
+                : (cursorPointer || item.cursorPointer) && 'cursor-pointer',
               item.danger &&
-                "text-destructive focus:text-destructive focus:bg-destructive/10",
+                'text-destructive focus:text-destructive focus:bg-destructive/10'
             )}
             disabled={item.disabled}
           >
@@ -148,7 +152,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             {item.children.map((child, childIndex) =>
-              renderMenuItem(child, childIndex),
+              renderMenuItem(child, childIndex)
             )}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
@@ -160,12 +164,12 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
         {item.divided && index > 0 && <DropdownMenuSeparator />}
         <DropdownMenuItem
           className={cn(
-            "text-xs",
+            'text-xs',
             item.disabled
-              ? "opacity-50 cursor-not-allowed"
-              : (cursorPointer || item.cursorPointer) && "cursor-pointer",
+              ? 'opacity-50 cursor-not-allowed'
+              : (cursorPointer || item.cursorPointer) && 'cursor-pointer',
             item.danger &&
-              "text-destructive focus:text-destructive focus:bg-destructive/10",
+              'text-destructive focus:text-destructive focus:bg-destructive/10'
           )}
           disabled={item.disabled}
           onClick={(e) => {
@@ -211,7 +215,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
       <DropdownMenuContent
         side={side}
         align={align}
-        className={cn("min-w-[120px]", overlayClassName)}
+        className={cn('min-w-[120px]', overlayClassName)}
         style={overlayStyle}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -230,11 +234,11 @@ interface DropdownButtonProps {
   className?: string;
   buttonProps?: Omit<
     EnhancedButtonProps,
-    "className" | "disabled" | "children"
+    'className' | 'disabled' | 'children'
   >;
-  dropdownProps?: Omit<EnhancedDropdownProps, "children" | "disabled">;
+  dropdownProps?: Omit<EnhancedDropdownProps, 'children' | 'disabled'>;
   disabled?: boolean;
-  type?: EnhancedButtonProps["type"];
+  type?: EnhancedButtonProps['type'];
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({
@@ -245,13 +249,13 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   buttonProps,
   dropdownProps,
   disabled,
-  type = "primary",
+  type = 'primary',
 }) => {
   return (
     <div className="flex items-center">
       <Button
         {...buttonProps}
-        className={cn("rounded-r-none !px-2", className)}
+        className={cn('rounded-r-none !px-2', className)}
         onClick={onClick}
         disabled={disabled}
         type={type}
@@ -269,10 +273,10 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           {...buttonProps}
           htmlType="button"
           className={cn(
-            "rounded-l-none -ml-px !px-2",
-            type === "primary" &&
+            'rounded-l-none -ml-px !px-2',
+            type === 'primary' &&
               `border-l border-primary-foreground/${!disabled ? 10 : 60}`,
-            className,
+            className
           )}
           disabled={disabled}
           type={type}
@@ -290,7 +294,7 @@ const DropdownWithStatics = Dropdown as typeof Dropdown & {
 
 DropdownWithStatics.Button = DropdownButton;
 
-Dropdown.displayName = "EnhancedDropdown";
-DropdownButton.displayName = "EnhancedDropdownButton";
+Dropdown.displayName = 'EnhancedDropdown';
+DropdownButton.displayName = 'EnhancedDropdownButton';
 
 export { DropdownWithStatics as Dropdown, DropdownButton };

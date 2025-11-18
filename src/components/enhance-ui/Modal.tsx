@@ -1,17 +1,12 @@
-import React from "react";
-import type { ReactNode } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogFooter,
-} from "../ui/dialog";
-import { X, Loader2 } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useTranslation } from "react-i18next";
-import { Button } from "./Button";
+import React from 'react';
+import type { ReactNode } from 'react';
+import { Dialog, DialogContent, DialogTitle, DialogFooter } from '../ui/dialog';
+import { X, Loader2 } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { useTranslation } from 'react-i18next';
+import { Button } from './Button';
 
-type SemanticName = "content" | "header" | "body" | "footer";
+type SemanticName = 'content' | 'header' | 'body' | 'footer';
 
 export interface ModalProps {
   open: boolean;
@@ -26,11 +21,11 @@ export interface ModalProps {
   className?: string;
   children?: React.ReactNode;
   closable?: boolean; // 是否显示右上角关闭按钮
-  type?: "primary" | "danger";
+  type?: 'primary' | 'danger';
   isShowHeader?: boolean;
   isShowFooter?: boolean;
   classNames?: Partial<Record<SemanticName, string | undefined>>;
-  footerBtnPosition?: "left" | "center" | "right" | "block";
+  footerBtnPosition?: 'left' | 'center' | 'right' | 'block';
   footerExtraContent?: {
     left?: React.ReactNode;
     center?: React.ReactNode;
@@ -51,21 +46,21 @@ export const Modal: React.FC<ModalProps> = ({
   className,
   children,
   closable = true,
-  type = "primary",
+  type = 'primary',
   isShowHeader = true,
   isShowFooter = true,
   classNames,
-  footerBtnPosition = "right",
+  footerBtnPosition = 'right',
   footerExtraContent,
 }) => {
-  const { t } = useTranslation("components");
+  const { t } = useTranslation('components');
   const [okLoading, setOkLoading] = React.useState(false);
-  const okTextNode = okText ?? t("confirm");
-  const cancelTextNode = cancelText ?? t("cancel");
+  const okTextNode = okText ?? t('confirm');
+  const cancelTextNode = cancelText ?? t('cancel');
 
   const runBeforeAndAction = async (
     before?: () => boolean | void | Promise<boolean | void>,
-    action?: () => void | Promise<void>,
+    action?: () => void | Promise<void>
   ) => {
     if (before) {
       const res = await before();
@@ -94,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
     try {
       const proceeded = await runBeforeAndAction(
         onCancelBeforeFunction,
-        onCancel,
+        onCancel
       );
       if (proceeded) onOpenChange?.(false);
     } catch (e) {
@@ -128,14 +123,14 @@ export const Modal: React.FC<ModalProps> = ({
         className={cn(
           `max-h-[90vh] flex flex-col p-0 `,
           className,
-          classNames?.content,
+          classNames?.content
         )}
       >
         {isShowHeader ? (
           <DialogTitle
             className={cn(
-              "text-xl font-semibold flex justify-between p-5 border-b border-under-line",
-              classNames?.header,
+              'text-xl font-semibold flex justify-between p-5 border-b border-under-line',
+              classNames?.header
             )}
           >
             {renderHeader()}
@@ -149,21 +144,21 @@ export const Modal: React.FC<ModalProps> = ({
           </DialogTitle>
         ) : null}
 
-        <div className={cn("p-5 pt-3 overflow-y-auto", classNames?.body)}>
+        <div className={cn('p-5 pt-3 overflow-y-auto', classNames?.body)}>
           {children}
         </div>
 
         {isShowFooter ? (
           <DialogFooter
             className={cn(
-              "flex-col sm:flex-row gap-2 border-under-line border-t py-5 px-5",
+              'flex-col sm:flex-row gap-2 border-under-line border-t py-5 px-5',
               {
-                left: "sm:justify-start",
-                center: "sm:justify-center",
-                block: "sm:justify-center",
-                right: "sm:justify-end",
+                left: 'sm:justify-start',
+                center: 'sm:justify-center',
+                block: 'sm:justify-center',
+                right: 'sm:justify-end',
               }[footerBtnPosition],
-              classNames?.footer,
+              classNames?.footer
             )}
           >
             {footerExtraContent?.left}
@@ -171,10 +166,10 @@ export const Modal: React.FC<ModalProps> = ({
               onClick={handleCancel}
               disabled={okLoading}
               className={cn(
-                "min-w-[96px]",
-                type === "primary" &&
-                  "border-primary text-primary hover:text-primary",
-                footerBtnPosition === "block" && "flex-1",
+                'min-w-[96px]',
+                type === 'primary' &&
+                  'border-primary text-primary hover:text-primary',
+                footerBtnPosition === 'block' && 'flex-1'
               )}
             >
               {cancelTextNode}
@@ -186,10 +181,10 @@ export const Modal: React.FC<ModalProps> = ({
               onClick={handleOk}
               disabled={okLoading}
               className={cn(
-                "min-w-[96px]",
-                footerBtnPosition === "block" && "flex-1",
+                'min-w-[96px]',
+                footerBtnPosition === 'block' && 'flex-1'
               )}
-              danger={type === "danger"}
+              danger={type === 'danger'}
               type="primary"
             >
               {okLoading && <Loader2 className="h-4 w-4 animate-spin" />}

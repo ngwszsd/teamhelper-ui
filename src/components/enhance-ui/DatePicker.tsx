@@ -1,14 +1,10 @@
-import * as React from "react";
-import { ChevronDownIcon, XIcon } from "lucide-react";
-import { Calendar } from "../ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../ui/popover";
-import { cn } from "../../lib/utils";
-import { RangePicker } from "./RangePicker";
-import { Button } from "./Button";
+import * as React from 'react';
+import { ChevronDownIcon, XIcon } from 'lucide-react';
+import { Calendar } from '../ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { cn } from '../../lib/utils';
+import { RangePicker } from './RangePicker';
+import { Button } from './Button';
 
 export interface DatePickerProps {
   /**
@@ -47,7 +43,7 @@ export interface DatePickerProps {
  */
 const parseDate = (dateString: string): Date | undefined => {
   if (!dateString) return undefined;
-  const date = new Date(dateString + "T00:00:00");
+  const date = new Date(dateString + 'T00:00:00');
   return isNaN(date.getTime()) ? undefined : date;
 };
 
@@ -56,8 +52,8 @@ const parseDate = (dateString: string): Date | undefined => {
  */
 const formatDate = (date: Date): string => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
@@ -85,7 +81,7 @@ type DatePickerComponent = React.FC<DatePickerProps> & {
 export const DatePicker: DatePickerComponent = ({
   value,
   onChange,
-  placeholder = "请选择日期",
+  placeholder = '请选择日期',
   disabled = false,
   allowClear = true,
   className,
@@ -93,7 +89,7 @@ export const DatePicker: DatePickerComponent = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(() => {
-    const start = defaultValue || "";
+    const start = defaultValue || '';
     const d = parseDate(start) ?? new Date();
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
@@ -101,7 +97,7 @@ export const DatePicker: DatePickerComponent = ({
   // 受控 / 非受控模式判定
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<string | undefined>(
-    defaultValue,
+    defaultValue
   );
   const currentValue = isControlled ? value : internalValue;
 
@@ -128,7 +124,7 @@ export const DatePicker: DatePickerComponent = ({
       // 延迟关闭弹窗，让视觉反馈更流畅
       setTimeout(() => setOpen(false), 0);
     },
-    [isControlled, onChange],
+    [isControlled, onChange]
   );
 
   // 处理清除
@@ -141,19 +137,19 @@ export const DatePicker: DatePickerComponent = ({
       }
       onChange?.(undefined);
     },
-    [isControlled, onChange],
+    [isControlled, onChange]
   );
 
   // 显示的文本
   const displayText = React.useMemo(() => {
     return selectedDate
       ? selectedDate
-          .toLocaleDateString("zh-CN", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
+          .toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
           })
-          .replace(/\//g, "-")
+          .replace(/\//g, '-')
       : placeholder;
   }, [selectedDate, placeholder]);
 
@@ -164,16 +160,16 @@ export const DatePicker: DatePickerComponent = ({
           <Button
             disabled={disabled}
             className={cn(
-              "w-48 justify-start font-normal",
-              !selectedDate && "text-muted-foreground",
-              className,
+              'w-48 justify-start font-normal',
+              !selectedDate && 'text-muted-foreground',
+              className
             )}
           >
             <span className="truncate">{displayText}</span>
             <ChevronDownIcon
               className={cn(
-                "ml-auto h-4 w-4 opacity-50",
-                selectedDate && "opacity-0",
+                'ml-auto h-4 w-4 opacity-50',
+                selectedDate && 'opacity-0'
               )}
             />
           </Button>
@@ -208,7 +204,7 @@ export const DatePicker: DatePickerComponent = ({
   );
 };
 
-DatePicker.displayName = "EnhancedDatePicker";
+DatePicker.displayName = 'EnhancedDatePicker';
 
 DatePicker.RangePicker = RangePicker;
 

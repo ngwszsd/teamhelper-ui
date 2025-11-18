@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Pagination as BasePagination,
   PaginationContent,
@@ -7,18 +7,18 @@ import {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
-} from "../ui/pagination";
+} from '../ui/pagination';
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "../ui/select";
-import { Input } from "../ui/input";
-import { cn } from "../../lib/utils";
-import type { ButtonProps } from "../ui/button";
-import { useTranslation } from "react-i18next";
+} from '../ui/select';
+import { Input } from '../ui/input';
+import { cn } from '../../lib/utils';
+import type { ButtonProps } from '../ui/button';
+import { useTranslation } from 'react-i18next';
 export interface EnhancedPaginationProps {
   /** 当前页码（从 1 开始） */
   current: number;
@@ -41,7 +41,7 @@ export interface EnhancedPaginationProps {
   showTotal?: (total: number, range: [number, number]) => React.ReactNode;
 
   /** 控制分页按钮尺寸，复用基础 Button 的 size */
-  size?: ButtonProps["size"];
+  size?: ButtonProps['size'];
   /** 容器 className（传递到基础 Pagination 容器） */
   className?: string;
   /** 禁用交互 */
@@ -60,24 +60,24 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
   pageSizeOptions = [10, 20, 50, 100],
   showQuickJumper = false,
   showTotal,
-  size = "default",
+  size = 'default',
   className,
   disabled,
   extra,
 }) => {
-  const { t } = useTranslation("components");
+  const { t } = useTranslation('components');
   const totalPages = React.useMemo(
     () => Math.max(1, Math.ceil((total ?? 0) / Math.max(1, pageSize ?? 1))),
-    [total, pageSize],
+    [total, pageSize]
   );
 
   const safeCurrent = React.useMemo(
     () => clamp(current ?? 1, 1, totalPages),
-    [current, totalPages],
+    [current, totalPages]
   );
 
   const [quickValue, setQuickValue] = React.useState<string>(
-    String(safeCurrent),
+    String(safeCurrent)
   );
   React.useEffect(() => {
     setQuickValue(String(safeCurrent));
@@ -116,7 +116,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
 
   const pages = React.useMemo(
     () => buildRange(safeCurrent, totalPages),
-    [safeCurrent, totalPages],
+    [safeCurrent, totalPages]
   );
 
   const renderTotal = () => {
@@ -137,11 +137,11 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">
-          {t("pagination.pageSizeLabel")}
+          {t('pagination.pageSizeLabel')}
         </span>
         <Select value={String(pageSize)} onValueChange={handleSizeChange}>
           <SelectTrigger className="w-[100px]">
-            <SelectValue placeholder={t("select")} />
+            <SelectValue placeholder={t('select')} />
           </SelectTrigger>
           <SelectContent>
             {pageSizeOptions.map((opt) => (
@@ -161,7 +161,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">
-          {t("pagination.jumpToLabel")}
+          {t('pagination.jumpToLabel')}
         </span>
         <div className="w-[80px]">
           <Input
@@ -170,7 +170,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
             onChange={(e) => setQuickValue(e.target.value)}
             onBlur={() => handleQuickJump()}
             onKeyDown={(e) => {
-              if (e.key === "Enter") handleQuickJump();
+              if (e.key === 'Enter') handleQuickJump();
             }}
           />
         </div>
@@ -181,8 +181,8 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
   return (
     <div
       className={cn(
-        "flex w-full items-center justify-between gap-3",
-        className,
+        'flex w-full items-center justify-between gap-3',
+        className
       )}
     >
       <div className="flex items-center gap-3">{renderTotal()}</div>
@@ -204,14 +204,14 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
 
           {pages.map((p, idx) => (
             <PaginationItem key={`${p}-${idx}`}>
-              {p === "ellipsis" ? (
+              {p === 'ellipsis' ? (
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
                   href="#"
                   size={size}
                   isActive={p === safeCurrent}
-                  aria-current={p === safeCurrent ? "page" : undefined}
+                  aria-current={p === safeCurrent ? 'page' : undefined}
                   onClick={(e) => {
                     e.preventDefault();
                     handlePageChange(Number(p));
@@ -255,20 +255,20 @@ function clamp(n: number, min: number, max: number) {
 
 function buildRange(
   current: number,
-  totalPages: number,
-): Array<number | "ellipsis"> {
+  totalPages: number
+): Array<number | 'ellipsis'> {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
   if (current <= 4) {
-    return [1, 2, 3, 4, 5, "ellipsis", totalPages];
+    return [1, 2, 3, 4, 5, 'ellipsis', totalPages];
   }
 
   if (current >= totalPages - 3) {
     return [
       1,
-      "ellipsis",
+      'ellipsis',
       totalPages - 4,
       totalPages - 3,
       totalPages - 2,
@@ -279,11 +279,11 @@ function buildRange(
 
   return [
     1,
-    "ellipsis",
+    'ellipsis',
     current - 1,
     current,
     current + 1,
-    "ellipsis",
+    'ellipsis',
     totalPages,
   ];
 }

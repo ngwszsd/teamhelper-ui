@@ -1,22 +1,22 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Card as BaseCard,
   CardHeader as BaseCardHeader,
   CardTitle as BaseCardTitle,
   CardContent as BaseCardContent,
   CardFooter as BaseCardFooter,
-} from "../ui/card";
-import { cn } from "../../lib/utils";
+} from '../ui/card';
+import { cn } from '../../lib/utils';
 
 export interface EnhancedCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: React.ReactNode;
   extra?: React.ReactNode;
   cover?: React.ReactNode;
   actions?: React.ReactNode[];
   hoverable?: boolean;
   bordered?: boolean;
-  size?: "default" | "small";
+  size?: 'default' | 'small';
   loading?: boolean;
 }
 
@@ -30,34 +30,34 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
       actions,
       hoverable = false,
       bordered = true,
-      size = "default",
+      size = 'default',
       loading = false,
       children,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <BaseCard
         ref={ref}
         className={cn(
-          hoverable && "hover:shadow-md transition-shadow cursor-pointer",
-          !bordered && "border-0 shadow-none",
-          size === "small" && "text-sm",
-          loading && "opacity-60 pointer-events-none",
-          className,
+          hoverable && 'hover:shadow-md transition-shadow cursor-pointer',
+          !bordered && 'border-0 shadow-none',
+          size === 'small' && 'text-sm',
+          loading && 'opacity-60 pointer-events-none',
+          className
         )}
         {...props}
       >
         {cover && <div className="rounded-t-xl overflow-hidden">{cover}</div>}
 
         {(title || extra) && (
-          <BaseCardHeader className={cn(size === "small" && "p-4")}>
+          <BaseCardHeader className={cn(size === 'small' && 'p-4')}>
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 {title && (
                   <BaseCardTitle
-                    className={cn(size === "small" && "text-base")}
+                    className={cn(size === 'small' && 'text-base')}
                   >
                     {title}
                   </BaseCardTitle>
@@ -71,8 +71,8 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
         {children && (
           <BaseCardContent
             className={cn(
-              size === "small" && "p-4 pt-0",
-              !title && !extra && size === "small" && "pt-4",
+              size === 'small' && 'p-4 pt-0',
+              !title && !extra && size === 'small' && 'pt-4'
             )}
           >
             {loading ? (
@@ -89,8 +89,8 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
         {actions && actions.length > 0 && (
           <BaseCardFooter
             className={cn(
-              "flex justify-end space-x-2",
-              size === "small" && "p-4 pt-0",
+              'flex justify-end space-x-2',
+              size === 'small' && 'p-4 pt-0'
             )}
           >
             {actions.map((action, index) => (
@@ -100,9 +100,9 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
         )}
       </BaseCard>
     );
-  },
+  }
 );
 
-Card.displayName = "EnhancedCard";
+Card.displayName = 'EnhancedCard';
 
 export { Card };

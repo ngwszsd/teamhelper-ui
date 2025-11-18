@@ -1,14 +1,10 @@
-import * as React from "react";
-import { ChevronDownIcon, XIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../ui/popover";
-import { cn } from "../../lib/utils";
-import type { DateRange } from "react-day-picker";
+import * as React from 'react';
+import { ChevronDownIcon, XIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Calendar } from '../ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { cn } from '../../lib/utils';
+import type { DateRange } from 'react-day-picker';
 
 export interface RangePickerProps {
   // 受控值，格式 YYYY-MM-DD
@@ -41,30 +37,30 @@ export interface RangePickerProps {
  */
 const parseDate = (
   dateString?: string,
-  format = "YYYY-MM-DD",
+  format = 'YYYY-MM-DD'
 ): Date | undefined => {
   if (!dateString) return undefined;
   // 仅支持 YYYY-MM-DD
-  if (format !== "YYYY-MM-DD") return undefined;
-  const date = new Date(dateString + "T00:00:00");
+  if (format !== 'YYYY-MM-DD') return undefined;
+  const date = new Date(dateString + 'T00:00:00');
   return isNaN(date.getTime()) ? undefined : date;
 };
 
 /**
  * 简单格式化为 YYYY-MM-DD
  */
-const formatDate = (date?: Date, format = "YYYY-MM-DD"): string | undefined => {
+const formatDate = (date?: Date, format = 'YYYY-MM-DD'): string | undefined => {
   if (!date) return undefined;
-  if (format !== "YYYY-MM-DD") return undefined;
+  if (format !== 'YYYY-MM-DD') return undefined;
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
 const toDateRange = (
   value?: [string, string],
-  format = "YYYY-MM-DD",
+  format = 'YYYY-MM-DD'
 ): DateRange | undefined => {
   if (!value) return undefined;
   const [start, end] = value;
@@ -77,12 +73,12 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   value,
   defaultValue,
   onChange,
-  placeholder = ["开始日期", "结束日期"],
+  placeholder = ['开始日期', '结束日期'],
   disabled = false,
   allowClear = true,
   className,
-  format = "YYYY-MM-DD",
-  separator = " ~ ",
+  format = 'YYYY-MM-DD',
+  separator = ' ~ ',
   open,
   onOpenChange,
   presets,
@@ -120,14 +116,14 @@ export const RangePicker: React.FC<RangePickerProps> = ({
 
   const selectedRange = React.useMemo(
     () => toDateRange(mergedValue, format),
-    [mergedValue, format],
+    [mergedValue, format]
   );
   const hasFullValue = Boolean(selectedRange?.from || selectedRange?.to);
 
   const displayText = React.useMemo(() => {
     const start = formatDate(selectedRange?.from, format);
     const end = formatDate(selectedRange?.to, format);
-    return `${start || placeholder?.[0] || "开始日期"}${separator}${end || placeholder?.[1] || "结束日期"}`;
+    return `${start || placeholder?.[0] || '开始日期'}${separator}${end || placeholder?.[1] || '结束日期'}`;
   }, [selectedRange, placeholder, format, separator]);
 
   const emitChange = (next?: [string, string]) => {
@@ -168,7 +164,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         setTimeout(() => setOpenSafe(false), 0);
       }
     },
-    [format],
+    [format]
   );
 
   const handleClear = (e: React.MouseEvent) => {
@@ -196,16 +192,16 @@ export const RangePicker: React.FC<RangePickerProps> = ({
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-80 justify-start font-normal",
-              !hasFullValue && "text-muted-foreground",
-              className,
+              'w-80 justify-start font-normal',
+              !hasFullValue && 'text-muted-foreground',
+              className
             )}
           >
             <span className="truncate">{displayText}</span>
             <ChevronDownIcon
               className={cn(
-                "ml-auto h-4 w-4 opacity-50",
-                hasFullValue && "opacity-0",
+                'ml-auto h-4 w-4 opacity-50',
+                hasFullValue && 'opacity-0'
               )}
             />
           </Button>
@@ -254,6 +250,6 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   );
 };
 
-RangePicker.displayName = "EnhancedRangePicker";
+RangePicker.displayName = 'EnhancedRangePicker';
 
 export { RangePicker as default };

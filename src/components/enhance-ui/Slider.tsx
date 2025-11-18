@@ -1,6 +1,6 @@
-import React from "react";
-import { Slider as BaseSlider } from "../ui/slider";
-import { cn } from "../../lib/utils";
+import React from 'react';
+import { Slider as BaseSlider } from '../ui/slider';
+import { cn } from '../../lib/utils';
 
 export interface EnhancedSliderProps {
   value?: number[];
@@ -21,7 +21,7 @@ export interface EnhancedSliderProps {
   dots?: boolean;
   tooltip?: {
     open?: boolean;
-    placement?: "top" | "left" | "right" | "bottom";
+    placement?: 'top' | 'left' | 'right' | 'bottom';
     formatter?: (value?: number) => React.ReactNode;
   };
   className?: string;
@@ -46,7 +46,7 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
   ...props
 }) => {
   const [internalValue, setInternalValue] = React.useState<number[]>(
-    defaultValue || (range ? [0, 0] : [0]),
+    defaultValue || (range ? [0, 0] : [0])
   );
 
   const currentValue = value !== undefined ? value : internalValue;
@@ -63,7 +63,7 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
   };
 
   return (
-    <div className={cn("relative w-full", vertical && "h-48", className)}>
+    <div className={cn('relative w-full', vertical && 'h-48', className)}>
       <BaseSlider
         value={currentValue}
         onValueChange={handleValueChange}
@@ -72,11 +72,11 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
         max={max}
         step={step || 1}
         disabled={disabled}
-        orientation={vertical ? "vertical" : "horizontal"}
+        orientation={vertical ? 'vertical' : 'horizontal'}
         className={cn(
-          "relative flex w-full touch-none select-none items-center",
-          vertical && "h-full flex-col",
-          disabled && "opacity-50 cursor-not-allowed",
+          'relative flex w-full touch-none select-none items-center',
+          vertical && 'h-full flex-col',
+          disabled && 'opacity-50 cursor-not-allowed'
         )}
         {...props}
       />
@@ -85,8 +85,8 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
       {marks && (
         <div
           className={cn(
-            "absolute flex w-full justify-between",
-            vertical ? "flex-col h-full left-6" : "top-6",
+            'absolute flex w-full justify-between',
+            vertical ? 'flex-col h-full left-6' : 'top-6'
           )}
         >
           {Object.entries(marks).map(([key, mark]) => {
@@ -96,7 +96,7 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
               : { left: `${position}%` };
 
             let content: React.ReactNode = null;
-            if (mark && typeof mark === "object" && "label" in mark) {
+            if (mark && typeof mark === 'object' && 'label' in mark) {
               content = mark.label;
             } else {
               content = mark as React.ReactNode;
@@ -119,8 +119,8 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
       {dots && (
         <div
           className={cn(
-            "absolute flex w-full",
-            vertical ? "flex-col h-full left-2" : "top-2",
+            'absolute flex w-full',
+            vertical ? 'flex-col h-full left-2' : 'top-2'
           )}
         >
           {Array.from(
@@ -138,7 +138,7 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
                   style={style}
                 />
               );
-            },
+            }
           )}
         </div>
       )}

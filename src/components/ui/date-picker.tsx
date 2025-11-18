@@ -1,13 +1,9 @@
-import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+import * as React from 'react';
+import { ChevronDownIcon } from 'lucide-react';
 
-import { Button } from "./button";
-import { Calendar } from "./calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./popover";
+import { Button } from './button';
+import { Calendar } from './calendar';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 export function Calendar22() {
   const [open, setOpen] = React.useState(false);
@@ -22,7 +18,7 @@ export function Calendar22() {
             id="date"
             className="w-48 justify-between font-normal"
           >
-            {date ? date.toLocaleDateString() : "请选择"}
+            {date ? date.toLocaleDateString() : '请选择'}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>

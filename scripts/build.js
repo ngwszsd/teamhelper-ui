@@ -32,7 +32,7 @@ try {
   console.log('📦 Running Rollup build...');
   execSync('npm run build:rollup', {
     cwd: rootDir,
-    stdio: 'inherit'
+    stdio: 'inherit',
   });
 
   // 3. 验证构建结果
@@ -40,7 +40,7 @@ try {
   const expectedFiles = [
     'dist/index.js',
     'dist/index.esm.js',
-    'dist/index.d.ts'
+    'dist/index.d.ts',
   ];
 
   for (const file of expectedFiles) {
@@ -60,7 +60,7 @@ try {
     version,
     buildTime: new Date().toISOString(),
     files: expectedFiles,
-    fileSizes: {}
+    fileSizes: {},
   };
 
   // 计算文件大小
@@ -70,7 +70,7 @@ try {
       const stats = statSync(filePath);
       buildInfo.fileSizes[file] = {
         bytes: stats.size,
-        kb: (stats.size / 1024).toFixed(2)
+        kb: (stats.size / 1024).toFixed(2),
       };
     } catch (error) {
       // 文件不存在时跳过
@@ -83,7 +83,7 @@ try {
   );
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-  
+
   console.log(`\n🎉 Build completed successfully!`);
   console.log(`📊 Build info:`);
   console.log(`   Package: ${name}`);
@@ -95,7 +95,6 @@ try {
     console.log(`   ${file}: ${info.kb} KB`);
   }
   console.log(`\n📦 Ready for npm publish!`);
-
 } catch (error) {
   console.error('\n❌ Build failed:', error.message);
   if (error.stack) {

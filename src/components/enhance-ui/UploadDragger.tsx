@@ -1,10 +1,10 @@
-import * as React from "react";
-import { FileIcon, Trash2, CircleX, FolderUp } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
-export type ParseMode = "json" | "text" | "arrayBuffer" | "none";
-export type ListType = "list" | "card";
+import * as React from 'react';
+import { FileIcon, Trash2, CircleX, FolderUp } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+export type ParseMode = 'json' | 'text' | 'arrayBuffer' | 'none';
+export type ListType = 'list' | 'card';
 
 export interface UploadProps {
   accept?: string; // e.g. ".json,application/json"
@@ -27,7 +27,7 @@ export interface UploadProps {
   renderFileItem?: (
     file: File,
     index: number,
-    onRemove: () => void,
+    onRemove: () => void
   ) => React.ReactNode;
 }
 
@@ -37,12 +37,12 @@ export interface UploadProps {
  * - 通过 props 配置解析与校验
  */
 export function UploadDragger({
-  accept = "",
+  accept = '',
   multiple = true,
   maxSize,
   disabled = false,
-  parseAs = "none",
-  listType = "list", // 默认为list模式
+  parseAs = 'none',
+  listType = 'list', // 默认为list模式
   onChange,
   onParsed,
   onError,
@@ -55,19 +55,19 @@ export function UploadDragger({
   onFileListChange,
   renderFileItem,
 }: UploadProps) {
-  const { t, i18n } = useTranslation("components");
+  const { t, i18n } = useTranslation('components');
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = React.useState(false);
 
   // 根据listType决定是否显示文件列表
-  const shouldShowFileList = listType === "list" ? showFileList : false;
+  const shouldShowFileList = listType === 'list' ? showFileList : false;
   const acceptTokens = React.useMemo(
     () =>
       accept
-        ?.split(",")
+        ?.split(',')
         .map((s) => s.trim())
         .filter(Boolean),
-    [accept],
+    [accept]
   );
   // 非受控列表
   const [internalFiles, setInternalFiles] = React.useState<File[]>([]);
@@ -77,10 +77,10 @@ export function UploadDragger({
   const matchAccept = (file: File) => {
     if (!acceptTokens?.length) return true;
     return acceptTokens.some((t) => {
-      if (t.startsWith(".")) {
+      if (t.startsWith('.')) {
         return file.name.toLowerCase().endsWith(t.toLowerCase());
       }
-      if (t.endsWith("/*")) {
+      if (t.endsWith('/*')) {
         const base = t.slice(0, -2);
         return file.type.startsWith(base);
       }
@@ -94,18 +94,18 @@ export function UploadDragger({
 
     files.forEach((file) => {
       if (maxSize && file.size > maxSize) {
-        errors.push(t("upload.error.size", { fileName: file.name }));
+        errors.push(t('upload.error.size', { fileName: file.name }));
         return;
       }
       if (!matchAccept(file)) {
-        errors.push(t("upload.error.type", { fileName: file.name }));
+        errors.push(t('upload.error.type', { fileName: file.name }));
         return;
       }
       valid.push(file);
     });
 
     if (errors.length) {
-      const sep = i18n.language?.startsWith("zh") ? "；" : "; ";
+      const sep = i18n.language?.startsWith('zh') ? '；' : '; ';
       const msg = errors.join(sep);
       onError?.(msg);
       toast.error(msg);
@@ -115,19 +115,19 @@ export function UploadDragger({
 
   const parseFile = async (file: File) => {
     try {
-      if (parseAs === "json") {
+      if (parseAs === 'json') {
         const text = await file.text();
         const data = JSON.parse(text);
         onParsed?.(data, file);
-      } else if (parseAs === "text") {
+      } else if (parseAs === 'text') {
         const text = await file.text();
         onParsed?.(text, file);
-      } else if (parseAs === "arrayBuffer") {
+      } else if (parseAs === 'arrayBuffer') {
         const buf = await file.arrayBuffer();
         onParsed?.(buf, file);
       }
     } catch (e) {
-      const msg = t("upload.error.parse", { fileName: file.name });
+      const msg = t('upload.error.parse', { fileName: file.name });
       onError?.(msg);
       toast.error(msg);
     }
@@ -150,7 +150,7 @@ export function UploadDragger({
     const nextList = multiple ? [...currentFiles, ...valid] : [...valid];
     updateFileList(nextList);
 
-    if (parseAs !== "none") {
+    if (parseAs !== 'none') {
       for (const f of valid) {
         // 顺序解析，避免并发 toast 混乱
         // 可按需改成 Promise.all
@@ -161,12 +161,12 @@ export function UploadDragger({
   };
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = async (
-    e,
+    e
   ) => {
     const files = Array.from(e.target.files || []);
     await handleFiles(files);
     // 清空 input，避免选择相同文件后无法触发 change
-    e.target.value = "";
+    e.target.value = '';
   };
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = async (e) => {
@@ -214,12 +214,12 @@ export function UploadDragger({
 
   // 检查是否有图片文件用于card模式预览
   const hasImageFile =
-    currentFiles.length > 0 && currentFiles[0].type.startsWith("image/");
+    currentFiles.length > 0 && currentFiles[0].type.startsWith('image/');
   const imagePreviewUrl = hasImageFile
     ? URL.createObjectURL(currentFiles[0])
     : null;
 
-  const descriptionNode = description ?? t("upload.dragDescription");
+  const descriptionNode = description ?? t('upload.dragDescription');
 
   return (
     <>
@@ -227,21 +227,21 @@ export function UploadDragger({
         role="button"
         tabIndex={0}
         onClick={triggerSelect}
-        onKeyDown={(e) => (e.key === "Enter" ? triggerSelect() : undefined)}
+        onKeyDown={(e) => (e.key === 'Enter' ? triggerSelect() : undefined)}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         className={cn(
-          "relative flex flex-col items-center justify-center rounded-md border-2 border-dashed text-center select-none cursor-pointer",
-          listType === "card" ? "p-0 overflow-hidden" : "p-8 h-40",
-          disabled && "opacity-50 cursor-not-allowed",
+          'relative flex flex-col items-center justify-center rounded-md border-2 border-dashed text-center select-none cursor-pointer',
+          listType === 'card' ? 'p-0 overflow-hidden' : 'p-8 h-40',
+          disabled && 'opacity-50 cursor-not-allowed',
           dragging
-            ? "border-primary/80 bg-primary/5"
-            : "border-border hover:bg-background",
-          className,
+            ? 'border-primary/80 bg-primary/5'
+            : 'border-border hover:bg-background',
+          className
         )}
       >
-        {listType === "card" && hasImageFile && imagePreviewUrl ? (
+        {listType === 'card' && hasImageFile && imagePreviewUrl ? (
           // Card模式：显示图片预览
           <>
             <img src={imagePreviewUrl} alt="预览" className="object-cover" />
@@ -307,10 +307,10 @@ export function UploadDragger({
                   onClick={() => removeAt(idx)}
                 >
                   <Trash2 className="size-4" />
-                  {t("upload.remove")}
+                  {t('upload.remove')}
                 </button>
               </div>
-            ),
+            )
           )}
         </div>
       )}

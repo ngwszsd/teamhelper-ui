@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "../../lib/utils";
+import * as React from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { cn } from '../../lib/utils';
 
 /**
  * 通用虚拟滚动 List 组件
@@ -72,14 +72,14 @@ export const List = <T extends unknown = any>({
   return (
     <div
       ref={parentRef}
-      className={cn("relative w-full overflow-auto ", className)}
+      className={cn('relative w-full overflow-auto ', className)}
       style={{ height: containerHeight, ...style }}
     >
       <div
         style={{
           height: totalSize,
-          width: "100%",
-          position: "relative",
+          width: '100%',
+          position: 'relative',
         }}
       >
         {virtualItems.map((vi) => {
@@ -93,10 +93,10 @@ export const List = <T extends unknown = any>({
               ref={virtualizer.measureElement}
               data-index={index}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
                 left: 0,
-                width: "100%",
+                width: '100%',
                 transform: `translateY(${vi.start}px)`,
                 // 给动态内容提供基础样式，外部可覆盖
                 // 保留 itemGap（下边距），在测量逻辑中已计入
@@ -112,6 +112,6 @@ export const List = <T extends unknown = any>({
   );
 };
 
-List.displayName = "EnhancedList";
+List.displayName = 'EnhancedList';
 
 export type ListItem = unknown;

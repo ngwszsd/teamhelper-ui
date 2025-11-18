@@ -1,13 +1,9 @@
-import * as React from "react";
-import { Input } from "../ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../ui/popover";
-import { cn } from "../../lib/utils";
-import { XIcon, Check, ChevronDown } from "lucide-react";
-import { List } from "./List";
+import * as React from 'react';
+import { Input } from '../ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { cn } from '../../lib/utils';
+import { XIcon, Check, ChevronDown } from 'lucide-react';
+import { List } from './List';
 
 export type EnhancedSelectOption = {
   /** 选项显示的文本 */
@@ -26,7 +22,7 @@ type SingleProps = {
   /** 值变化回调；单选：返回选中 option；清除：返回 null */
   onChange: (value?: string, option?: EnhancedSelectOption | null) => void;
   /** 模式（单选），默认 "single" */
-  mode?: "single";
+  mode?: 'single';
   /** 占位文案 */
   placeholder?: string;
   /** 外层容器类名 */
@@ -61,7 +57,7 @@ type MultipleProps = {
   /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
   onChange: (value?: string[], option?: EnhancedSelectOption[]) => void;
   /** 模式（多选） */
-  mode: "multiple";
+  mode: 'multiple';
   /** 占位文案 */
   placeholder?: string;
   /** 外层容器类名 */
@@ -98,7 +94,7 @@ export type EnhancedSelectProps = SingleProps | MultipleProps;
 export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
   const {
     options,
-    placeholder = "请选择",
+    placeholder = '请选择',
     className,
     contentClassName,
     matchTriggerWidth = true,
@@ -111,9 +107,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
     listHeight = 240,
     estimatedItemSize = 36,
   } = props;
-  const isMultiple = props.mode === "multiple";
+  const isMultiple = props.mode === 'multiple';
   const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = React.useState("");
+  const [query, setQuery] = React.useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [measuredWidth, setMeasuredWidth] = React.useState<number>();
 
@@ -122,8 +118,8 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
       if (inputRef.current) setMeasuredWidth(inputRef.current.offsetWidth);
     };
     update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
   }, []);
   const normalized = (s: string) => s.toLowerCase();
   const filteredOptions = React.useMemo(() => {
@@ -131,7 +127,7 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
     const q = normalized(query.trim());
     return options.filter(
       (opt) =>
-        normalized(opt.label).includes(q) || normalized(opt.value).includes(q),
+        normalized(opt.label).includes(q) || normalized(opt.value).includes(q)
     );
   }, [options, query, searchable]);
 
@@ -148,10 +144,10 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
   }, [options]);
 
   const displayText = React.useMemo(() => {
-    if (isMultiple) return selectedValues.length ? "" : "";
-    if (!selectedValues.length) return "";
+    if (isMultiple) return selectedValues.length ? '' : '';
+    if (!selectedValues.length) return '';
     const labels = selectedValues.map((v) => labelMap.get(v) ?? v);
-    return labels.join(", ");
+    return labels.join(', ');
   }, [selectedValues, labelMap, isMultiple]);
 
   const clearable = allowClear && selectedValues.length > 0 && !disabled;
@@ -185,7 +181,7 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
   };
 
   return (
-    <div className={cn("relative inline-block w-full", className)}>
+    <div className={cn('relative inline-block w-full', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Input
@@ -198,13 +194,13 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
               if (!disabled) setOpen(true);
             }}
             className={cn(
-              "pr-8 focus:ring-1 focus:ring-ring",
-              disabled && "cursor-not-allowed",
+              'pr-8 focus:ring-1 focus:ring-ring',
+              disabled && 'cursor-not-allowed'
             )}
           />
         </PopoverTrigger>
         <PopoverContent
-          className={cn("p-2", contentClassName)}
+          className={cn('p-2', contentClassName)}
           align="start"
           sideOffset={4}
           style={{
@@ -233,9 +229,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
                 return (
                   <div
                     className={cn(
-                      "flex items-center justify-between px-2 py-1 rounded cursor-pointer",
-                      selected ? "bg-accent" : "hover:bg-accent",
-                      option.disabled && "opacity-50 cursor-not-allowed",
+                      'flex items-center justify-between px-2 py-1 rounded cursor-pointer',
+                      selected ? 'bg-accent' : 'hover:bg-accent',
+                      option.disabled && 'opacity-50 cursor-not-allowed'
                     )}
                     onClick={() => handleSelect(option)}
                   >

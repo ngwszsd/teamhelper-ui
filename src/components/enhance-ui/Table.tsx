@@ -1,5 +1,5 @@
-import * as React from "react";
-import { cn } from "../../lib/utils";
+import * as React from 'react';
+import { cn } from '../../lib/utils';
 import {
   Table as BaseTable,
   TableHeader,
@@ -8,34 +8,30 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "../ui/table";
-import { Checkbox } from "../ui/checkbox";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import { EnhancedSpinner } from "./Spinner";
-import { Empty } from "./Empty";
-import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
-import { useVirtualizer } from "@tanstack/react-virtual";
+} from '../ui/table';
+import { Checkbox } from '../ui/checkbox';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { EnhancedSpinner } from './Spinner';
+import { Empty } from './Empty';
+import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 export interface ColumnType<T = any> {
   title?: React.ReactNode;
   dataIndex?: string;
   key?: string;
   width?: number | string;
-  align?: "left" | "center" | "right";
-  fixed?: "left" | "right";
+  align?: 'left' | 'center' | 'right';
+  fixed?: 'left' | 'right';
   sorter?: boolean | ((a: T, b: T) => number);
-  sortOrder?: "ascend" | "descend" | null;
+  sortOrder?: 'ascend' | 'descend' | null;
   render?: (value: any, record: T, index: number) => React.ReactNode;
   onHeaderCell?: (
-    column: ColumnType<T>,
+    column: ColumnType<T>
   ) => React.HTMLAttributes<HTMLTableCellElement>;
   onCell?: (
     record: T,
-    rowIndex: number,
+    rowIndex: number
   ) => React.HTMLAttributes<HTMLTableCellElement>;
   ellipsis?: boolean;
   className?: string;
@@ -47,24 +43,24 @@ export interface EnhancedTableProps<T = any> {
   rowKey?: string | ((record: T) => string);
   loading?: boolean;
   rowSelection?: {
-    type?: "checkbox" | "radio";
+    type?: 'checkbox' | 'radio';
     selectedRowKeys?: React.Key[];
     onChange?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
     onSelect?: (
       record: T,
       selected: boolean,
       selectedRows: T[],
-      nativeEvent: Event,
+      nativeEvent: Event
     ) => void;
     onSelectAll?: (
       selected: boolean,
       selectedRows: T[],
-      changeRows: T[],
+      changeRows: T[]
     ) => void;
     getCheckboxProps?: (record: T) => { disabled?: boolean };
   };
   scroll?: { x?: number | string; y?: number | string };
-  size?: "small" | "middle" | "large";
+  size?: 'small' | 'middle' | 'large';
   bordered?: boolean;
   showHeader?: boolean;
   title?: (currentPageData: T[]) => React.ReactNode;
@@ -76,7 +72,7 @@ export interface EnhancedTableProps<T = any> {
       record: T,
       index: number,
       indent: number,
-      expanded: boolean,
+      expanded: boolean
     ) => React.ReactNode;
     expandRowByClick?: boolean;
     onExpand?: (expanded: boolean, record: T) => void;
@@ -84,22 +80,22 @@ export interface EnhancedTableProps<T = any> {
   };
   onRow?: (
     record: T,
-    index: number,
+    index: number
   ) => React.HTMLAttributes<HTMLTableRowElement>;
   onHeaderRow?: (
     columns: ColumnType<T>[],
-    index: number,
+    index: number
   ) => React.HTMLAttributes<HTMLTableRowElement>;
   className?: string;
   style?: React.CSSProperties;
   locale?: {
     emptyText?: React.ReactNode;
   };
-  sortDirections?: ("ascend" | "descend")[];
+  sortDirections?: ('ascend' | 'descend')[];
   onChange?: (
     filters: any,
     sorter: any,
-    extra: { currentDataSource: T[]; action: string },
+    extra: { currentDataSource: T[]; action: string }
   ) => void;
   /** 表头固定配置：true/false 或配置对象（默认启用） */
   stickyHeader?: boolean | { top?: number; zIndex?: number };
@@ -108,11 +104,11 @@ export interface EnhancedTableProps<T = any> {
 const Table = <T extends Record<string, any> = any>({
   columns,
   dataSource = [],
-  rowKey = "key",
+  rowKey = 'key',
   loading = false,
   rowSelection,
   scroll,
-  size = "middle",
+  size = 'middle',
   bordered = false,
   showHeader = true,
   title,
@@ -134,11 +130,11 @@ const Table = <T extends Record<string, any> = any>({
 
   const [sortedInfo, setSortedInfo] = React.useState<{
     columnKey?: string;
-    order?: "ascend" | "descend";
+    order?: 'ascend' | 'descend';
   }>({});
 
   const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>(
-    rowSelection?.selectedRowKeys || [],
+    rowSelection?.selectedRowKeys || []
   );
 
   // 性能优化：使用 useDeferredValue 延迟状态更新，减少重渲染
@@ -175,12 +171,12 @@ const Table = <T extends Record<string, any> = any>({
 
   const getRowKey = React.useCallback(
     (record: T, index: number): string => {
-      if (typeof rowKey === "function") {
+      if (typeof rowKey === 'function') {
         return rowKey(record);
       }
       return record[rowKey] || index.toString();
     },
-    [rowKey],
+    [rowKey]
   );
 
   // 性能优化：创建 key 到 record 的映射，避免频繁的 findIndex 操作
@@ -197,18 +193,18 @@ const Table = <T extends Record<string, any> = any>({
     if (!column.sorter) return;
 
     const columnKey = column.key || column.dataIndex;
-    let order: "ascend" | "descend" | null = null;
+    let order: 'ascend' | 'descend' | null = null;
 
     if (sortedInfo.columnKey === columnKey) {
-      if (sortedInfo.order === "ascend") {
-        order = "descend";
-      } else if (sortedInfo.order === "descend") {
+      if (sortedInfo.order === 'ascend') {
+        order = 'descend';
+      } else if (sortedInfo.order === 'descend') {
         order = null;
       } else {
-        order = "ascend";
+        order = 'ascend';
       }
     } else {
-      order = "ascend";
+      order = 'ascend';
     }
 
     const newSortedInfo = {
@@ -221,7 +217,7 @@ const Table = <T extends Record<string, any> = any>({
     if (onChange) {
       onChange({}, newSortedInfo, {
         currentDataSource: dataSource,
-        action: "sort",
+        action: 'sort',
       });
     }
   };
@@ -254,7 +250,7 @@ const Table = <T extends Record<string, any> = any>({
       keys: React.Key[],
       rows: T[],
       immediate = false,
-      triggerCallback = true,
+      triggerCallback = true
     ) => {
       if (immediate || keys.length === 0) {
         // 立即更新（如全选/全不选）
@@ -272,7 +268,7 @@ const Table = <T extends Record<string, any> = any>({
         flushSelectionUpdate();
       }
     },
-    [rowSelection, flushSelectionUpdate],
+    [rowSelection, flushSelectionUpdate]
   );
 
   const handleSelectAll = React.useCallback(
@@ -291,7 +287,7 @@ const Table = <T extends Record<string, any> = any>({
           const processChunk = () => {
             const endIndex = Math.min(
               currentIndex + chunkSize,
-              dataSource.length,
+              dataSource.length
             );
 
             // 使用for循环而不是map，性能更好
@@ -333,7 +329,7 @@ const Table = <T extends Record<string, any> = any>({
         const processBatch = () => {
           const endIndex = Math.min(
             currentIndex + batchSize,
-            dataSource.length,
+            dataSource.length
           );
 
           for (let i = currentIndex; i < endIndex; i++) {
@@ -362,7 +358,7 @@ const Table = <T extends Record<string, any> = any>({
         rowSelection?.onSelectAll?.(checked, rows, dataSource);
       }
     },
-    [dataSource, getRowKey, handleSelectChange, rowSelection],
+    [dataSource, getRowKey, handleSelectChange, rowSelection]
   );
 
   const handleSelect = React.useCallback(
@@ -370,7 +366,7 @@ const Table = <T extends Record<string, any> = any>({
       const key = getRowKey(record, index);
 
       let newKeys: React.Key[];
-      if (rowSelection?.type === "radio") {
+      if (rowSelection?.type === 'radio') {
         // 单选模式：只能选择一个
         newKeys = checked ? [key] : [];
       } else {
@@ -408,7 +404,7 @@ const Table = <T extends Record<string, any> = any>({
       rowSelection,
       selectedRowKeys,
       keyToRecordMap,
-    ],
+    ]
   );
 
   const renderSortIcon = (column: ColumnType<T>) => {
@@ -418,7 +414,7 @@ const Table = <T extends Record<string, any> = any>({
     const isActive = sortedInfo.columnKey === columnKey;
 
     if (isActive) {
-      return sortedInfo.order === "ascend" ? (
+      return sortedInfo.order === 'ascend' ? (
         <ChevronUp className="w-4 h-4 ml-1" />
       ) : (
         <ChevronDown className="w-4 h-4 ml-1" />
@@ -429,20 +425,20 @@ const Table = <T extends Record<string, any> = any>({
   };
 
   const sizeClasses = {
-    small: "text-xs",
-    middle: "text-sm",
-    large: "text-base",
+    small: 'text-xs',
+    middle: 'text-sm',
+    large: 'text-base',
   };
 
   const paddingClasses = {
-    small: "[&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1",
-    middle: "[&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2",
-    large: "[&_th]:px-4 [&_th]:py-3 [&_td]:px-4 [&_td]:py-3",
+    small: '[&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1',
+    middle: '[&_th]:px-3 [&_th]:py-2 [&_td]:px-3 [&_td]:py-2',
+    large: '[&_th]:px-4 [&_th]:py-3 [&_td]:px-4 [&_td]:py-3',
   };
 
   // 统一的行高估算，确保虚拟滚动时行高一致且平滑
   const rowHeightBySize: Record<
-    NonNullable<EnhancedTableProps<T>["size"]>,
+    NonNullable<EnhancedTableProps<T>['size']>,
     number
   > = {
     small: 28,
@@ -462,13 +458,13 @@ const Table = <T extends Record<string, any> = any>({
   });
 
   // 统一对齐类名解析：默认 left，支持运行时更新
-  const getAlignClass = (align?: "left" | "center" | "right") => {
-    const a = align ?? "left";
-    return a === "center"
-      ? "text-center"
-      : a === "right"
-        ? "text-right"
-        : "text-left";
+  const getAlignClass = (align?: 'left' | 'center' | 'right') => {
+    const a = align ?? 'left';
+    return a === 'center'
+      ? 'text-center'
+      : a === 'right'
+        ? 'text-right'
+        : 'text-left';
   };
 
   // 处理固定列逻辑
@@ -479,9 +475,9 @@ const Table = <T extends Record<string, any> = any>({
       const right: ColumnType<T>[] = [];
 
       columns.forEach((col) => {
-        if (col.fixed === "left") {
+        if (col.fixed === 'left') {
           left.push(col);
-        } else if (col.fixed === "right") {
+        } else if (col.fixed === 'right') {
           right.push(col);
         } else {
           normal.push(col);
@@ -496,7 +492,7 @@ const Table = <T extends Record<string, any> = any>({
     }, [columns]);
 
   // 渲染列的通用函数
-  const renderColumns = (cols: ColumnType<T>[], isFixed?: "left" | "right") => {
+  const renderColumns = (cols: ColumnType<T>[], isFixed?: 'left' | 'right') => {
     return cols.map((column, index) => {
       const columnKey = column.key || column.dataIndex || index;
       return (
@@ -505,15 +501,15 @@ const Table = <T extends Record<string, any> = any>({
           className={cn(
             getAlignClass(column.align),
             column.className,
-            column.sorter && "cursor-pointer select-none hover:bg-muted/50",
-            isFixed && "sticky bg-background z-10",
-            isFixed === "left" && "left-0",
-            isFixed === "right" && "right-0",
+            column.sorter && 'cursor-pointer select-none hover:bg-muted/50',
+            isFixed && 'sticky bg-background z-10',
+            isFixed === 'left' && 'left-0',
+            isFixed === 'right' && 'right-0'
           )}
           style={{
             width: column.width,
-            ...(isFixed === "left" && { left: rowSelection ? 48 : 0 }),
-            ...(isFixed === "right" && { right: 0 }),
+            ...(isFixed === 'left' && { left: rowSelection ? 48 : 0 }),
+            ...(isFixed === 'right' && { right: 0 }),
           }}
           onClick={() => handleSort(column)}
           {...(column.onHeaderCell?.(column) || {})}
@@ -532,7 +528,7 @@ const Table = <T extends Record<string, any> = any>({
     cols: ColumnType<T>[],
     record: T,
     index: number,
-    isFixed?: "left" | "right",
+    isFixed?: 'left' | 'right'
   ) => {
     return cols.map((column, colIndex) => {
       const columnKey = column.key || column.dataIndex || colIndex;
@@ -546,14 +542,14 @@ const Table = <T extends Record<string, any> = any>({
           key={columnKey}
           className={cn(
             getAlignClass(column.align),
-            column.ellipsis && "truncate max-w-0",
-            isFixed && "sticky bg-background z-10",
-            isFixed === "left" && "left-0",
-            isFixed === "right" && "right-0",
+            column.ellipsis && 'truncate max-w-0',
+            isFixed && 'sticky bg-background z-10',
+            isFixed === 'left' && 'left-0',
+            isFixed === 'right' && 'right-0'
           )}
           style={{
-            ...(isFixed === "left" && { left: rowSelection ? 48 : 0 }),
-            ...(isFixed === "right" && { right: 0 }),
+            ...(isFixed === 'left' && { left: rowSelection ? 48 : 0 }),
+            ...(isFixed === 'right' && { right: 0 }),
           }}
           {...(column.onCell?.(record, index) || {})}
         >
@@ -575,17 +571,17 @@ const Table = <T extends Record<string, any> = any>({
   // 表头固定配置解析
   const stickyEnabled = stickyHeader !== false;
   const stickyTop =
-    typeof stickyHeader === "object" && stickyHeader?.top != null
+    typeof stickyHeader === 'object' && stickyHeader?.top != null
       ? stickyHeader.top
       : 0;
   const stickyZIndex =
-    typeof stickyHeader === "object" && stickyHeader?.zIndex != null
+    typeof stickyHeader === 'object' && stickyHeader?.zIndex != null
       ? stickyHeader.zIndex
       : 20;
 
   if (loading) {
     return (
-      <div className={cn("relative", className)} style={style}>
+      <div className={cn('relative', className)} style={style}>
         <EnhancedSpinner spinning={true} tip="加载中...">
           <div className="min-h-[200px]" />
         </EnhancedSpinner>
@@ -595,34 +591,34 @@ const Table = <T extends Record<string, any> = any>({
 
   return (
     <div
-      className={cn("w-full h-full min-h-0 flex flex-col", className)}
+      className={cn('w-full h-full min-h-0 flex flex-col', className)}
       style={style}
     >
       {title && <div className="mb-4">{title(dataSource)}</div>}
 
       <div
         className={cn(
-          "relative overflow-auto border rounded-md flex-1 min-h-0",
-          bordered && "border-border",
-          !bordered && "border-transparent",
+          'relative overflow-auto border rounded-md flex-1 min-h-0',
+          bordered && 'border-border',
+          !bordered && 'border-transparent'
         )}
         ref={scrollContainerRef}
         style={
           scroll
             ? { maxHeight: scroll.y, maxWidth: scroll.x }
-            : { height: "100%", maxWidth: "100%" }
+            : { height: '100%', maxWidth: '100%' }
         }
       >
         <BaseTable
           className={cn(
             sizeClasses[size],
             paddingClasses[size],
-            "w-full table-fixed",
+            'w-full table-fixed'
           )}
         >
           {showHeader && (
             <TableHeader
-              className={cn("bg-background", stickyEnabled && "sticky")}
+              className={cn('bg-background', stickyEnabled && 'sticky')}
               style={
                 stickyEnabled
                   ? { top: stickyTop, zIndex: stickyZIndex }
@@ -632,9 +628,9 @@ const Table = <T extends Record<string, any> = any>({
               <TableRow {...(onHeaderRow?.(columns, 0) || {})}>
                 {rowSelection && (
                   <TableHead
-                    className={cn("w-12 sticky left-0 bg-background z-20")}
+                    className={cn('w-12 sticky left-0 bg-background z-20')}
                   >
-                    {rowSelection.type !== "radio" && (
+                    {rowSelection.type !== 'radio' && (
                       <Checkbox
                         checked={
                           selectedRowKeys.length === dataSource.length &&
@@ -647,9 +643,9 @@ const Table = <T extends Record<string, any> = any>({
                     )}
                   </TableHead>
                 )}
-                {renderColumns(leftFixedColumns, "left")}
+                {renderColumns(leftFixedColumns, 'left')}
                 {renderColumns(normalColumns)}
-                {renderColumns(rightFixedColumns, "right")}
+                {renderColumns(rightFixedColumns, 'right')}
               </TableRow>
             </TableHeader>
           )}
@@ -698,14 +694,14 @@ const Table = <T extends Record<string, any> = any>({
                           key={key}
                           style={{ height: rowHeight }}
                           className={cn(
-                            isSelected && "bg-muted/50",
-                            "hover:bg-muted/30",
+                            isSelected && 'bg-muted/50',
+                            'hover:bg-muted/30'
                           )}
                           {...(onRow?.(record, index) || {})}
                         >
                           {rowSelection && (
                             <TableCell className="sticky left-0 bg-card z-10">
-                              {rowSelection.type === "radio" ? (
+                              {rowSelection.type === 'radio' ? (
                                 <input
                                   type="radio"
                                   name="table-radio-selection"
@@ -715,11 +711,11 @@ const Table = <T extends Record<string, any> = any>({
                                       record,
                                       e.target.checked,
                                       index,
-                                      e.nativeEvent,
+                                      e.nativeEvent
                                     )
                                   }
                                   {...(rowSelection.getCheckboxProps?.(
-                                    record,
+                                    record
                                   ) || {})}
                                 />
                               ) : (
@@ -730,23 +726,23 @@ const Table = <T extends Record<string, any> = any>({
                                       record,
                                       !!checked,
                                       index,
-                                      new Event("change"),
+                                      new Event('change')
                                     )
                                   }
                                   {...(rowSelection.getCheckboxProps?.(
-                                    record,
+                                    record
                                   ) || {})}
                                 />
                               )}
                             </TableCell>
                           )}
-                          {renderCells(leftFixedColumns, record, index, "left")}
+                          {renderCells(leftFixedColumns, record, index, 'left')}
                           {renderCells(normalColumns, record, index)}
                           {renderCells(
                             rightFixedColumns,
                             record,
                             index,
-                            "right",
+                            'right'
                           )}
                         </TableRow>
                       );
@@ -773,14 +769,14 @@ const Table = <T extends Record<string, any> = any>({
                     key={key}
                     style={{ height: rowHeight }}
                     className={cn(
-                      isSelected && "bg-muted/50",
-                      "hover:bg-muted/30",
+                      isSelected && 'bg-muted/50',
+                      'hover:bg-muted/30'
                     )}
                     {...(onRow?.(record, index) || {})}
                   >
                     {rowSelection && (
                       <TableCell className="sticky left-0 z-10">
-                        {rowSelection.type === "radio" ? (
+                        {rowSelection.type === 'radio' ? (
                           <input
                             type="radio"
                             name="table-radio-selection"
@@ -790,7 +786,7 @@ const Table = <T extends Record<string, any> = any>({
                                 record,
                                 e.target.checked,
                                 index,
-                                e.nativeEvent,
+                                e.nativeEvent
                               )
                             }
                             {...(rowSelection.getCheckboxProps?.(record) || {})}
@@ -803,7 +799,7 @@ const Table = <T extends Record<string, any> = any>({
                                 record,
                                 !!checked,
                                 index,
-                                new Event("change"),
+                                new Event('change')
                               )
                             }
                             {...(rowSelection.getCheckboxProps?.(record) || {})}
@@ -811,9 +807,9 @@ const Table = <T extends Record<string, any> = any>({
                         )}
                       </TableCell>
                     )}
-                    {renderCells(leftFixedColumns, record, index, "left")}
+                    {renderCells(leftFixedColumns, record, index, 'left')}
                     {renderCells(normalColumns, record, index)}
-                    {renderCells(rightFixedColumns, record, index, "right")}
+                    {renderCells(rightFixedColumns, record, index, 'right')}
                   </TableRow>
                 );
               })
@@ -836,6 +832,6 @@ const Table = <T extends Record<string, any> = any>({
 };
 
 // 性能优化：同步外部状态变化，避免不必要的重渲染
-Table.displayName = "EnhancedTable";
+Table.displayName = 'EnhancedTable';
 
 export { Table as EnhancedTable };

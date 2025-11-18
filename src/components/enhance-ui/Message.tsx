@@ -1,6 +1,6 @@
-import React from "react";
-import { toast } from "sonner";
-import { CheckCircle, XCircle, AlertCircle, Info, Loader2 } from "lucide-react";
+import React from 'react';
+import { toast } from 'sonner';
+import { CheckCircle, XCircle, AlertCircle, Info, Loader2 } from 'lucide-react';
 
 export interface MessageConfig {
   content: React.ReactNode;
@@ -12,7 +12,7 @@ export interface MessageConfig {
   style?: React.CSSProperties;
 }
 
-export type MessageType = "success" | "error" | "warning" | "info" | "loading";
+export type MessageType = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
 class MessageApi {
   private getIcon(type: MessageType) {
@@ -30,14 +30,14 @@ class MessageApi {
     type: MessageType,
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
     let config: MessageConfig;
 
     if (
-      typeof content === "object" &&
+      typeof content === 'object' &&
       content !== null &&
-      "content" in content
+      'content' in content
     ) {
       config = content as MessageConfig;
     } else {
@@ -71,7 +71,7 @@ class MessageApi {
         id: key?.toString(),
         // loading 未显式传 duration 时常驻
         duration:
-          type === "loading"
+          type === 'loading'
             ? messageDuration
               ? messageDuration * 1000
               : Infinity
@@ -82,11 +82,11 @@ class MessageApi {
         icon: defaultIcon,
       };
 
-      if (type === "success") {
+      if (type === 'success') {
         toast.success(messageNode, toastOptions);
-      } else if (type === "error") {
+      } else if (type === 'error') {
         toast.error(messageNode, toastOptions);
-      } else if (type === "loading") {
+      } else if (type === 'loading') {
         toast.loading(messageNode, toastOptions);
       } else {
         // info / warning 使用普通 toast，通过 icon 区分类型
@@ -98,31 +98,31 @@ class MessageApi {
   success(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
-    return this.show("success", content, duration, onClose);
+    return this.show('success', content, duration, onClose);
   }
 
   error(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
-    return this.show("error", content, duration, onClose);
+    return this.show('error', content, duration, onClose);
   }
 
   warning(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
-    return this.show("warning", content, duration, onClose);
+    return this.show('warning', content, duration, onClose);
   }
 
   warn(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
     return this.warning(content, duration, onClose);
   }
@@ -130,21 +130,21 @@ class MessageApi {
   info(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
-    return this.show("info", content, duration, onClose);
+    return this.show('info', content, duration, onClose);
   }
 
   loading(
     content: React.ReactNode | MessageConfig,
     duration?: number,
-    onClose?: () => void,
+    onClose?: () => void
   ) {
-    return this.show("loading", content, duration, onClose);
+    return this.show('loading', content, duration, onClose);
   }
 
   open(config: MessageConfig & { type?: MessageType }) {
-    const { type = "info", ...restConfig } = config;
+    const { type = 'info', ...restConfig } = config;
     return this.show(type, restConfig);
   }
 

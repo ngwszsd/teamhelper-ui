@@ -5,7 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../ui/breadcrumb";
+} from '../ui/breadcrumb';
 
 type Crumb = {
   label: React.ReactNode;
@@ -18,8 +18,7 @@ const Breadcrumb: React.FC<{
   items: Crumb[];
   separator?: React.ReactNode;
   className?: string;
-}> = ({ items, separator = "/", className }) => {
-
+}> = ({ items, separator = '/', className }) => {
   return (
     <BreadcrumbContainer className={className}>
       <BreadcrumbList>
@@ -38,7 +37,10 @@ const Breadcrumb: React.FC<{
                 {item.label}
               </BreadcrumbLink>
             ) : item.href ? (
-              <BreadcrumbLink href={item.href} onClick={() => item.onClick?.(item)}>
+              <BreadcrumbLink
+                href={item.href}
+                onClick={() => item.onClick?.(item)}
+              >
                 {item.label}
               </BreadcrumbLink>
             ) : (
@@ -72,4 +74,4 @@ const Breadcrumb: React.FC<{
 };
 
 export default Breadcrumb;
-export { Breadcrumb as EnhancedBreadcrumb  };
+export { Breadcrumb as EnhancedBreadcrumb };

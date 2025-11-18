@@ -1,10 +1,10 @@
-import * as React from "react";
-import { nanoid } from "nanoid";
-import { FileIcon, Trash2, Eye } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { UploadDragger } from "./UploadDragger";
+import * as React from 'react';
+import { nanoid } from 'nanoid';
+import { FileIcon, Trash2, Eye } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { UploadDragger } from './UploadDragger';
 
-export type UploadStatus = "uploading" | "done" | "error";
+export type UploadStatus = 'uploading' | 'done' | 'error';
 
 export interface UploadFile {
   uid: string;
@@ -83,10 +83,10 @@ function toUploadFile(file: File): UploadFile {
 
 function resolveMaybeFn<T>(
   value: T | ((file: File) => T) | undefined,
-  file: File,
+  file: File
 ): T | undefined {
   if (!value) return undefined;
-  return typeof value === "function" ? (value as any)(file) : value;
+  return typeof value === 'function' ? (value as any)(file) : value;
 }
 
 const InternalUpload = ({
@@ -97,7 +97,7 @@ const InternalUpload = ({
   action,
   headers,
   data,
-  name = "file",
+  name = 'file',
   withCredentials,
   customRequest,
   fileList,
@@ -115,7 +115,7 @@ const InternalUpload = ({
 
   const isControlled = !!fileList;
   const [internalList, setInternalList] = React.useState<UploadFile[]>(
-    defaultFileList || [],
+    defaultFileList || []
   );
   const currentList = isControlled ? fileList! : internalList;
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -128,7 +128,7 @@ const InternalUpload = ({
   const updateList = (
     next: UploadFile[],
     changedFile?: UploadFile,
-    event?: ProgressEvent,
+    event?: ProgressEvent
   ) => {
     if (!isControlled) setInternalList(next);
     if (changedFile && onChange) {
@@ -151,7 +151,7 @@ const InternalUpload = ({
       return;
     }
     if (file.url) {
-      window.open(file.url, "_blank");
+      window.open(file.url, '_blank');
     }
   };
 
@@ -162,9 +162,7 @@ const InternalUpload = ({
 
     const onProgress = (e: { percent: number }) => {
       const nextList = currentList.map((f) =>
-        f.uid === uf.uid
-          ? { ...f, status: "uploading", percent: e.percent }
-          : f,
+        f.uid === uf.uid ? { ...f, status: 'uploading', percent: e.percent } : f
       );
       const changed = nextList.find((f) => f.uid === uf.uid)!;
       updateList(nextList as UploadFile[], changed as UploadFile);
@@ -172,7 +170,7 @@ const InternalUpload = ({
 
     const onSuccess = (response: any) => {
       const nextList = currentList.map((f) =>
-        f.uid === uf.uid ? { ...f, status: "done", percent: 100, response } : f,
+        f.uid === uf.uid ? { ...f, status: 'done', percent: 100, response } : f
       );
       const changed = nextList.find((f) => f.uid === uf.uid)!;
       updateList(nextList as UploadFile[], changed as UploadFile);
@@ -180,7 +178,7 @@ const InternalUpload = ({
 
     const onError = (error: any) => {
       const nextList = currentList.map((f) =>
-        f.uid === uf.uid ? { ...f, status: "error", error } : f,
+        f.uid === uf.uid ? { ...f, status: 'error', error } : f
       );
       const changed = nextList.find((f) => f.uid === uf.uid)!;
       updateList(nextList as UploadFile[], changed as UploadFile);
@@ -189,7 +187,7 @@ const InternalUpload = ({
     // 未提供上传方式则直接标记为 done
     if (!customRequest && !url) {
       const nextList = currentList.map((f) =>
-        f.uid === uf.uid ? { ...f, status: "done", percent: 100 } : f,
+        f.uid === uf.uid ? { ...f, status: 'done', percent: 100 } : f
       );
       const changed = nextList.find((f) => f.uid === uf.uid)!;
       updateList(nextList as UploadFile[], changed as UploadFile);
@@ -225,7 +223,7 @@ const InternalUpload = ({
         const total = evt.total || 1;
         const percent = Math.min(
           100,
-          Math.round(((evt.loaded || 0) / total) * 100),
+          Math.round(((evt.loaded || 0) / total) * 100)
         );
         onProgress({ percent });
       });
@@ -261,10 +259,10 @@ const InternalUpload = ({
   };
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = async (
-    e,
+    e
   ) => {
     const files = Array.from(e.target.files || []);
-    e.target.value = "";
+    e.target.value = '';
     if (!files.length) return;
 
     // 数量限制
@@ -299,16 +297,16 @@ const InternalUpload = ({
   };
 
   return (
-    <div className={cn("space-y-2 flex flex-col", className)} style={style}>
+    <div className={cn('space-y-2 flex flex-col', className)} style={style}>
       {/* 触发区域：与 antd 一致，children 为点击触发 */}
       <div
         role="button"
         tabIndex={0}
         onClick={triggerSelect}
-        onKeyDown={(e) => (e.key === "Enter" ? triggerSelect() : undefined)}
+        onKeyDown={(e) => (e.key === 'Enter' ? triggerSelect() : undefined)}
         className={cn(
-          "inline-flex items-center gap-2 cursor-pointer select-none",
-          disabled && "opacity-50 cursor-not-allowed",
+          'inline-flex items-center gap-2 cursor-pointer select-none',
+          disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
         {children}
@@ -334,17 +332,17 @@ const InternalUpload = ({
               <div className="flex items-center gap-2 overflow-hidden">
                 <FileIcon className="size-4 text-muted-foreground shrink-0" />
                 <span className="truncate max-w-[20rem]">{file.name}</span>
-                {typeof file.size === "number" && (
+                {typeof file.size === 'number' && (
                   <span className="text-muted-foreground">
                     ({Math.round(file.size / 1024)} KB)
                   </span>
                 )}
-                {file.status === "uploading" && (
+                {file.status === 'uploading' && (
                   <span className="text-muted-foreground">
                     - {file.percent ?? 0}%
                   </span>
                 )}
-                {file.status === "error" && (
+                {file.status === 'error' && (
                   <span className="text-destructive">- 上传失败</span>
                 )}
               </div>
@@ -375,7 +373,7 @@ const InternalUpload = ({
   );
 };
 
-InternalUpload.displayName = "Upload";
+InternalUpload.displayName = 'Upload';
 
 // 绑定 Dragger：与 antd 保持一致
 type UploadComponent = typeof InternalUpload & {

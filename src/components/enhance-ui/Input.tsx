@@ -1,23 +1,23 @@
-import * as React from "react";
-import { cn } from "../../lib/utils";
-import { Input as BaseInput } from "../ui/input";
-import { Button } from "./Button";
-import { Search as SearchIcon, X as XIcon, Loader2 } from "lucide-react";
+import * as React from 'react';
+import { cn } from '../../lib/utils';
+import { Input as BaseInput } from '../ui/input';
+import { Button } from './Button';
+import { Search as SearchIcon, X as XIcon, Loader2 } from 'lucide-react';
 
-type InputSize = "small" | "middle" | "large";
+type InputSize = 'small' | 'middle' | 'large';
 
 const sizeClasses: Record<InputSize, string> = {
-  small: "h-8 px-2 text-sm",
-  middle: "h-9 px-3 text-base md:text-sm",
-  large: "h-11 px-4 text-base",
+  small: 'h-8 px-2 text-sm',
+  middle: 'h-9 px-3 text-base md:text-sm',
+  large: 'h-11 px-4 text-base',
 };
 
-type InternalInputProps = React.ComponentProps<"input"> & {
+type InternalInputProps = React.ComponentProps<'input'> & {
   size?: InputSize;
 };
 
 const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
-  ({ className, size = "middle", ...props }, ref) => {
+  ({ className, size = 'middle', ...props }, ref) => {
     return (
       <BaseInput
         ref={ref}
@@ -25,12 +25,12 @@ const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
         {...props}
       />
     );
-  },
+  }
 );
-InternalInput.displayName = "EnhancedInput";
+InternalInput.displayName = 'EnhancedInput';
 
 export interface EnhancedInputSearchProps
-  extends Omit<React.ComponentProps<"input">, "size"> {
+  extends Omit<React.ComponentProps<'input'>, 'size'> {
   value?: string;
   defaultValue?: string;
   allowClear?: boolean;
@@ -41,7 +41,7 @@ export interface EnhancedInputSearchProps
   className?: string;
   onSearch?: (
     value: string,
-    event?: React.KeyboardEvent | React.MouseEvent,
+    event?: React.KeyboardEvent | React.MouseEvent
   ) => void;
 }
 
@@ -58,19 +58,19 @@ const SearchInput = React.forwardRef<
       allowClear = true,
       enterButton = false,
       loading = false,
-      size = "middle",
+      size = 'middle',
       disabled,
       inputClassName,
       className,
       ...rest
     },
-    ref,
+    ref
   ) => {
     const [internalValue, setInternalValue] = React.useState(
-      defaultValue ?? "",
+      defaultValue ?? ''
     );
     const isControlled = value !== undefined;
-    const currentValue = isControlled ? (value ?? "") : internalValue;
+    const currentValue = isControlled ? (value ?? '') : internalValue;
 
     const updateValue = (next: string) => {
       if (!isControlled) setInternalValue(next);
@@ -87,7 +87,7 @@ const SearchInput = React.forwardRef<
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") triggerSearch(e);
+      if (e.key === 'Enter') triggerSearch(e);
     };
 
     const showClear = allowClear && !disabled && !!currentValue;
@@ -112,7 +112,7 @@ const SearchInput = React.forwardRef<
       if (React.isValidElement(enterButton)) {
         const existingOnClick = (enterButton as any).props?.onClick;
         return React.cloneElement(enterButton as React.ReactElement<any>, {
-          className: cn((enterButton as any).props?.className, "ml-2"),
+          className: cn((enterButton as any).props?.className, 'ml-2'),
           onClick: (e: React.MouseEvent) => {
             existingOnClick?.(e);
             triggerSearch(e);
@@ -124,7 +124,7 @@ const SearchInput = React.forwardRef<
     };
 
     return (
-      <div className={cn("flex w-full items-center", className)}>
+      <div className={cn('flex w-full items-center', className)}>
         <div className="relative flex-1">
           {!enterButton && (
             <div className="pointer-events-none absolute left-2 top-1/2 flex -translate-y-1/2 items-center">
@@ -151,8 +151,8 @@ const SearchInput = React.forwardRef<
             onKeyDown={handleKeyDown}
             className={cn(
               sizeClasses[size],
-              !enterButton && "pl-8 pr-7",
-              inputClassName,
+              !enterButton && 'pl-8 pr-7',
+              inputClassName
             )}
             {...rest}
           />
@@ -164,11 +164,11 @@ const SearchInput = React.forwardRef<
                   type="button"
                   className="pointer-events-auto text-muted-foreground hover:text-foreground cursor-pointer"
                   onClick={() => {
-                    updateValue("");
+                    updateValue('');
                     // 受控时通知外层清空
                     if (isControlled) {
                       onChange?.({
-                        target: { value: "" },
+                        target: { value: '' },
                       } as unknown as React.ChangeEvent<HTMLInputElement>);
                     }
                   }}
@@ -183,9 +183,9 @@ const SearchInput = React.forwardRef<
         {renderEnterButton()}
       </div>
     );
-  },
+  }
 );
-SearchInput.displayName = "InputSearch";
+SearchInput.displayName = 'InputSearch';
 
 type EnhancedInputComponent = typeof InternalInput & {
   Search: typeof SearchInput;

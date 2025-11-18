@@ -1,7 +1,7 @@
-import * as React from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "../../lib/utils";
-import { ChevronDown } from "lucide-react";
+import * as React from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { cn } from '../../lib/utils';
+import { ChevronDown } from 'lucide-react';
 
 export interface TreeNode {
   /** 唯一标识（推荐提供），未提供时将根据路径自动生成 */
@@ -18,7 +18,7 @@ export interface TreeNode {
   disabled?: boolean;
 }
 
-export type SelectionMode = "single" | "multiple";
+export type SelectionMode = 'single' | 'multiple';
 
 export interface TreeSelectInfo {
   /** 是否选中 */
@@ -42,7 +42,7 @@ export interface TreeProps {
       level: number;
       expanded: boolean;
       isLeaf: boolean;
-    },
+    }
   ) => React.ReactNode;
   /** 自定义右侧额外区域（默认显示 node.extra） */
   renderRightExtra?: (
@@ -52,7 +52,7 @@ export interface TreeProps {
       level: number;
       expanded: boolean;
       isLeaf: boolean;
-    },
+    }
   ) => React.ReactNode;
   /** 默认展开的节点 key 列表 */
   defaultExpandedKeys?: React.Key[];
@@ -91,7 +91,7 @@ export interface TreeProps {
   }) => React.ReactNode;
   /** 展开/收起图标的样式类名 */
   toggleIconClassName?: string;
-  toggleIconPosition?: "left" | "right";
+  toggleIconPosition?: 'left' | 'right';
   getTreeItemClassName?: (flat: FlatNode) => string;
 }
 
@@ -106,7 +106,7 @@ type FlatNode = {
 function getNodeKey(node: TreeNode, path: number[]): React.Key {
   if (node.key != null) return node.key;
   // 使用路径生成稳定 key，例如 "0-2-1"
-  return path.join("-");
+  return path.join('-');
 }
 
 function flatten(tree: TreeNode[], expanded: Set<React.Key>): FlatNode[] {
@@ -114,7 +114,7 @@ function flatten(tree: TreeNode[], expanded: Set<React.Key>): FlatNode[] {
   const walk = (
     nodes: TreeNode[],
     level: number,
-    parentPath: number[] = [],
+    parentPath: number[] = []
   ) => {
     nodes.forEach((n, idx) => {
       const path = [...parentPath, idx];
@@ -147,7 +147,7 @@ function initializeExpandedKeys(
     defaultExpandAll?: boolean;
     autoExpandRoot?: boolean;
     showToggleIcon?: boolean;
-  },
+  }
 ): Set<React.Key> {
   const {
     defaultExpandedKeys,
@@ -194,7 +194,7 @@ export const Tree: React.FC<TreeProps> = ({
   selectedKeys,
   defaultSelectedKeys,
   onSelect,
-  selectionMode = "single",
+  selectionMode = 'single',
   selectable = true,
   containerHeight = 360,
   estimatedItemSize = 40,
@@ -204,7 +204,7 @@ export const Tree: React.FC<TreeProps> = ({
   showToggleIcon = true,
   toggleIcon,
   toggleIconClassName,
-  toggleIconPosition = "left",
+  toggleIconPosition = 'left',
   getTreeItemClassName,
 }) => {
   const parentRef = React.useRef<HTMLDivElement | null>(null);
@@ -216,7 +216,7 @@ export const Tree: React.FC<TreeProps> = ({
       defaultExpandAll,
       autoExpandRoot,
       showToggleIcon,
-    }),
+    })
   );
 
   // 当 showToggleIcon 变为隐藏时（非受控），同步展开全部
@@ -238,7 +238,7 @@ export const Tree: React.FC<TreeProps> = ({
 
   const visibleList = React.useMemo(
     () => flatten(treeData, expandedSet),
-    [treeData, expandedSet],
+    [treeData, expandedSet]
   );
 
   const virtualizer = useVirtualizer({
@@ -256,7 +256,7 @@ export const Tree: React.FC<TreeProps> = ({
 
   // 非受控选中状态
   const [innerSelected, setInnerSelected] = React.useState<Set<React.Key>>(
-    () => new Set(defaultSelectedKeys ?? []),
+    () => new Set(defaultSelectedKeys ?? [])
   );
 
   // 计算最终选中集合（受控优先）
@@ -276,7 +276,7 @@ export const Tree: React.FC<TreeProps> = ({
         onExpandedKeysChange?.(Array.from(next));
       }
     },
-    [expandedSet, expandedKeys, onExpandedKeysChange],
+    [expandedSet, expandedKeys, onExpandedKeysChange]
   );
 
   const select = React.useCallback(
@@ -286,7 +286,7 @@ export const Tree: React.FC<TreeProps> = ({
       let next: Set<React.Key>;
       const isSelected = selectedSet.has(key);
 
-      if (selectionMode === "multiple") {
+      if (selectionMode === 'multiple') {
         // 多选模式：切换当前节点选中状态
         next = new Set(selectedSet);
         if (isSelected) {
@@ -318,19 +318,19 @@ export const Tree: React.FC<TreeProps> = ({
         onSelect?.(nextKeys, selectInfo);
       }
     },
-    [selectedSet, selectedKeys, onSelect, selectionMode, selectable],
+    [selectedSet, selectedKeys, onSelect, selectionMode, selectable]
   );
 
   const renderToggleIcon = (flat: FlatNode) => {
     return (
       <button
-        aria-label={expandedSet.has(flat.key) ? "Collapse" : "Expand"}
+        aria-label={expandedSet.has(flat.key) ? 'Collapse' : 'Expand'}
         className={cn(
-          "inline-flex items-center justify-center rounded-sm",
-          "transition-transform duration-200 ease-out",
-          "hover:bg-muted/60 p-0.5",
-          expandedSet.has(flat.key) ? "rotate-0" : "-rotate-90",
-          toggleIconPosition === "left" && "mr-1",
+          'inline-flex items-center justify-center rounded-sm',
+          'transition-transform duration-200 ease-out',
+          'hover:bg-muted/60 p-0.5',
+          expandedSet.has(flat.key) ? 'rotate-0' : '-rotate-90',
+          toggleIconPosition === 'left' && 'mr-1'
         )}
         onClick={(e) => {
           e.stopPropagation();
@@ -345,7 +345,7 @@ export const Tree: React.FC<TreeProps> = ({
           })
         ) : (
           <ChevronDown
-            className={cn("h-4 w-4 text-muted-foreground", toggleIconClassName)}
+            className={cn('h-4 w-4 text-muted-foreground', toggleIconClassName)}
           />
         )}
       </button>
@@ -355,10 +355,10 @@ export const Tree: React.FC<TreeProps> = ({
   return (
     <div
       ref={parentRef}
-      className={cn("relative w-full overflow-auto ", className)}
+      className={cn('relative w-full overflow-auto ', className)}
       style={{ height: containerHeight }}
     >
-      <div style={{ height: totalSize, width: "100%", position: "relative" }}>
+      <div style={{ height: totalSize, width: '100%', position: 'relative' }}>
         {items.map((vi) => {
           const flat = visibleList[vi.index];
           const class_name = getTreeItemClassName?.(flat);
@@ -368,32 +368,32 @@ export const Tree: React.FC<TreeProps> = ({
               key={flat.key}
               ref={virtualizer.measureElement}
               style={{
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
                 left: 0,
-                width: "100%",
+                width: '100%',
                 transform: `translateY(${vi.start}px)`,
               }}
               onClick={() => select(flat.key, flat.node)}
             >
               <div
                 className={cn(
-                  "px-3 py-2  flex items-center justify-between",
-                  "transition-colors duration-150",
+                  'px-3 py-2  flex items-center justify-between',
+                  'transition-colors duration-150',
                   !flat.node.disabled &&
                     selectable &&
-                    "cursor-pointer hover:bg-tabs/15",
-                  flat.isLeaf ? "" : "bg-card/60",
-                  selectedSet.has(flat.key) && "bg-tabs/15 ",
-                  flat.node.disabled && "opacity-50 cursor-not-allowed",
-                  class_name,
+                    'cursor-pointer hover:bg-tabs/15',
+                  flat.isLeaf ? '' : 'bg-card/60',
+                  selectedSet.has(flat.key) && 'bg-tabs/15 ',
+                  flat.node.disabled && 'opacity-50 cursor-not-allowed',
+                  class_name
                 )}
                 style={{ paddingLeft: flat.level * indent + 12 }}
               >
                 <div className="flex items-center min-w-0 w-full">
                   {!flat?.isLeaf &&
                   showToggleIcon &&
-                  toggleIconPosition === "left"
+                  toggleIconPosition === 'left'
                     ? renderToggleIcon(flat)
                     : null}
 
@@ -411,9 +411,9 @@ export const Tree: React.FC<TreeProps> = ({
                   ) : (
                     <span
                       className={cn(
-                        "truncate",
-                        flat.isLeaf ? "font-normal" : "font-medium",
-                        selectedSet.has(flat.key) && "font-medium",
+                        'truncate',
+                        flat.isLeaf ? 'font-normal' : 'font-medium',
+                        selectedSet.has(flat.key) && 'font-medium'
                       )}
                     >
                       {flat.node.title}
@@ -433,7 +433,7 @@ export const Tree: React.FC<TreeProps> = ({
 
                   {!flat?.isLeaf &&
                   showToggleIcon &&
-                  toggleIconPosition === "right"
+                  toggleIconPosition === 'right'
                     ? renderToggleIcon(flat)
                     : null}
                 </div>
@@ -446,6 +446,6 @@ export const Tree: React.FC<TreeProps> = ({
   );
 };
 
-Tree.displayName = "EnhancedTree";
+Tree.displayName = 'EnhancedTree';
 
 export default Tree;

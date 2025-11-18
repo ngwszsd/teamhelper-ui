@@ -1,9 +1,9 @@
-import * as React from "react";
-import { cn } from "../../lib/utils";
+import * as React from 'react';
+import { cn } from '../../lib/utils';
 
 export interface EnhancedSpinnerProps {
   spinning?: boolean;
-  size?: "small" | "default" | "large";
+  size?: 'small' | 'default' | 'large';
   tip?: React.ReactNode;
   delay?: number;
   indicator?: React.ReactNode;
@@ -15,7 +15,7 @@ export interface EnhancedSpinnerProps {
 
 const Spinner: React.FC<EnhancedSpinnerProps> = ({
   spinning = true,
-  size = "default",
+  size = 'default',
   tip,
   delay = 0,
   indicator,
@@ -25,7 +25,7 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
   children,
 }) => {
   const [isSpinning, setIsSpinning] = React.useState(
-    delay === 0 ? spinning : false,
+    delay === 0 ? spinning : false
   );
 
   React.useEffect(() => {
@@ -42,31 +42,31 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
 
   const getSizeClass = () => {
     switch (size) {
-      case "small":
-        return "h-4 w-4";
-      case "large":
-        return "h-8 w-8";
+      case 'small':
+        return 'h-4 w-4';
+      case 'large':
+        return 'h-8 w-8';
       default:
-        return "h-6 w-6";
+        return 'h-6 w-6';
     }
   };
 
   const getTextSizeClass = () => {
     switch (size) {
-      case "small":
-        return "text-sm";
-      case "large":
-        return "text-lg";
+      case 'small':
+        return 'text-sm';
+      case 'large':
+        return 'text-lg';
       default:
-        return "text-base";
+        return 'text-base';
     }
   };
 
   const defaultIndicator = (
     <div
       className={cn(
-        "animate-spin rounded-full border-2 border-solid border-current border-r-transparent",
-        getSizeClass(),
+        'animate-spin rounded-full border-2 border-solid border-current border-r-transparent',
+        getSizeClass()
       )}
     />
   );
@@ -74,14 +74,14 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
   const spinnerElement = (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-2",
-        className,
+        'flex flex-col items-center justify-center gap-2',
+        className
       )}
       style={style}
     >
       {indicator || defaultIndicator}
       {tip && (
-        <div className={cn("text-muted-foreground", getTextSizeClass())}>
+        <div className={cn('text-muted-foreground', getTextSizeClass())}>
           {tip}
         </div>
       )}
@@ -90,11 +90,11 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
 
   if (children) {
     return (
-      <div className={cn("relative", wrapperClassName)}>
+      <div className={cn('relative', wrapperClassName)}>
         <div
           className={cn(
-            "transition-opacity duration-200",
-            isSpinning && "opacity-50 pointer-events-none",
+            'transition-opacity duration-200',
+            isSpinning && 'opacity-50 pointer-events-none'
           )}
         >
           {children}
@@ -122,6 +122,6 @@ interface SpinnerStaticMethods {
 
 const SpinnerWithStatics = Spinner as typeof Spinner & SpinnerStaticMethods;
 
-Spinner.displayName = "EnhancedSpinner";
+Spinner.displayName = 'EnhancedSpinner';
 
 export { SpinnerWithStatics as EnhancedSpinner };

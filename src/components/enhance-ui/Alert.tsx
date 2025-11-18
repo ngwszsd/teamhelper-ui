@@ -1,6 +1,6 @@
-import { Info, X } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useState } from "react";
+import { Info, X } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { useState } from 'react';
 
 interface IProps {
   icon?: React.ReactNode;
@@ -8,12 +8,12 @@ interface IProps {
   description?: React.ReactNode;
   classNames?: Partial<
     Record<
-      "body" | "icon" | "content" | "title" | "description",
+      'body' | 'icon' | 'content' | 'title' | 'description',
       string | undefined
     >
   >;
   showIcon?: boolean;
-  type?: "info" | "error" | "warning";
+  type?: 'info' | 'error' | 'warning';
   closable?: boolean;
   closeIcon?: React.ReactNode;
   onClose?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -25,7 +25,7 @@ const Alert: React.FC<IProps> = ({
   description,
   classNames,
   showIcon = true,
-  type = "info",
+  type = 'info',
   closable,
   closeIcon,
   onClose,
@@ -36,37 +36,37 @@ const Alert: React.FC<IProps> = ({
   return (
     <div
       className={cn(
-        "px-3 py-1.5 flex items-center space-x-2.5 rounded-[6px]",
-        "bg-card border",
-        type === "info" && "border-border",
-        type === "error" && "border-destructive/50",
-        type === "warning" && "border-orange-400/10 bg-orange-400/10",
-        classNames?.body,
+        'px-3 py-1.5 flex items-center space-x-2.5 rounded-[6px]',
+        'bg-card border',
+        type === 'info' && 'border-border',
+        type === 'error' && 'border-destructive/50',
+        type === 'warning' && 'border-orange-400/10 bg-orange-400/10',
+        classNames?.body
       )}
     >
       {showIcon
         ? icon || (
             <Info
               className={cn(
-                "h-4 w-4",
-                type === "info" && "text-foreground",
-                type === "error" && "text-destructive",
-                type === "warning" && "text-orange-400",
-                classNames?.icon,
+                'h-4 w-4',
+                type === 'info' && 'text-foreground',
+                type === 'error' && 'text-destructive',
+                type === 'warning' && 'text-orange-400',
+                classNames?.icon
               )}
             />
           )
         : null}
 
-      <div className={cn("space-y-1 flex-1", classNames?.content)}>
+      <div className={cn('space-y-1 flex-1', classNames?.content)}>
         {title ? (
           <div
             className={cn(
-              "text-sm font-medium",
-              type === "info" && "text-foreground",
-              type === "error" && "text-destructive",
-              type === "warning" && "text-orange-400",
-              classNames?.title,
+              'text-sm font-medium',
+              type === 'info' && 'text-foreground',
+              type === 'error' && 'text-destructive',
+              type === 'warning' && 'text-orange-400',
+              classNames?.title
             )}
           >
             {title}
@@ -76,11 +76,11 @@ const Alert: React.FC<IProps> = ({
         {description ? (
           <div
             className={cn(
-              "text-xs",
-              type === "info" && "text-muted-foreground",
-              type === "error" && "text-destructive",
-              type === "warning" && "text-orange-400",
-              classNames?.description,
+              'text-xs',
+              type === 'info' && 'text-muted-foreground',
+              type === 'error' && 'text-destructive',
+              type === 'warning' && 'text-orange-400',
+              classNames?.description
             )}
           >
             {description}
