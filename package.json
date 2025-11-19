@@ -19,16 +19,24 @@
     "typescript",
     "component-library"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "rollup -c rollup.config.ts --configPlugin typescript -w",
-    "build": "node scripts/build.js",
-    "build:rollup": "rollup -c rollup.config.ts --configPlugin typescript",
+    "dev": "rslib build --watch",
+    "build": "rslib build",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "build:types": "tsc --emitDeclarationOnly",
@@ -40,23 +48,15 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\""
   },
   "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
-  "type": "module",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^29.0.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.3.0",
-    "@rollup/pluginutils": "^5.3.0",
+    "@rsbuild/core": "^1.6.7",
+    "@rslib/core": "^0.18.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.3",
-    "rollup": "^4.53.2",
-    "rollup-plugin-dts": "^6.2.3",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-typescript2": "^0.36.0",
     "tailwindcss": "^4.1.17",
     "tslib": "^2.8.1",
     "tw-animate-css": "^1.4.0",

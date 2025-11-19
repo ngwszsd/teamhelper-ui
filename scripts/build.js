@@ -30,7 +30,7 @@ try {
 
   // 2. 运行 Rollup 构建
   console.log('📦 Running Rollup build...');
-  execSync('npm run build:rollup', {
+  execSync('npm run build', {
     cwd: rootDir,
     stdio: 'inherit',
   });
