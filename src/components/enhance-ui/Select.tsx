@@ -47,6 +47,9 @@ type SingleProps = {
   listHeight?: number;
   /** 预估项高度（虚拟滚动） */
   estimatedItemSize?: number;
+  inputClassName?: string;
+  listItemClassName?: string;
+  showCheck?: boolean;
 };
 
 type MultipleProps = {
@@ -82,6 +85,9 @@ type MultipleProps = {
   listHeight?: number;
   /** 预估项高度（虚拟滚动） */
   estimatedItemSize?: number;
+  inputClassName?: string;
+  listItemClassName?: string;
+  showCheck?: boolean;
 };
 
 /** 增强型 Select 组件的 props（单选与多选模式联合） */
@@ -106,6 +112,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
     renderLabel,
     listHeight = 240,
     estimatedItemSize = 36,
+    inputClassName,
+    listItemClassName,
+    showCheck = true,
   } = props;
   const isMultiple = props.mode === 'multiple';
   const [open, setOpen] = React.useState(false);
@@ -194,7 +203,8 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
               if (!disabled) setOpen(true);
             }}
             className={cn(
-              'pr-8 focus:ring-1 focus:ring-ring',
+              'pr-8 focus:ring-1 focus:ring-ring shadow-none text-left',
+              inputClassName,
               disabled && 'cursor-not-allowed'
             )}
           />
@@ -229,8 +239,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
                 return (
                   <div
                     className={cn(
-                      'flex items-center justify-between px-2 py-1 rounded cursor-pointer',
-                      selected ? 'bg-accent' : 'hover:bg-accent',
+                      'flex items-center justify-between px-2 py-1 rounded cursor-pointer text-sm',
+                      listItemClassName,
+                      selected ? 'bg-accent font-bold' : 'hover:bg-accent',
                       option.disabled && 'opacity-50 cursor-not-allowed'
                     )}
                     onClick={() => handleSelect(option)}
@@ -238,7 +249,7 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
                     <div className="truncate">
                       {renderLabel ? renderLabel(option) : option.label}
                     </div>
-                    {selected && <Check className="h-4 w-4" />}
+                    {selected && showCheck && <Check className="h-4 w-4" />}
                   </div>
                 );
               }}
@@ -286,7 +297,20 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
           <XIcon className="h-3 w-3" />
         </button>
       ) : (
-        <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <ChevronDown
+          className={cn(
+            'absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground',
+            disabled && 'cursor-not-allowed text-muted-foreground/50'
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (disabled) return;
+            requestAnimationFrame(() => {
+              inputRef.current?.focus();
+            });
+            setOpen(true);
+          }}
+        />
       )}
     </div>
   );
