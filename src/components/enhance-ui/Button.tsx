@@ -174,7 +174,7 @@ const InternalButton = React.forwardRef<HTMLButtonElement, EnhancedButtonProps>(
     const commonProps: Omit<BaseButtonProps, 'size' | 'variant'> & {
       className?: string;
     } = {
-      className: cn(extraClasses, className),
+      className: cn('gap-1', extraClasses, className),
       style,
       disabled: disabled || delayedLoading,
       'aria-busy': delayedLoading || undefined,

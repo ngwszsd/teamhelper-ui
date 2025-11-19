@@ -31,6 +31,8 @@ export interface ModalProps {
     center?: React.ReactNode;
     right?: React.ReactNode;
   };
+  isShowCancel?: boolean;
+  isShowOk?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -52,6 +54,8 @@ export const Modal: React.FC<ModalProps> = ({
   classNames,
   footerBtnPosition = 'right',
   footerExtraContent,
+  isShowCancel = true,
+  isShowOk = true,
 }) => {
   const { t } = useTranslation('components');
   const [okLoading, setOkLoading] = React.useState(false);
@@ -162,34 +166,38 @@ export const Modal: React.FC<ModalProps> = ({
             )}
           >
             {footerExtraContent?.left}
-            <Button
-              onClick={handleCancel}
-              disabled={okLoading}
-              className={cn(
-                'min-w-[96px]',
-                type === 'primary' &&
-                  'border-primary text-primary hover:text-primary',
-                footerBtnPosition === 'block' && 'flex-1'
-              )}
-            >
-              {cancelTextNode}
-            </Button>
+            {isShowCancel ? (
+              <Button
+                onClick={handleCancel}
+                disabled={okLoading}
+                className={cn(
+                  'min-w-[96px]',
+                  type === 'primary' &&
+                    'border-primary text-primary hover:text-primary',
+                  footerBtnPosition === 'block' && 'flex-1'
+                )}
+              >
+                {cancelTextNode}
+              </Button>
+            ) : null}
 
             {footerExtraContent?.center}
 
-            <Button
-              onClick={handleOk}
-              disabled={okLoading}
-              className={cn(
-                'min-w-[96px]',
-                footerBtnPosition === 'block' && 'flex-1'
-              )}
-              danger={type === 'danger'}
-              type="primary"
-            >
-              {okLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {okTextNode}
-            </Button>
+            {isShowOk ? (
+              <Button
+                onClick={handleOk}
+                disabled={okLoading}
+                className={cn(
+                  'min-w-[96px]',
+                  footerBtnPosition === 'block' && 'flex-1'
+                )}
+                danger={type === 'danger'}
+                type="primary"
+              >
+                {okLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {okTextNode}
+              </Button>
+            ) : null}
 
             {footerExtraContent?.right}
           </DialogFooter>
