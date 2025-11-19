@@ -30,6 +30,7 @@
     "dist",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "rslib.config.ts"
+    "rslib.config.ts",
+    ".storybook/**/*"
   ]
 }
