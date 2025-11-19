@@ -304,7 +304,10 @@ export type { EnhancedCardProps } from './components/enhance-ui/Card';
 export type { DatePickerProps } from './components/enhance-ui/DatePicker';
 export type { EnhancedDropdownProps } from './components/enhance-ui/Dropdown';
 export type { EnhancedEmptyProps } from './components/enhance-ui/Empty';
-export type { EnhancedInputSearchProps } from './components/enhance-ui/Input';
+export type {
+  EnhancedInputSearchProps,
+  InternalInputProps,
+} from './components/enhance-ui/Input';
 export type { ModalProps } from './components/enhance-ui/Modal';
 export type { EnhancedPaginationProps } from './components/enhance-ui/Pagination';
 export type { EnhancedPopoverProps } from './components/enhance-ui/Popover';
