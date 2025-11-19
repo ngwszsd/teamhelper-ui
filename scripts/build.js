@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, statSync, rmSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -28,20 +28,16 @@ try {
     // 如果目录不存在，忽略错误
   }
 
-  // 2. 运行 Rollup 构建
-  console.log('📦 Running Rollup build...');
-  execSync('npm run build', {
+  // 2. 运行 rslib 构建
+  console.log('📦 Running rslib build...');
+  execSync('npm run build:rslib', {
     cwd: rootDir,
     stdio: 'inherit',
   });
 
   // 3. 验证构建结果
   console.log('✅ Verifying build output...');
-  const expectedFiles = [
-    'dist/index.js',
-    'dist/index.esm.js',
-    'dist/index.d.ts',
-  ];
+  const expectedFiles = ['dist/index.js', 'dist/index.cjs', 'dist/index.d.ts'];
 
   for (const file of expectedFiles) {
     const filePath = join(rootDir, file);

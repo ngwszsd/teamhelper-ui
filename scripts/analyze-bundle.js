@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync, statSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  statSync,
+  readdirSync,
+  lstatSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -24,7 +30,7 @@ try {
   try {
     const buildInfo = JSON.parse(readFileSync(buildInfoPath, 'utf8'));
     // 简单检查关键文件是否存在
-    for (const file of ['dist/index.js', 'dist/index.esm.js']) {
+    for (const file of ['dist/index.js', 'dist/index.cjs']) {
       try {
         readFileSync(join(rootDir, file));
       } catch {
@@ -48,31 +54,40 @@ try {
     });
   }
 
-  // 分析 dist 文件夹大小
   console.log('📊 Analyzing bundle size...');
 
-  const distFiles = ['dist/index.js', 'dist/index.esm.js', 'dist/index.d.ts'];
+  const walk = (dir) => {
+    const entries = readdirSync(dir);
+    const files = [];
+    for (const entry of entries) {
+      const fullPath = join(dir, entry);
+      const stats = lstatSync(fullPath);
+      if (stats.isDirectory()) {
+        files.push(...walk(fullPath));
+      } else {
+        files.push(fullPath);
+      }
+    }
+    return files;
+  };
+
+  const distRoot = join(rootDir, 'dist');
+  const allFiles = walk(distRoot);
 
   let totalSize = 0;
   const fileSizes = {};
 
-  for (const file of distFiles) {
-    try {
-      const stats = statSync(join(rootDir, file));
-      const size = stats.size;
-      const sizeKB = (size / 1024).toFixed(2);
-
-      fileSizes[file] = {
-        bytes: size,
-        kb: sizeKB,
-        gzipped: null, // 可以添加gzip压缩后的size
-      };
-
-      totalSize += size;
-      console.log(`  ${file}: ${sizeKB} KB`);
-    } catch (error) {
-      console.warn(`  ⚠️  ${file} not found`);
-    }
+  for (const absPath of allFiles) {
+    const stats = statSync(absPath);
+    const size = stats.size;
+    const sizeKB = (size / 1024).toFixed(2);
+    const relPath = absPath.replace(rootDir + '/', '');
+    fileSizes[relPath] = {
+      bytes: size,
+      kb: sizeKB,
+      gzipped: null,
+    };
+    totalSize += size;
   }
 
   const totalKB = (totalSize / 1024).toFixed(2);
