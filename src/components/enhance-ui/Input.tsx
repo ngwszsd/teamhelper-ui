@@ -12,7 +12,7 @@ const sizeClasses: Record<InputSize, string> = {
   large: 'h-11 px-4 text-base',
 };
 
-type InternalInputProps = React.ComponentProps<'input'> & {
+export type InternalInputProps = Omit<React.ComponentProps<'input'>, 'size'> & {
   size?: InputSize;
 };
 
