@@ -143,7 +143,7 @@ const SearchInput = React.forwardRef<
             </div>
           )}
 
-          <BaseInput
+          <InternalInput
             ref={ref}
             disabled={disabled}
             value={currentValue}
