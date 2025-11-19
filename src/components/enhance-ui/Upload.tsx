@@ -297,7 +297,10 @@ const InternalUpload = ({
   };
 
   return (
-    <div className={cn('space-y-2 flex flex-col', className)} style={style}>
+    <div
+      className={cn('space-y-2 flex flex-col w-fit', className)}
+      style={style}
+    >
       {/* 触发区域：与 antd 一致，children 为点击触发 */}
       <div
         role="button"
