@@ -146,6 +146,7 @@ const TipsModal: FC<TipsModalProps> = ({
     >
       <DialogContent
         className={cn(
+          `max-h-[90vh] flex flex-col`,
           'min-w-[400px] w-auto p-0 gap-0',
           className,
           classNames?.content
@@ -169,7 +170,7 @@ const TipsModal: FC<TipsModalProps> = ({
 
         <div
           style={{ width: 'auto', fontSize: '14px', color: '#4E5969' }}
-          className={cn('p-5', classNames?.body)}
+          className={cn('p-5 overflow-y-auto', classNames?.body)}
         >
           {renderContent()}
         </div>

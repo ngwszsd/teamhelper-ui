@@ -66,6 +66,10 @@ function buildExtraClasses(opts: {
   const { type = 'default', danger, ghost, shape, block } = opts;
   const extra: string[] = [];
 
+  if (type === 'link') {
+    extra.push('hover:no-underline hover:text-primary/70');
+  }
+
   // dashed 边框
   if (type === 'dashed') {
     extra.push('border-dashed');
