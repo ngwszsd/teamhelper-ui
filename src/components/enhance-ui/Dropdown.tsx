@@ -147,7 +147,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
             )}
             disabled={item.disabled}
           >
-            {item.icon && <span className="mr-2">{item.icon}</span>}
+            {item.icon && <span>{item.icon}</span>}
             {item.label}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -173,13 +173,14 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
           )}
           disabled={item.disabled}
           onClick={(e) => {
+            e?.stopPropagation?.();
             if (!item.disabled) {
               item.onClick?.({ key: item.key, domEvent: e });
               menu?.onClick?.({ key: item.key, domEvent: e });
             }
           }}
         >
-          {item.icon && <span className="mr-2">{item.icon}</span>}
+          {item.icon && <span>{item.icon}</span>}
           {item.label}
         </DropdownMenuItem>
       </React.Fragment>
