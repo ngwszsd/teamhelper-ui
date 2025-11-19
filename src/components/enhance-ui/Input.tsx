@@ -21,7 +21,7 @@ const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
     return (
       <BaseInput
         ref={ref}
-        className={cn(sizeClasses[size as InputSize], className)}
+        className={cn('shadow-none', sizeClasses[size as InputSize], className)}
         {...props}
       />
     );
