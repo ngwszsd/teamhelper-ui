@@ -12,6 +12,7 @@ import {
 import { Checkbox } from '../ui/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { EnhancedSpinner } from './Spinner';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Empty } from './Empty';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -632,7 +633,6 @@ const Table = <T extends Record<string, any> = any>({
                   >
                     {rowSelection.type !== 'radio' && (
                       <Checkbox
-                        className={'xxxxxx1'}
                         checked={
                           selectedRowKeys.length === dataSource.length &&
                           dataSource.length > 0
@@ -701,27 +701,26 @@ const Table = <T extends Record<string, any> = any>({
                           {...(onRow?.(record, index) || {})}
                         >
                           {rowSelection && (
-                            <TableCell className="sticky left-0 bg-card z-10 xxxxxxxxx">
+                            <TableCell className="sticky left-0 bg-card z-10">
                               {rowSelection.type === 'radio' ? (
-                                <input
-                                  type="radio"
-                                  name="table-radio-selection"
-                                  checked={isSelected}
-                                  onChange={(e) =>
+                                <RadioGroup
+                                  value={isSelected ? key : ''}
+                                  onValueChange={(value) =>
                                     handleSelect(
                                       record,
-                                      e.target.checked,
+                                      value === key,
                                       index,
-                                      e.nativeEvent
+                                      new Event('change')
                                     )
                                   }
                                   {...(rowSelection.getCheckboxProps?.(
                                     record
                                   ) || {})}
-                                />
+                                >
+                                  <RadioGroupItem value={key} />
+                                </RadioGroup>
                               ) : (
                                 <Checkbox
-                                  className={'xxxxxxxxx'}
                                   checked={isSelected}
                                   onCheckedChange={(checked) =>
                                     handleSelect(
@@ -777,25 +776,24 @@ const Table = <T extends Record<string, any> = any>({
                     {...(onRow?.(record, index) || {})}
                   >
                     {rowSelection && (
-                      <TableCell className="sticky left-0 z-10">
+                      <TableCell className="sticky left-0 bg-card z-10">
                         {rowSelection.type === 'radio' ? (
-                          <input
-                            type="radio"
-                            name="table-radio-selection"
-                            checked={isSelected}
-                            onChange={(e) =>
+                          <RadioGroup
+                            value={isSelected ? key : ''}
+                            onValueChange={(value) =>
                               handleSelect(
                                 record,
-                                e.target.checked,
+                                value === key,
                                 index,
-                                e.nativeEvent
+                                new Event('change')
                               )
                             }
                             {...(rowSelection.getCheckboxProps?.(record) || {})}
-                          />
+                          >
+                            <RadioGroupItem value={key} />
+                          </RadioGroup>
                         ) : (
                           <Checkbox
-                            className={'xxxxxxx'}
                             checked={isSelected}
                             onCheckedChange={(checked) =>
                               handleSelect(
