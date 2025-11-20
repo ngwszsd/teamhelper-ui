@@ -37,7 +37,11 @@ try {
 
   // 3. 验证构建结果
   console.log('✅ Verifying build output...');
-  const expectedFiles = ['dist/index.js', 'dist/index.cjs', 'dist/index.d.ts'];
+  const expectedFiles = [
+    'dist/index.js',
+    'dist/index.cjs',
+    'dist/src/index.d.ts',
+  ];
 
   for (const file of expectedFiles) {
     const filePath = join(rootDir, file);
