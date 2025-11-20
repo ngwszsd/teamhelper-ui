@@ -632,6 +632,7 @@ const Table = <T extends Record<string, any> = any>({
                   >
                     {rowSelection.type !== 'radio' && (
                       <Checkbox
+                        className={'xxxxxx1'}
                         checked={
                           selectedRowKeys.length === dataSource.length &&
                           dataSource.length > 0
@@ -700,7 +701,7 @@ const Table = <T extends Record<string, any> = any>({
                           {...(onRow?.(record, index) || {})}
                         >
                           {rowSelection && (
-                            <TableCell className="sticky left-0 bg-card z-10">
+                            <TableCell className="sticky left-0 bg-card z-10 xxxxxxxxx">
                               {rowSelection.type === 'radio' ? (
                                 <input
                                   type="radio"
@@ -720,6 +721,7 @@ const Table = <T extends Record<string, any> = any>({
                                 />
                               ) : (
                                 <Checkbox
+                                  className={'xxxxxxxxx'}
                                   checked={isSelected}
                                   onCheckedChange={(checked) =>
                                     handleSelect(
@@ -793,6 +795,7 @@ const Table = <T extends Record<string, any> = any>({
                           />
                         ) : (
                           <Checkbox
+                            className={'xxxxxxx'}
                             checked={isSelected}
                             onCheckedChange={(checked) =>
                               handleSelect(
