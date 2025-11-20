@@ -33,6 +33,7 @@ export interface EnhancedTooltipProps {
   mouseEnterDelay?: number;
   mouseLeaveDelay?: number;
   zIndex?: number;
+  className?: string;
 }
 
 const Tooltip: React.FC<EnhancedTooltipProps> = ({
@@ -49,6 +50,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
   mouseEnterDelay = 0.1,
   mouseLeaveDelay = 0.1,
   zIndex,
+  className,
 }) => {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
   const [hoverTimeout, setHoverTimeout] = React.useState<ReturnType<
@@ -144,25 +146,27 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
   const contentNode = React.isValidElement(title) ? title : <>{title}</>;
 
   return (
-    <BaseTooltip open={isOpen} onOpenChange={handleOpenChange}>
-      <TooltipTrigger asChild>
-        <div {...triggerProps}>{children}</div>
-      </TooltipTrigger>
+    <div className={cn('w-fit', className)}>
+      <BaseTooltip open={isOpen} onOpenChange={handleOpenChange}>
+        <TooltipTrigger asChild>
+          <div {...triggerProps}>{children}</div>
+        </TooltipTrigger>
 
-      <TooltipContent
-        side={side}
-        align={align}
-        className={cn(
-          overlayClassName,
-          !arrow && '[&>svg]:hidden' // 隐藏箭头
-        )}
-        style={{ ...overlayStyle, zIndex }}
-        onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
-        onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
-      >
-        {contentNode}
-      </TooltipContent>
-    </BaseTooltip>
+        <TooltipContent
+          side={side}
+          align={align}
+          className={cn(
+            overlayClassName,
+            !arrow && '[&>svg]:hidden' // 隐藏箭头
+          )}
+          style={{ ...overlayStyle, zIndex }}
+          onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
+          onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
+        >
+          {contentNode}
+        </TooltipContent>
+      </BaseTooltip>
+    </div>
   );
 };
 
