@@ -286,6 +286,10 @@ export { EnhancedTooltip } from './components/enhance-ui/Tooltip';
 export { Tree } from './components/enhance-ui/Tree';
 export { Upload } from './components/enhance-ui/Upload';
 export { List, ListProps, ListItem } from './components/enhance-ui/List';
+export {
+  EnhancedRadio,
+  EnhancedRadioGroup,
+} from './components/enhance-ui/Radio';
 
 export {
   openTipsModal,
@@ -326,3 +330,8 @@ export type {
   ListType,
   UploadProps,
 } from './components/enhance-ui/UploadDragger';
+export type {
+  RadioOption,
+  EnhancedRadioGroupProps,
+  EnhancedRadioProps,
+} from './components/enhance-ui/Radio';
