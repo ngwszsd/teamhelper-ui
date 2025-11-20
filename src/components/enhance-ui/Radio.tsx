@@ -123,7 +123,7 @@ const Group = React.forwardRef<
               />
               <span
                 className={cn(
-                  'ml-2 text-[14px] leading-5 text-[#1f2329] font-normal',
+                  'ml-2 text-sm leading-5 text-foreground font-normal',
                   labelClassName
                 )}
               >
@@ -177,7 +177,7 @@ const Radio = React.forwardRef<
           <label
             htmlFor={generatedId}
             className={cn(
-              'ml-2 text-[14px] leading-5 text-[#1f2329] font-normal cursor-pointer',
+              'ml-2 text-sm leading-5 text-foreground font-normal cursor-pointer',
               labelClassName
             )}
           >
