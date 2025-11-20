@@ -34,6 +34,7 @@ export interface EnhancedTooltipProps {
   mouseLeaveDelay?: number;
   zIndex?: number;
   className?: string;
+  triggerClassName?: string;
 }
 
 const Tooltip: React.FC<EnhancedTooltipProps> = ({
@@ -51,6 +52,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
   mouseLeaveDelay = 0.1,
   zIndex,
   className,
+  triggerClassName,
 }) => {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
   const [hoverTimeout, setHoverTimeout] = React.useState<ReturnType<
@@ -149,7 +151,9 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
     <div className={cn('w-fit', className)}>
       <BaseTooltip open={isOpen} onOpenChange={handleOpenChange}>
         <TooltipTrigger asChild>
-          <div {...triggerProps}>{children}</div>
+          <div className={cn(triggerClassName)} {...triggerProps}>
+            {children}
+          </div>
         </TooltipTrigger>
 
         <TooltipContent
