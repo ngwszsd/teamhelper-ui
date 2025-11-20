@@ -167,6 +167,7 @@ const Popover: React.FC<EnhancedPopoverProps> = ({
         )}
         onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
         onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
+        onClick={(e) => e.stopPropagation()}
       >
         {popoverContent}
       </PopoverContent>
