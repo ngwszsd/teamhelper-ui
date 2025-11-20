@@ -23,12 +23,14 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", ".storybook/**/*"],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "rslib.config.ts"
+    "rslib.config.ts",
+    ".storybook/**/*",
+    "stories/**/*"
   ]
 }

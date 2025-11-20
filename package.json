@@ -27,7 +27,7 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": {
         "development": "./src/index.ts",
         "default": "./dist/index.js"
@@ -35,7 +35,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "types": "dist/src/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
