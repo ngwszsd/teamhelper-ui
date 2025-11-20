@@ -279,7 +279,7 @@ export { EnhancedPopover } from './components/enhance-ui/Popover';
 export { EnhancedSelect } from './components/enhance-ui/Select';
 export { EnhancedSlider } from './components/enhance-ui/Slider';
 export { EnhancedSpinner } from './components/enhance-ui/Spinner';
-export { EnhancedTable } from './components/enhance-ui/Table';
+export { EnhancedTable, ColumnType } from './components/enhance-ui/Table';
 export { EnhancedTabs } from './components/enhance-ui/Tabs';
 export { Timeline } from './components/enhance-ui/Timeline';
 export { EnhancedTooltip } from './components/enhance-ui/Tooltip';
