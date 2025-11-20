@@ -24,8 +24,7 @@ export interface EnhancedTimelineProps {
   children?: React.ReactNode;
   // 新增：连线与留白的可调参数（px）
   lineLeft?: number;
-  lineTopOffset?: number;
-  lineBottomOffset?: number;
+  lineTop?: number;
 }
 
 const colorClassMap: Record<string, string> = {
@@ -53,7 +52,8 @@ function Dot({
   return (
     <span
       className={cn(
-        'timeline-dot relative z-10 inline-block size-2 rounded-full',
+        'timeline-dot relative z-10 inline-block rounded-full',
+        'w-1.5 h-1.5',
         cls
       )}
       style={inlineStyle}
@@ -85,11 +85,18 @@ const TimelineItem: React.FC<
   return (
     <li
       className={cn(
-        'grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
+        'relative grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
         className
       )}
       style={style}
     >
+      <span
+        className="pointer-events-none absolute top-0 bottom-0 border-l border-border z-0"
+        style={{
+          left: 'var(--timeline-line-left)',
+          top: 'var(--timeline-line-top)',
+        }}
+      />
       <div className="relative flex items-center justify-center col-start-1 row-start-1">
         <Dot color={color} dot={dot} />
       </div>
@@ -113,8 +120,7 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   style,
   children,
   lineLeft = 10,
-  lineTopOffset = 0,
-  lineBottomOffset = 0,
+  lineTop = 8,
 }) => {
   const childrenItems: TimelineItemProps[] = React.Children.toArray(children)
     .map((child) => {
@@ -144,69 +150,13 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
     list = [...list].reverse();
   }
 
-  const containerRef = React.useRef<HTMLUListElement>(null);
-
-  React.useLayoutEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const updateLineBounds = () => {
-      const rect = el.getBoundingClientRect();
-      const dots = el.querySelectorAll<HTMLElement>('.timeline-dot');
-      if (!dots.length) {
-        el.style.setProperty('--timeline-line-top', `${lineTopOffset}px`);
-        el.style.setProperty('--timeline-line-bottom', `${lineBottomOffset}px`);
-        return;
-      }
-      const firstRect = dots[0].getBoundingClientRect();
-      const lastRect = dots[dots.length - 1].getBoundingClientRect();
-
-      const firstCenter = firstRect.top - rect.top + firstRect.height / 2;
-      const lastCenter = lastRect.top - rect.top + lastRect.height / 2;
-
-      const top = Math.max(0, firstCenter + 0 - (lineTopOffset || 0));
-      const bottom = Math.max(
-        0,
-        rect.height - lastCenter + 0 - (lineBottomOffset || 0)
-      );
-
-      el.style.setProperty('--timeline-line-top', `${top}px`);
-      el.style.setProperty('--timeline-line-bottom', `${bottom}px`);
-    };
-
-    updateLineBounds();
-
-    const ro = new ResizeObserver(() => updateLineBounds());
-    ro.observe(el);
-    window.addEventListener('resize', updateLineBounds);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', updateLineBounds);
-    };
-  }, [
-    items,
-    children,
-    reverse,
-    pending,
-    mode,
-    itemClassName,
-    lineTopOffset,
-    lineBottomOffset,
-  ]);
-
   return (
     <ul
-      ref={containerRef}
-      className={cn(
-        "relative space-y-6 before:content-[''] before:absolute before:z-0 before:left-[var(--timeline-line-left)] before:top-[var(--timeline-line-top)] before:bottom-[var(--timeline-line-bottom)] before:border-l before:border-border before:pointer-events-none",
-        className
-      )}
+      className={cn('relative space-y-6', className)}
       style={{
         ...(style || {}),
         ['--timeline-line-left' as any]: `${lineLeft}px`,
-        ['--timeline-line-top' as any]: `${lineTopOffset}px`,
-        ['--timeline-line-bottom' as any]: `${lineBottomOffset}px`,
+        ['--timeline-line-top' as any]: `${lineTop}px`,
       }}
       role="list"
     >
