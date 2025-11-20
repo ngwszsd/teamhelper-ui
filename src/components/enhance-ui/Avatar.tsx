@@ -110,10 +110,8 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
 
     const getInitial = (value: string | number | undefined) => {
       const s = String(value ?? '');
-      const ch = s.trim().charAt(0);
-      return ch
-        ? ch.toUpperCase()
-        : (alt || '').trim().charAt(0)?.toUpperCase() || '?';
+      const ch = s.trim() || '';
+      return ch ? ch.toUpperCase() : (alt || '').trim()?.toUpperCase() || '?';
     };
 
     if (isPlainTextNode(children))
@@ -121,7 +119,7 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
     if (icon && isPlainTextNode(icon))
       return initialOnly ? getInitial(icon) : String(icon);
 
-    const initial = (alt || '')?.trim?.()?.charAt?.(0)?.toUpperCase?.() || '?';
+    const initial = (alt || '')?.trim?.()?.toUpperCase?.() || '?';
     return initial;
   }, [src, imgVisible, icon, children, alt, initialOnly]);
 
