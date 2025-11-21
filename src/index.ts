@@ -326,7 +326,12 @@ export type {
 export type { EnhancedTabsProps } from './components/enhance-ui/Tabs';
 export type { EnhancedTimelineProps } from './components/enhance-ui/Timeline';
 export type { EnhancedTooltipProps } from './components/enhance-ui/Tooltip';
-export type { TreeProps, TreeNode } from './components/enhance-ui/Tree';
+export type {
+  TreeProps,
+  TreeNode,
+  TreeSelectInfo,
+  SelectionMode,
+} from './components/enhance-ui/Tree';
 export type { EnhancedUploadProps } from './components/enhance-ui/Upload';
 export type {
   ParseMode,
