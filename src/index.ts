@@ -319,11 +319,14 @@ export type { RangePickerProps } from './components/enhance-ui/RangePicker';
 export type { EnhancedSelectProps } from './components/enhance-ui/Select';
 export type { EnhancedSliderProps } from './components/enhance-ui/Slider';
 export type { EnhancedSpinnerProps } from './components/enhance-ui/Spinner';
-export type { EnhancedTableProps } from './components/enhance-ui/Table';
+export type {
+  EnhancedTableProps,
+  ColumnType,
+} from './components/enhance-ui/Table';
 export type { EnhancedTabsProps } from './components/enhance-ui/Tabs';
 export type { EnhancedTimelineProps } from './components/enhance-ui/Timeline';
 export type { EnhancedTooltipProps } from './components/enhance-ui/Tooltip';
-export type { TreeProps } from './components/enhance-ui/Tree';
+export type { TreeProps, TreeNode } from './components/enhance-ui/Tree';
 export type { EnhancedUploadProps } from './components/enhance-ui/Upload';
 export type {
   ParseMode,

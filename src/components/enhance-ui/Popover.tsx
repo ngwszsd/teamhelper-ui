@@ -29,6 +29,7 @@ export interface EnhancedPopoverProps {
   onOpenChange?: (open: boolean) => void;
   arrow?: boolean;
   overlayClassName?: string;
+  popoverContentClassName?: string;
   overlayStyle?: React.CSSProperties;
   getPopupContainer?: () => HTMLElement;
   destroyTooltipOnHide?: boolean;
@@ -48,6 +49,7 @@ const Popover: React.FC<EnhancedPopoverProps> = ({
   onOpenChange,
   arrow = true,
   overlayClassName,
+  popoverContentClassName,
   overlayStyle,
   mouseEnterDelay = 0.1,
   mouseLeaveDelay = 0.1,
@@ -163,7 +165,8 @@ const Popover: React.FC<EnhancedPopoverProps> = ({
         className={cn(
           'w-auto max-w-xs',
           !arrow &&
-            'data-[side=bottom]:slide-in-from-top-0 data-[side=left]:slide-in-from-right-0 data-[side=right]:slide-in-from-left-0 data-[side=top]:slide-in-from-bottom-0'
+            'data-[side=bottom]:slide-in-from-top-0 data-[side=left]:slide-in-from-right-0 data-[side=right]:slide-in-from-left-0 data-[side=top]:slide-in-from-bottom-0',
+          popoverContentClassName
         )}
         onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
         onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
