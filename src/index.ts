@@ -1,4 +1,4 @@
-import './styles/globals.css';
+// CSS 由前端项目统一导入,这里不再导入以避免冲突
 // UI Components
 export { Button, buttonVariants } from './components/ui/button';
 export type { ButtonProps } from './components/ui/button';

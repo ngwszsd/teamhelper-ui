@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Tailwind v4 使用 @source 指令来指定扫描路径 */
+@source '../';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -14,7 +17,8 @@
   --tabs-foreground: rgba(255, 255, 255, 1);
   --muted: rgba(248, 249, 250, 1);
   --muted-foreground: rgba(113, 128, 150, 1);
-  --accent: rgba(248, 249, 250, 1); /* 下拉item hover色 */
+  --accent: rgba(248, 249, 250, 1);
+  /* 下拉item hover色 */
   --accent-foreground: rgba(45, 55, 72, 1);
   --destructive: rgba(246, 81, 96, 1);
   --destructive-foreground: rgba(250, 250, 250, 1);
@@ -22,10 +26,14 @@
   --main-yellow-foreground: rgba(255, 237, 237, 1);
   --main-green: rgba(37, 180, 59, 1);
   --main-green-foreground: rgba(238, 255, 237, 1);
-  --border: rgba(244, 244, 244, 1); /* 描边 分割线 */
-  --under-line: rgba(226, 232, 240, 1); /* 下划线 */
-  --input: rgba(226, 232, 240, 1); /* 表单类输入边框 */
-  --ring: var(--primary); /* 表单类输入边框focus */
+  --border: rgba(244, 244, 244, 1);
+  /* 描边 分割线 */
+  --under-line: rgba(226, 232, 240, 1);
+  /* 下划线 */
+  --input: rgba(226, 232, 240, 1);
+  /* 表单类输入边框 */
+  --ring: var(--primary);
+  /* 表单类输入边框focus */
   --radius: 0.625rem;
   --tooltip: oklch(0.205 0 0);
   --tooltip-foreground: rgba(250, 250, 250, 1);
@@ -67,8 +75,10 @@
   --main-green-foreground: rgba(11, 65, 31, 1);
   --border: rgba(42, 49, 60, 1);
   --under-line: rgba(61, 68, 77, 1);
-  --input: var(--border); /* 表单类输入边框 */
-  --ring: var(--primary); /* 表单类输入边框 focus*/
+  --input: var(--border);
+  /* 表单类输入边框 */
+  --ring: var(--primary);
+  /* 表单类输入边框 focus*/
   --tooltip: oklch(0.205 0 0);
   --tooltip-foreground: rgba(250, 250, 250, 1);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -119,6 +129,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -179,7 +190,8 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   /* 使用强大的阴影来覆盖背景色，边框通常不受影响 */
-  -webkit-box-shadow: 0 0 0px 1000px var(--card) inset !important; /* 将白色替换为您想要的颜色 */
+  -webkit-box-shadow: 0 0 0px 1000px var(--card) inset !important;
+  /* 将白色替换为您想要的颜色 */
   box-shadow: 0 0 0px 1000px var(--card) inset !important;
 
   /* 同时设置文字颜色 */
@@ -193,6 +205,7 @@ input:-webkit-autofill:active {
  * 对于不支持 -webkit-autofill 但支持标准语法的未来浏览器（如果出现）
  */
 @supports (-webkit-touch-callout: none) {
+
   input:autofill,
   input:autofill:hover,
   input:autofill:focus,
