@@ -28,7 +28,7 @@ export interface EnhancedRadioGroupProps
 }
 
 const StyledRadioItem = React.forwardRef<
-  React.ElementRef<typeof BaseRadioItem>,
+  React.ComponentRef<typeof BaseRadioItem>,
   React.ComponentPropsWithoutRef<typeof BaseRadioItem>
 >(({ className, ...props }, ref) => {
   return (
@@ -48,7 +48,7 @@ const StyledRadioItem = React.forwardRef<
 StyledRadioItem.displayName = 'StyledRadioItem';
 
 const Group = React.forwardRef<
-  React.ElementRef<typeof BaseRadioGroup>,
+  React.ComponentRef<typeof BaseRadioGroup>,
   EnhancedRadioGroupProps
 >(
   (
@@ -150,7 +150,7 @@ export interface EnhancedRadioProps
 }
 
 const Radio = React.forwardRef<
-  React.ElementRef<typeof BaseRadioItem>,
+  React.ComponentRef<typeof BaseRadioItem>,
   EnhancedRadioProps
 >(
   (

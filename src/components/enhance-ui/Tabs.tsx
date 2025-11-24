@@ -41,7 +41,7 @@ export interface EnhancedTabsProps {
 }
 
 const Tabs = React.forwardRef<
-  React.ElementRef<typeof BaseTabs>,
+  React.ComponentRef<typeof BaseTabs>,
   EnhancedTabsProps
 >(
   (

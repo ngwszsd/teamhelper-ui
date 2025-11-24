@@ -5,7 +5,7 @@ import { Circle } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 const RadioGroup = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Root>,
+  React.ComponentRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
   return (
@@ -19,7 +19,7 @@ const RadioGroup = React.forwardRef<
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 const RadioGroupItem = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Item>,
+  React.ComponentRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & {
     indicatorClassName?: string;
   }
@@ -34,9 +34,7 @@ const RadioGroupItem = React.forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle
-          className={cn('h-3.5 w-3.5 fill-primary', indicatorClassName)}
-        />
+        <Circle className={cn('w-2 h-2 fill-primary', indicatorClassName)} />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );
