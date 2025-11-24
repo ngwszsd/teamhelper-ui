@@ -290,6 +290,10 @@ export {
   EnhancedRadio,
   EnhancedRadioGroup,
 } from './components/enhance-ui/Radio';
+export {
+  EnhancedCheckbox,
+  EnhancedCheckboxGroup,
+} from './components/enhance-ui/Checkbox';
 
 export {
   openTipsModal,
