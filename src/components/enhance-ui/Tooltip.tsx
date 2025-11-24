@@ -148,7 +148,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
   const contentNode = React.isValidElement(title) ? title : <>{title}</>;
 
   return (
-    <div className={cn('w-fit', className)}>
+    <div className={cn('max-w-fit', className)}>
       <BaseTooltip open={isOpen} onOpenChange={handleOpenChange}>
         <TooltipTrigger asChild>
           <div className={cn(triggerClassName)} {...triggerProps}>
