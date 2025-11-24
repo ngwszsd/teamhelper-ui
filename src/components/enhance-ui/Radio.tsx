@@ -121,14 +121,14 @@ const Group = React.forwardRef<
                 disabled={opt.disabled}
                 className={cn(itemClassName)}
               />
-              <span
+              <div
                 className={cn(
                   'ml-2 text-sm leading-5 text-foreground font-normal',
                   labelClassName
                 )}
               >
                 {opt.label}
-              </span>
+              </div>
             </label>
           );
         })}
