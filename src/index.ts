@@ -295,6 +295,7 @@ export {
   EnhancedCheckbox,
   EnhancedCheckboxGroup,
 } from './components/enhance-ui/Checkbox';
+export { DivSkeleton } from './components/enhance-ui/DivSkeleton';
 
 export {
   openTipsModal,
