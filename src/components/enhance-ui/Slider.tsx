@@ -25,6 +25,12 @@ export interface EnhancedSliderProps {
     formatter?: (value?: number) => React.ReactNode;
   };
   className?: string;
+  trackClassName?: string;
+  rangeClassName?: string;
+  thumbClassName?: string;
+  showMarkText?: boolean;
+  showMarkDot?: boolean;
+  thumbChildren?: React.ReactNode;
 }
 
 export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
@@ -43,6 +49,8 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
   dots = false,
   tooltip,
   className,
+  showMarkText,
+  showMarkDot,
   ...props
 }) => {
   const [internalValue, setInternalValue] = React.useState<number[]>(
@@ -78,11 +86,41 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
           vertical && 'h-full flex-col',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
+        markContent={
+          marks && Object.keys(marks).length && showMarkDot ? (
+            <div
+              className={cn(
+                'absolute flex pointer-events-none',
+                'mx-0.5',
+                vertical ? 'flex-col h-full left-2' : 'top-0'
+              )}
+              style={{ width: 'calc(100% - 4px * 2)' }}
+            >
+              {Object.keys(marks).map((key) => {
+                const position = ((Number(key) - min) / (max - min)) * 100;
+                const style = vertical
+                  ? { bottom: `${position}%` }
+                  : { left: `${position}%` };
+
+                return (
+                  <div
+                    key={key}
+                    className={cn(
+                      'absolute bg-[#D6D6D6]',
+                      'w-1 h-1 rounded-full'
+                    )}
+                    style={style}
+                  />
+                );
+              })}
+            </div>
+          ) : null
+        }
         {...props}
       />
 
       {/* 显示刻度标记 */}
-      {marks && (
+      {marks && showMarkText && (
         <div
           className={cn(
             'absolute flex w-full justify-between',
