@@ -398,7 +398,7 @@ export const Tree: React.FC<TreeProps> = ({
                     : null}
 
                   {flat.node.icon && (
-                    <span className="mr-2">{flat.node.icon}</span>
+                    <div className="mr-2 flex">{flat.node.icon}</div>
                   )}
 
                   {renderNodeContent ? (
