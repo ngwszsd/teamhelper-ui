@@ -15,7 +15,8 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@th/ui": ["./src/index.ts"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
