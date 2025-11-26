@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Skeleton } from '@th/ui';
+import { Skeleton } from './../ui/skeleton';
 
 interface IProps {
   className?: string;
