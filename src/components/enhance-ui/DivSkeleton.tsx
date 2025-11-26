@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils';
 import { Skeleton } from './../ui/skeleton';
 
-interface IProps {
+interface DivSkeletonProps {
   className?: string;
   isSkeleton?: boolean;
   children: React.ReactNode;
 }
 
-export const DivSkeleton: React.FC<IProps> = ({
+export const DivSkeleton: React.FC<DivSkeletonProps> = ({
   className,
   children,
   isSkeleton = true,
