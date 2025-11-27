@@ -25,6 +25,7 @@ export interface EnhancedTimelineProps {
   // 新增：连线与留白的可调参数（px）
   lineLeft?: number;
   lineTop?: number;
+  isShowLastLine?: boolean;
 }
 
 const colorClassMap: Record<string, string> = {
@@ -62,7 +63,11 @@ function Dot({
 }
 
 const TimelineItem: React.FC<
-  TimelineItemProps & { mode?: TimelineMode; index?: number }
+  TimelineItemProps & {
+    mode?: TimelineMode;
+    index?: number;
+    isShowLine?: boolean;
+  }
 > = ({
   children,
   label,
@@ -73,6 +78,7 @@ const TimelineItem: React.FC<
   style,
   mode = 'left',
   index = 0,
+  isShowLine,
 }) => {
   // 优先使用显式的 position；否则根据 mode 判断，alternate 模式按索引奇偶交替
   const isRight = position
@@ -86,17 +92,20 @@ const TimelineItem: React.FC<
     <li
       className={cn(
         'relative grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
+        'mb-3',
         className
       )}
       style={style}
     >
-      <span
-        className="pointer-events-none absolute top-0 bottom-0 border-l border-border z-0"
-        style={{
-          left: 'var(--timeline-line-left)',
-          top: 'var(--timeline-line-top)',
-        }}
-      />
+      {isShowLine ? (
+        <div
+          className="pointer-events-none absolute top-0 bottom-0 z-0 w-px bg-border h-full"
+          style={{
+            left: 'var(--timeline-line-left)',
+            top: 'var(--timeline-line-top)',
+          }}
+        />
+      ) : null}
       <div className="relative flex items-center justify-center col-start-1 row-start-1">
         <Dot color={color} dot={dot} />
       </div>
@@ -119,8 +128,9 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   itemClassName,
   style,
   children,
-  lineLeft = 10,
+  lineLeft = 9.5,
   lineTop = 8,
+  isShowLastLine = true,
 }) => {
   const childrenItems: TimelineItemProps[] = React.Children.toArray(children)
     .map((child) => {
@@ -152,7 +162,7 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
 
   return (
     <ul
-      className={cn('relative space-y-6', className)}
+      className={cn('relative', className)}
       style={{
         ...(style || {}),
         ['--timeline-line-left' as any]: `${lineLeft}px`,
@@ -160,7 +170,7 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
       }}
       role="list"
     >
-      {list.map((it, idx) => (
+      {list.map((it, idx, arr) => (
         <TimelineItem
           key={idx}
           {...it}
@@ -169,6 +179,7 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
           }
           index={idx}
           className={itemClassName}
+          isShowLine={isShowLastLine ? true : idx < arr.length - 1}
         />
       ))}
     </ul>
