@@ -1,6 +1,6 @@
 {
   "name": "@teamhelper/ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Component library for Teamhelper",
   "author": "geekbook9533@gmail.com",
   "license": "MIT",
@@ -46,7 +46,15 @@
   },
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.cjs",
+    "dist/**/*.d.ts",
+    "!dist/**/*.d.ts.map",
+    "!dist/**/*.js.map",
+    "!dist/build-info.json",
+    "!dist/bundle-analysis.json",
+    "README.md",
+    "README_TREE_SHAKING.md"
   ],
   "scripts": {
     "dev": "rslib build --watch",
@@ -58,6 +66,7 @@
     "pub": "node scripts/publish.js",
     "pub:quick": "npm run build && npm publish --access public",
     "analyze": "node scripts/analyze-bundle.js",
+    "analyze:size": "node scripts/analyze-package-size.js",
     "prepublishOnly": "npm run build",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
