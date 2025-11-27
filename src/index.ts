@@ -296,6 +296,7 @@ export {
   EnhancedCheckboxGroup,
 } from './components/enhance-ui/Checkbox';
 export { DivSkeleton } from './components/enhance-ui/DivSkeleton';
+export { Steps } from './components/enhance-ui/Steps';
 
 export {
   openTipsModal,
@@ -349,3 +350,4 @@ export type {
   EnhancedRadioGroupProps,
   EnhancedRadioProps,
 } from './components/enhance-ui/Radio';
+export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
