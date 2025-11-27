@@ -1,24 +1,25 @@
 {
-  "name": "@th/ui",
+  "name": "@teamhelper/ui",
   "version": "1.0.1",
-  "description": "Component library for garvin",
-  "author": "garvin <your-email@example.com>",
+  "description": "Component library for Teamhelper",
+  "author": "geekbook9533@gmail.com",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/your-username/your-repo.git"
-  },
   "bugs": {
-    "url": "https://github.com/your-username/your-repo/issues"
+    "url": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web"
   },
-  "homepage": "https://github.com/your-username/your-repo#readme",
+  "homepage": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web",
   "keywords": [
     "react",
     "components",
     "ui",
     "typescript",
-    "component-library"
+    "component-library",
+    "tailwind"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

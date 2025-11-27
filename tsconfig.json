@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@th/ui": ["./src/index.ts"]
+      "@teamhelper/ui": ["./src/index.ts"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
