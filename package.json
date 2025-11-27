@@ -34,6 +34,14 @@
         "default": "./dist/index.js"
       },
       "require": "./dist/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": {
+        "development": "./src/*.ts",
+        "default": "./dist/*.js"
+      },
+      "require": "./dist/*.cjs"
     }
   },
   "types": "dist/index.d.ts",
