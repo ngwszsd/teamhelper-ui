@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
-import { FileX, Inbox } from 'lucide-react';
+import { FileX, Inbox, PackageOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 type SemanticName = 'root' | 'image' | 'title' | 'description' | 'footer';
@@ -26,11 +26,17 @@ const EmptyImages = {
       <FileX className="w-6 h-6 text-muted-foreground" />
     </div>
   ),
+  PRESENTED_IMAGE_OPEN: (
+    <div className="flex items-center justify-center w-12 h-12 mb-2 bg-muted rounded-xl">
+      <PackageOpen className="w-6 h-6 text-foreground" />
+    </div>
+  ),
 };
 
 const Empty: React.FC<EnhancedEmptyProps> & {
   PRESENTED_IMAGE_DEFAULT: React.ReactNode;
   PRESENTED_IMAGE_SIMPLE: React.ReactNode;
+  PRESENTED_IMAGE_OPEN: React.ReactNode;
 } = ({
   image = EmptyImages.PRESENTED_IMAGE_DEFAULT,
   title,
@@ -112,6 +118,7 @@ const Empty: React.FC<EnhancedEmptyProps> & {
 // 添加静态属性
 Empty.PRESENTED_IMAGE_DEFAULT = EmptyImages.PRESENTED_IMAGE_DEFAULT;
 Empty.PRESENTED_IMAGE_SIMPLE = EmptyImages.PRESENTED_IMAGE_SIMPLE;
+Empty.PRESENTED_IMAGE_OPEN = EmptyImages.PRESENTED_IMAGE_OPEN;
 
 Empty.displayName = 'EnhancedEmpty';
 
