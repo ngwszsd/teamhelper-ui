@@ -44,11 +44,13 @@ yarn add @teamhelper/ui
 
 ### Peer Dependencies
 
-确保你的项目已安装以下依赖：
+组件库依赖 React，请确保你的项目已安装：
 
 ```bash
 npm install react react-dom
 ```
+
+> **注意**：其他工具库（如 `clsx`, `tailwind-merge` 等）会在安装组件库时自动安装，无需手动添加。
 
 ---
 
@@ -85,11 +87,28 @@ function App() {
 
 ### 3. 导入样式
 
-在你的项目中导入 Tailwind CSS 配置：
+在你的全局 CSS 文件（如 `globals.css`）中导入 Tailwind CSS 配置，并添加 `@source` 指令以确保 Tailwind 能正确扫描组件库的样式：
 
 ```css
-/* app.css */
 @import 'tailwindcss';
+@source "../node_modules/@teamhelper/ui/dist";
+```
+
+### 4. 使用内置工具库
+
+组件库已经内置并导出了常用的工具库，你可以直接使用，无需额外安装：
+
+```tsx
+import { toast, clsx, twMerge, Icons } from '@teamhelper/ui';
+
+// 使用 Toast
+toast.success('操作成功');
+
+// 使用图标
+<Icons.User className="w-4 h-4" />;
+
+// 使用样式合并
+const className = twMerge(clsx('base-class', condition && 'active'));
 ```
 
 ---

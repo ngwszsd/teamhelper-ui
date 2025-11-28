@@ -351,3 +351,9 @@ export type {
   EnhancedRadioProps,
 } from './components/enhance-ui/Radio';
 export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
+
+// Utilities (Re-export for convenience)
+export { toast, useSonner } from 'sonner';
+export { clsx, type ClassValue } from 'clsx';
+export { twMerge } from 'tailwind-merge';
+export { cva, type VariantProps, cx } from 'class-variance-authority';
