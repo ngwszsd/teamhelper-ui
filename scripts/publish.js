@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import readline from 'readline';
@@ -25,6 +25,77 @@ function question(prompt) {
   return new Promise((resolve) => {
     rl.question(prompt, resolve);
   });
+}
+
+// 修改 exports 配置为发布模式（指向 dist）
+function modifyExportsForPublish() {
+  console.log('📝 临时修改 exports 配置为发布模式...');
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+
+  packageJson.exports = {
+    '.': {
+      types: './dist/index.d.ts',
+      import: './dist/index.js',
+      require: './dist/index.cjs',
+    },
+    './*': {
+      types: './dist/*.d.ts',
+      import: './dist/*.js',
+      require: './dist/*.cjs',
+    },
+  };
+
+  // 移除 publishConfig.exports（不再需要）
+  if (packageJson.publishConfig && packageJson.publishConfig.exports) {
+    delete packageJson.publishConfig.exports;
+  }
+
+  writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJson, null, 2) + '\n',
+    'utf8'
+  );
+}
+
+// 恢复 exports 配置为开发模式（指向 src）
+function restoreExportsForDev() {
+  console.log('🔄 恢复 exports 配置为开发模式...');
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+
+  packageJson.exports = {
+    '.': {
+      types: './src/index.ts',
+      import: './src/index.ts',
+      require: './dist/index.cjs',
+    },
+    './*': {
+      types: './src/*.ts',
+      import: './src/*.ts',
+      require: './dist/*.cjs',
+    },
+  };
+
+  // 恢复 publishConfig.exports
+  if (!packageJson.publishConfig.exports) {
+    packageJson.publishConfig.exports = {
+      '.': {
+        types: './dist/index.d.ts',
+        import: './dist/index.js',
+        require: './dist/index.cjs',
+      },
+      './*': {
+        types: './dist/*.d.ts',
+        import: './dist/*.js',
+        require: './dist/*.cjs',
+      },
+    };
+  }
+
+  writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJson, null, 2) + '\n',
+    'utf8'
+  );
 }
 
 async function main() {
@@ -135,15 +206,28 @@ async function main() {
 
     // 3.5 发布
     console.log('📦 发布到 npm...');
-    execSync('npm publish --access public', { cwd: rootDir, stdio: 'inherit' });
 
-    console.log('');
-    console.log('🎉 发布成功！');
-    console.log(`📦 ${name}@${targetVersion} 已发布到 npm`);
-    console.log('');
-    console.log('🔗 后续操作：');
-    console.log(`   查看包: npm view ${name}`);
-    console.log(`   安装测试: npm install ${name}`);
+    try {
+      // 发布前：修改 exports 为发布模式
+      modifyExportsForPublish();
+
+      // 执行发布
+      execSync('npm publish --access public', {
+        cwd: rootDir,
+        stdio: 'inherit',
+      });
+
+      console.log('');
+      console.log('🎉 发布成功！');
+      console.log(`📦 ${name}@${targetVersion} 已发布到 npm`);
+      console.log('');
+      console.log('🔗 后续操作：');
+      console.log(`   查看包: npm view ${name}`);
+      console.log(`   安装测试: npm install ${name}`);
+    } finally {
+      // 发布后：恢复 exports 为开发模式
+      restoreExportsForDev();
+    }
   } catch (error) {
     console.error('');
     console.error('❌ 发布失败:', error.message);
