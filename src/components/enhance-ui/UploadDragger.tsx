@@ -262,7 +262,7 @@ export function UploadDragger({
             {children ?? (
               <>
                 <div className="mb-4 h-10 w-10 text-primary">
-                  <FolderUp />
+                  <FolderUp className="w-full h-full" />
                 </div>
                 <div className="text-sm text-muted-foreground font-medium">
                   {descriptionNode}
