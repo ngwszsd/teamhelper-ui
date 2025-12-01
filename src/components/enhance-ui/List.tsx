@@ -17,7 +17,7 @@ export interface ListProps<T = any> {
   /** 预估项目高度（默认 40） */
   estimatedItemSize?: number;
   /** 容器高度（默认 500px） */
-  containerHeight?: number;
+  containerHeight?: number | string;
   /** 容器类名（可选） */
   className?: string;
   /** 容器样式（可选） */

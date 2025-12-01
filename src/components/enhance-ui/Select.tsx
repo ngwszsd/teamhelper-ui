@@ -44,7 +44,7 @@ type SingleProps = {
   /** 自定义选项渲染 */
   renderLabel?: (option: EnhancedSelectOption) => React.ReactNode;
   /** 列表容器高度（虚拟滚动） */
-  listHeight?: number;
+  listHeight?: number | string;
   /** 预估项高度（虚拟滚动） */
   estimatedItemSize?: number;
   inputClassName?: string;
@@ -82,7 +82,7 @@ type MultipleProps = {
   /** 自定义选项渲染 */
   renderLabel?: (option: EnhancedSelectOption) => React.ReactNode;
   /** 列表容器高度（虚拟滚动） */
-  listHeight?: number;
+  listHeight?: number | string;
   /** 预估项高度（虚拟滚动） */
   estimatedItemSize?: number;
   inputClassName?: string;
