@@ -256,7 +256,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
     <div className="flex items-center">
       <Button
         {...buttonProps}
-        className={cn('rounded-r-none !px-2', className)}
+        className={cn('rounded-r-none px-2! border-r-0 shadow-none', className)}
         onClick={onClick}
         disabled={disabled}
         type={type}
@@ -274,9 +274,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           {...buttonProps}
           htmlType="button"
           className={cn(
-            'rounded-l-none -ml-px !px-2',
-            type === 'primary' &&
-              `border-l border-primary-foreground/${!disabled ? 10 : 60}`,
+            'rounded-l-none px-2! border-l-0 shadow-none',
             className
           )}
           disabled={disabled}
