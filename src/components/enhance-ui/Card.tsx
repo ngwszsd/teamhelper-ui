@@ -63,7 +63,7 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
                   </BaseCardTitle>
                 )}
               </div>
-              {extra && <div className="flex-shrink-0 ml-4">{extra}</div>}
+              {extra && <div className="shrink-0 ml-4">{extra}</div>}
             </div>
           </BaseCardHeader>
         )}
