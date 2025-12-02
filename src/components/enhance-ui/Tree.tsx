@@ -73,7 +73,7 @@ export interface TreeProps {
   /** 是否可选择（默认true） */
   selectable?: boolean;
   /** 容器高度（虚拟滚动需要） */
-  containerHeight?: number;
+  containerHeight?: number | string;
   /** 预估行高（虚拟滚动需要） */
   estimatedItemSize?: number;
   /** 每级缩进宽度 */
