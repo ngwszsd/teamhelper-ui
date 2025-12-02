@@ -249,6 +249,8 @@ export const openModalWarning = ({
   title,
   description,
   options,
+  onOk,
+  onOkBeforeFunction,
 }: {
   showIcon?: boolean;
   icon?: React.ReactNode;
@@ -256,6 +258,8 @@ export const openModalWarning = ({
   title?: TipsModalProps['title'];
   description?: React.ReactNode;
   options?: Omit<TipsModalProps, 'title' | 'content'>;
+  onOk?: TipsModalProps['onOk'];
+  onOkBeforeFunction?: TipsModalProps['onOkBeforeFunction'];
 }) => {
   const renderTitle = () => {
     if (!title) return null;
@@ -306,13 +310,8 @@ export const openModalWarning = ({
       </div>
     </div>,
     {
-      onOkBeforeFunction: () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true);
-          }, 3000);
-        });
-      },
+      onOk,
+      onOkBeforeFunction,
       classNames: {
         content: 'min-w-auto max-w-full w-[394px]',
       },
@@ -330,6 +329,7 @@ export const openModalError = ({
   content,
   options,
   onOk,
+  onOkBeforeFunction,
 }: {
   showIcon?: boolean;
   icon?: React.ReactNode;
@@ -338,6 +338,7 @@ export const openModalError = ({
   content: React.ReactNode;
   options?: Omit<TipsModalProps, 'title' | 'content' | 'onOk'>;
   onOk?: TipsModalProps['onOk'];
+  onOkBeforeFunction?: TipsModalProps['onOkBeforeFunction'];
 }) => {
   return openTipsModal(
     <div className={cn('gap-3 flex', classNames?.box)}>
@@ -366,13 +367,7 @@ export const openModalError = ({
     {
       title,
       type: 'danger',
-      onOkBeforeFunction: () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true);
-          }, 3000);
-        });
-      },
+      onOkBeforeFunction,
       classNames: {
         content: 'min-w-auto max-w-full w-[474px]',
       },
@@ -392,6 +387,7 @@ export const openModalWarning02 = ({
   content,
   options,
   onOk,
+  onOkBeforeFunction,
 }: {
   showIcon?: boolean;
   icon?: React.ReactNode;
@@ -400,6 +396,7 @@ export const openModalWarning02 = ({
   content: React.ReactNode;
   options?: Omit<TipsModalProps, 'title' | 'content' | 'onOk'>;
   onOk?: TipsModalProps['onOk'];
+  onOkBeforeFunction?: TipsModalProps['onOkBeforeFunction'];
 }) => {
   return openModalError({
     showIcon,
@@ -412,6 +409,7 @@ export const openModalWarning02 = ({
       ...options,
     },
     onOk,
+    onOkBeforeFunction,
   });
 };
 
