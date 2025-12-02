@@ -297,6 +297,7 @@ export {
 } from './components/enhance-ui/Checkbox';
 export { DivSkeleton } from './components/enhance-ui/DivSkeleton';
 export { Steps } from './components/enhance-ui/Steps';
+export { DirectoryTree } from './components/enhance-ui/DirectoryTree';
 
 export {
   openTipsModal,
@@ -351,6 +352,7 @@ export type {
   EnhancedRadioProps,
 } from './components/enhance-ui/Radio';
 export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
+export type { DirectoryTreeProps } from './components/enhance-ui/DirectoryTree';
 
 // Utilities (Re-export for convenience)
 export { toast, useSonner } from 'sonner';
