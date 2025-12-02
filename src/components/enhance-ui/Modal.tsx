@@ -148,7 +148,7 @@ export const Modal: React.FC<ModalProps> = ({
           </DialogTitle>
         ) : null}
 
-        <div className={cn('p-5 pt-3 overflow-y-auto', classNames?.body)}>
+        <div className={cn('px-5 overflow-y-auto', classNames?.body)}>
           {children}
         </div>
 

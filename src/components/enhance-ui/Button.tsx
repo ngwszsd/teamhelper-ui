@@ -178,11 +178,14 @@ const InternalButton = React.forwardRef<HTMLButtonElement, EnhancedButtonProps>(
     const commonProps: Omit<BaseButtonProps, 'size' | 'variant'> & {
       className?: string;
     } = {
-      className: cn('gap-1', extraClasses, className),
+      className: cn('gap-1 shadow-none', extraClasses, className),
       style,
       disabled: disabled || delayedLoading,
       'aria-busy': delayedLoading || undefined,
       onClick,
+      onFocus: (e) => {
+        e.stopPropagation();
+      },
       ...rest,
     };
 
