@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
+import { type ClassValue } from 'clsx';
 import { Input as BaseInput } from '../ui/input';
 import { Button } from './Button';
 import { Search as SearchIcon, X as XIcon, Loader2 } from 'lucide-react';
@@ -37,7 +38,7 @@ export interface EnhancedInputSearchProps
   enterButton?: boolean | React.ReactNode;
   loading?: boolean;
   size?: InputSize;
-  inputClassName?: string;
+  inputClassName?: ClassValue;
   className?: string;
   onSearch?: (
     value: string,
