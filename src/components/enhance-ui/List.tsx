@@ -82,14 +82,14 @@ export const List = <T extends unknown = any>({
           position: 'relative',
         }}
       >
-        {virtualItems.map((vi) => {
+        {virtualItems.map((vi, itemIdx) => {
           const index = vi.index;
           const item = dataSource[index];
           const key = (itemKey ? itemKey(item, index) : vi.key) as React.Key;
 
           return (
             <div
-              key={key}
+              key={isNaN(key as any) ? `${itemIdx}_${index}` : vi.key}
               ref={virtualizer.measureElement}
               data-index={index}
               style={{

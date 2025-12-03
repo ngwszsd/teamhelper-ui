@@ -14,14 +14,17 @@ import { Button, type EnhancedButtonProps } from './Button';
 import { ChevronDown } from 'lucide-react';
 
 export interface DropdownMenuItem {
-  key: string;
+  key: string | number;
   label: React.ReactNode;
   icon?: React.ReactNode;
   disabled?: boolean;
   danger?: boolean;
   cursorPointer?: boolean;
   divided?: boolean;
-  onClick?: (info: { key: string; domEvent: React.MouseEvent }) => void;
+  onClick?: (info: {
+    key: string | number;
+    domEvent: React.MouseEvent;
+  }) => void;
   children?: DropdownMenuItem[];
 }
 
@@ -29,7 +32,10 @@ export interface EnhancedDropdownProps {
   children: React.ReactNode;
   menu?: {
     items: DropdownMenuItem[];
-    onClick?: (info: { key: string; domEvent: React.MouseEvent }) => void;
+    onClick?: (info: {
+      key: string | number;
+      domEvent: React.MouseEvent;
+    }) => void;
   };
   trigger?: ('click' | 'hover' | 'contextMenu')[];
   placement?:
