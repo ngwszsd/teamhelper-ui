@@ -46,15 +46,18 @@ const Alert: React.FC<IProps> = ({
     >
       {showIcon
         ? icon || (
-            <Info
+            <div
               className={cn(
-                'h-4 w-4',
-                type === 'info' && 'text-foreground',
-                type === 'error' && 'text-destructive',
-                type === 'warning' && 'text-orange-400',
+                'w-4 h-4 rounded-full flex items-center justify-center overflow-hidden',
+                'text-[14px] text-muted font-medium',
+                type === 'info' && 'bg-foreground',
+                type === 'error' && 'bg-destructive',
+                type === 'warning' && 'bg-orange-400',
                 classNames?.icon
               )}
-            />
+            >
+              !
+            </div>
           )
         : null}
 
