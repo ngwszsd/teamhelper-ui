@@ -166,6 +166,9 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
           style={{ ...overlayStyle, zIndex }}
           onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
           onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           {contentNode}
         </TooltipContent>

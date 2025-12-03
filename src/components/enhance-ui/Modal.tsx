@@ -33,6 +33,7 @@ export interface ModalProps {
   };
   isShowCancel?: boolean;
   isShowOk?: boolean;
+  delay?: number;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -56,6 +57,7 @@ export const Modal: React.FC<ModalProps> = ({
   footerExtraContent,
   isShowCancel = true,
   isShowOk = true,
+  delay = 300,
 }) => {
   const { t } = useTranslation('components');
   const [okLoading, setOkLoading] = React.useState(false);
@@ -85,7 +87,9 @@ export const Modal: React.FC<ModalProps> = ({
     } catch (e) {
       // 交由上层处理错误即可
     } finally {
-      setOkLoading(false);
+      setTimeout(() => {
+        setOkLoading(false);
+      }, delay);
     }
   };
 
