@@ -20,7 +20,7 @@ type SingleProps = {
   /** 当前选中值（受控） */
   value?: string;
   /** 值变化回调；单选：返回选中 option；清除：返回 null */
-  onChange: (value?: string, option?: EnhancedSelectOption | null) => void;
+  onChange?: (value?: string, option?: EnhancedSelectOption | null) => void;
   /** 模式（单选），默认 "single" */
   mode?: 'single';
   /** 占位文案 */
@@ -58,7 +58,7 @@ type MultipleProps = {
   /** 当前选中值数组（受控） */
   value?: string[];
   /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
-  onChange: (value?: string[], option?: EnhancedSelectOption[]) => void;
+  onChange?: (value?: string[], option?: EnhancedSelectOption[]) => void;
   /** 模式（多选） */
   mode: 'multiple';
   /** 占位文案 */
@@ -170,9 +170,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
       else set.add(opt.value);
       const arr = Array.from(set);
       const arrOptions = options.filter((o) => arr.includes(o.value));
-      (props as MultipleProps).onChange(arr.length ? arr : [], arrOptions);
+      (props as MultipleProps).onChange?.(arr.length ? arr : [], arrOptions);
     } else {
-      (props as SingleProps).onChange(opt.value, opt);
+      (props as SingleProps).onChange?.(opt.value, opt);
       setOpen(false);
       requestAnimationFrame(() => {
         inputRef.current?.focus();
@@ -182,8 +182,8 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isMultiple) (props as MultipleProps).onChange([], []);
-    else (props as SingleProps).onChange(undefined, null);
+    if (isMultiple) (props as MultipleProps).onChange?.([], []);
+    else (props as SingleProps).onChange?.(undefined, null);
     requestAnimationFrame(() => {
       inputRef.current?.focus();
     });
