@@ -205,7 +205,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
               if (!disabled) setOpen(true);
             }}
             className={cn(
-              'pr-8 focus:ring-1 focus:ring-ring shadow-none text-left',
+              'pr-8 focus:ring-1 focus:ring-ring shadow-none text-left font-normal',
               inputClassName,
               disabled && 'cursor-not-allowed'
             )}
