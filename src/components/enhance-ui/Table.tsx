@@ -580,16 +580,6 @@ const Table = <T extends Record<string, any> = any>({
       ? stickyHeader.zIndex
       : 20;
 
-  if (loading) {
-    return (
-      <div className={cn('relative', className)} style={style}>
-        <EnhancedSpinner spinning={true} tip="加载中...">
-          <div className="min-h-[200px]" />
-        </EnhancedSpinner>
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn('w-full h-full min-h-0 flex flex-col', className)}
@@ -610,223 +600,245 @@ const Table = <T extends Record<string, any> = any>({
             : { height: '100%', maxWidth: '100%' }
         }
       >
-        <BaseTable
-          className={cn(
-            sizeClasses[size],
-            paddingClasses[size],
-            'w-full table-fixed'
-          )}
-        >
-          {showHeader && (
-            <TableHeader
-              className={cn('bg-background', stickyEnabled && 'sticky')}
-              style={
-                stickyEnabled
-                  ? { top: stickyTop, zIndex: stickyZIndex }
-                  : undefined
+        <>
+          <div
+            className={cn('relative h-full', className, {
+              hidden: !loading,
+            })}
+            style={style}
+          >
+            <EnhancedSpinner spinning wrapperClassName="h-full">
+              <div className="min-h-[200px]" />
+            </EnhancedSpinner>
+          </div>
+          <BaseTable
+            className={cn(
+              sizeClasses[size],
+              paddingClasses[size],
+              'w-full table-fixed',
+              {
+                hidden: loading,
               }
-            >
-              <TableRow {...(onHeaderRow?.(columns, 0) || {})}>
-                {rowSelection && (
-                  <TableHead
-                    className={cn('w-12 sticky left-0 bg-background z-20')}
-                  >
-                    {rowSelection.type !== 'radio' && (
-                      <Checkbox
-                        checked={
-                          selectedRowKeys.length === dataSource.length &&
-                          dataSource.length > 0
-                        }
-                        onCheckedChange={(checked) =>
-                          handleSelectAll(!!checked)
-                        }
-                      />
-                    )}
-                  </TableHead>
-                )}
-                {renderColumns(leftFixedColumns, 'left')}
-                {renderColumns(normalColumns)}
-                {renderColumns(rightFixedColumns, 'right')}
-              </TableRow>
-            </TableHeader>
-          )}
-
-          <TableBody>
-            {dataSource.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (rowSelection ? 1 : 0)}
-                  className="text-center py-8"
-                >
-                  {locale.emptyText}
-                </TableCell>
-              </TableRow>
-            ) : enableVirtual ? (
-              // 虚拟滚动：顶部/底部占位 + 可视区域行
-              (() => {
-                const virtualItems = rowVirtualizer.getVirtualItems();
-                const totalHeight = rowVirtualizer.getTotalSize();
-                const paddingTop =
-                  virtualItems.length > 0 ? virtualItems[0].start : 0;
-                const paddingBottom =
-                  virtualItems.length > 0
-                    ? totalHeight - virtualItems[virtualItems.length - 1].end
-                    : 0;
-
-                return (
-                  <>
-                    {paddingTop > 0 && (
-                      <TableRow aria-hidden style={{ height: paddingTop }}>
-                        <TableCell
-                          colSpan={columns.length + (rowSelection ? 1 : 0)}
-                        />
-                      </TableRow>
-                    )}
-
-                    {virtualItems.map((vItem) => {
-                      const index = vItem.index;
-                      const record = dataSource[index];
-                      const key = getRowKey(record, index);
-                      // 使用 Set 进行快速查找，避免 includes 的 O(n) 复杂度
-                      const isSelected = selectedKeysSet.has(key);
-
-                      return (
-                        <TableRow
-                          key={key}
-                          style={{ height: rowHeight }}
-                          className={cn(
-                            isSelected && 'bg-muted/50',
-                            'hover:bg-muted/30'
-                          )}
-                          {...(onRow?.(record, index) || {})}
-                        >
-                          {rowSelection && (
-                            <TableCell className="sticky left-0 bg-card z-10">
-                              {rowSelection.type === 'radio' ? (
-                                <RadioGroup
-                                  value={isSelected ? key : ''}
-                                  onValueChange={(value) =>
-                                    handleSelect(
-                                      record,
-                                      value === key,
-                                      index,
-                                      new Event('change')
-                                    )
-                                  }
-                                  {...(rowSelection.getCheckboxProps?.(
-                                    record
-                                  ) || {})}
-                                >
-                                  <RadioGroupItem value={key} />
-                                </RadioGroup>
-                              ) : (
-                                <Checkbox
-                                  checked={isSelected}
-                                  onCheckedChange={(checked) =>
-                                    handleSelect(
-                                      record,
-                                      !!checked,
-                                      index,
-                                      new Event('change')
-                                    )
-                                  }
-                                  {...(rowSelection.getCheckboxProps?.(
-                                    record
-                                  ) || {})}
-                                />
-                              )}
-                            </TableCell>
-                          )}
-                          {renderCells(leftFixedColumns, record, index, 'left')}
-                          {renderCells(normalColumns, record, index)}
-                          {renderCells(
-                            rightFixedColumns,
-                            record,
-                            index,
-                            'right'
-                          )}
-                        </TableRow>
-                      );
-                    })}
-
-                    {paddingBottom > 0 && (
-                      <TableRow aria-hidden style={{ height: paddingBottom }}>
-                        <TableCell
-                          colSpan={columns.length + (rowSelection ? 1 : 0)}
-                        />
-                      </TableRow>
-                    )}
-                  </>
-                );
-              })()
-            ) : (
-              dataSource.map((record, index) => {
-                const key = getRowKey(record, index);
-                // 使用 Set 进行快速查找，避免 includes 的 O(n) 复杂度
-                const isSelected = selectedKeysSet.has(key);
-
-                return (
-                  <TableRow
-                    key={key}
-                    style={{ height: rowHeight }}
-                    className={cn(
-                      isSelected && 'bg-muted/50',
-                      'hover:bg-muted/30'
-                    )}
-                    {...(onRow?.(record, index) || {})}
-                  >
-                    {rowSelection && (
-                      <TableCell className="sticky left-0 bg-card z-10">
-                        {rowSelection.type === 'radio' ? (
-                          <RadioGroup
-                            value={isSelected ? key : ''}
-                            onValueChange={(value) =>
-                              handleSelect(
-                                record,
-                                value === key,
-                                index,
-                                new Event('change')
-                              )
-                            }
-                            {...(rowSelection.getCheckboxProps?.(record) || {})}
-                          >
-                            <RadioGroupItem value={key} />
-                          </RadioGroup>
-                        ) : (
-                          <Checkbox
-                            checked={isSelected}
-                            onCheckedChange={(checked) =>
-                              handleSelect(
-                                record,
-                                !!checked,
-                                index,
-                                new Event('change')
-                              )
-                            }
-                            {...(rowSelection.getCheckboxProps?.(record) || {})}
-                          />
-                        )}
-                      </TableCell>
-                    )}
-                    {renderCells(leftFixedColumns, record, index, 'left')}
-                    {renderCells(normalColumns, record, index)}
-                    {renderCells(rightFixedColumns, record, index, 'right')}
-                  </TableRow>
-                );
-              })
             )}
-          </TableBody>
+          >
+            {showHeader && (
+              <TableHeader
+                className={cn('bg-background', stickyEnabled && 'sticky')}
+                style={
+                  stickyEnabled
+                    ? { top: stickyTop, zIndex: stickyZIndex }
+                    : undefined
+                }
+              >
+                <TableRow {...(onHeaderRow?.(columns, 0) || {})}>
+                  {rowSelection && (
+                    <TableHead
+                      className={cn('w-12 sticky left-0 bg-background z-20')}
+                    >
+                      {rowSelection.type !== 'radio' && (
+                        <Checkbox
+                          checked={
+                            selectedRowKeys.length === dataSource.length &&
+                            dataSource.length > 0
+                          }
+                          onCheckedChange={(checked) =>
+                            handleSelectAll(!!checked)
+                          }
+                        />
+                      )}
+                    </TableHead>
+                  )}
+                  {renderColumns(leftFixedColumns, 'left')}
+                  {renderColumns(normalColumns)}
+                  {renderColumns(rightFixedColumns, 'right')}
+                </TableRow>
+              </TableHeader>
+            )}
 
-          {footer && (
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={columns.length + (rowSelection ? 1 : 0)}>
-                  {footer(dataSource)}
-                </TableCell>
-              </TableRow>
-            </TableFooter>
-          )}
-        </BaseTable>
+            <TableBody>
+              {dataSource.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (rowSelection ? 1 : 0)}
+                    className="text-center py-8"
+                  >
+                    {locale.emptyText}
+                  </TableCell>
+                </TableRow>
+              ) : enableVirtual ? (
+                // 虚拟滚动：顶部/底部占位 + 可视区域行
+                (() => {
+                  const virtualItems = rowVirtualizer.getVirtualItems();
+                  const totalHeight = rowVirtualizer.getTotalSize();
+                  const paddingTop =
+                    virtualItems.length > 0 ? virtualItems[0].start : 0;
+                  const paddingBottom =
+                    virtualItems.length > 0
+                      ? totalHeight - virtualItems[virtualItems.length - 1].end
+                      : 0;
+
+                  return (
+                    <>
+                      {paddingTop > 0 && (
+                        <TableRow aria-hidden style={{ height: paddingTop }}>
+                          <TableCell
+                            colSpan={columns.length + (rowSelection ? 1 : 0)}
+                          />
+                        </TableRow>
+                      )}
+
+                      {virtualItems.map((vItem) => {
+                        const index = vItem.index;
+                        const record = dataSource[index];
+                        const key = getRowKey(record, index);
+                        // 使用 Set 进行快速查找，避免 includes 的 O(n) 复杂度
+                        const isSelected = selectedKeysSet.has(key);
+
+                        return (
+                          <TableRow
+                            key={key}
+                            style={{ height: rowHeight }}
+                            className={cn(
+                              isSelected && 'bg-muted/50',
+                              'hover:bg-muted/30'
+                            )}
+                            {...(onRow?.(record, index) || {})}
+                          >
+                            {rowSelection && (
+                              <TableCell className="sticky left-0 bg-card z-10">
+                                {rowSelection.type === 'radio' ? (
+                                  <RadioGroup
+                                    value={isSelected ? key : ''}
+                                    onValueChange={(value) =>
+                                      handleSelect(
+                                        record,
+                                        value === key,
+                                        index,
+                                        new Event('change')
+                                      )
+                                    }
+                                    {...(rowSelection.getCheckboxProps?.(
+                                      record
+                                    ) || {})}
+                                  >
+                                    <RadioGroupItem value={key} />
+                                  </RadioGroup>
+                                ) : (
+                                  <Checkbox
+                                    checked={isSelected}
+                                    onCheckedChange={(checked) =>
+                                      handleSelect(
+                                        record,
+                                        !!checked,
+                                        index,
+                                        new Event('change')
+                                      )
+                                    }
+                                    {...(rowSelection.getCheckboxProps?.(
+                                      record
+                                    ) || {})}
+                                  />
+                                )}
+                              </TableCell>
+                            )}
+                            {renderCells(
+                              leftFixedColumns,
+                              record,
+                              index,
+                              'left'
+                            )}
+                            {renderCells(normalColumns, record, index)}
+                            {renderCells(
+                              rightFixedColumns,
+                              record,
+                              index,
+                              'right'
+                            )}
+                          </TableRow>
+                        );
+                      })}
+
+                      {paddingBottom > 0 && (
+                        <TableRow aria-hidden style={{ height: paddingBottom }}>
+                          <TableCell
+                            colSpan={columns.length + (rowSelection ? 1 : 0)}
+                          />
+                        </TableRow>
+                      )}
+                    </>
+                  );
+                })()
+              ) : (
+                dataSource.map((record, index) => {
+                  const key = getRowKey(record, index);
+                  // 使用 Set 进行快速查找，避免 includes 的 O(n) 复杂度
+                  const isSelected = selectedKeysSet.has(key);
+
+                  return (
+                    <TableRow
+                      key={key}
+                      style={{ height: rowHeight }}
+                      className={cn(
+                        isSelected && 'bg-muted/50',
+                        'hover:bg-muted/30'
+                      )}
+                      {...(onRow?.(record, index) || {})}
+                    >
+                      {rowSelection && (
+                        <TableCell className="sticky left-0 bg-card z-10">
+                          {rowSelection.type === 'radio' ? (
+                            <RadioGroup
+                              value={isSelected ? key : ''}
+                              onValueChange={(value) =>
+                                handleSelect(
+                                  record,
+                                  value === key,
+                                  index,
+                                  new Event('change')
+                                )
+                              }
+                              {...(rowSelection.getCheckboxProps?.(record) ||
+                                {})}
+                            >
+                              <RadioGroupItem value={key} />
+                            </RadioGroup>
+                          ) : (
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={(checked) =>
+                                handleSelect(
+                                  record,
+                                  !!checked,
+                                  index,
+                                  new Event('change')
+                                )
+                              }
+                              {...(rowSelection.getCheckboxProps?.(record) ||
+                                {})}
+                            />
+                          )}
+                        </TableCell>
+                      )}
+                      {renderCells(leftFixedColumns, record, index, 'left')}
+                      {renderCells(normalColumns, record, index)}
+                      {renderCells(rightFixedColumns, record, index, 'right')}
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
+
+            {footer && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={columns.length + (rowSelection ? 1 : 0)}>
+                    {footer(dataSource)}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            )}
+          </BaseTable>
+        </>
       </div>
     </div>
   );

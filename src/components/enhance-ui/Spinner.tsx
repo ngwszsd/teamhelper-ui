@@ -100,7 +100,7 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
           {children}
         </div>
         {isSpinning && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm">
+          <div className="absolute inset-0 flex items-center justify-center">
             {spinnerElement}
           </div>
         )}
