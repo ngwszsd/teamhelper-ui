@@ -17,10 +17,10 @@ export type MessageType = 'success' | 'error' | 'warning' | 'info' | 'loading';
 class MessageApi {
   private getIcon(type: MessageType) {
     const iconMap = {
-      success: <CheckCircle className="w-4 h-4" />,
-      error: <XCircle className="w-4 h-4" />,
-      warning: <AlertCircle className="w-4 h-4" />,
-      info: <Info className="w-4 h-4" />,
+      success: <CheckCircle className="w-4 h-4 text-main-green-foreground" />,
+      error: <XCircle className="w-4 h-4 text-destructive" />,
+      warning: <AlertCircle className="w-4 h-4 text-main-yellow" />,
+      info: <Info className="w-4 h-4 text-primary" />,
       loading: <Loader2 className="w-4 h-4 animate-spin" />,
     };
     return iconMap[type];
@@ -117,14 +117,6 @@ class MessageApi {
     onClose?: () => void
   ) {
     return this.show('warning', content, duration, onClose);
-  }
-
-  warn(
-    content: React.ReactNode | MessageConfig,
-    duration?: number,
-    onClose?: () => void
-  ) {
-    return this.warning(content, duration, onClose);
   }
 
   info(
