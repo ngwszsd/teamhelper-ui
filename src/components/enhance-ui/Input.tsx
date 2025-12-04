@@ -166,12 +166,9 @@ const SearchInput = React.forwardRef<
                   className="pointer-events-auto text-muted-foreground hover:text-foreground cursor-pointer"
                   onClick={() => {
                     updateValue('');
-                    // 受控时通知外层清空
-                    if (isControlled) {
-                      onChange?.({
-                        target: { value: '' },
-                      } as unknown as React.ChangeEvent<HTMLInputElement>);
-                    }
+                    onChange?.({
+                      target: { value: '' },
+                    } as unknown as React.ChangeEvent<HTMLInputElement>);
                   }}
                 >
                   <XIcon className="h-4 w-4" />
