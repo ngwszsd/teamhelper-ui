@@ -90,7 +90,7 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
 
   if (children) {
     return (
-      <div className={cn('relative h-full', wrapperClassName)}>
+      <div className={cn('relative', wrapperClassName)}>
         <div
           className={cn(
             'transition-opacity duration-200',

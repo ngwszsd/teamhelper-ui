@@ -188,6 +188,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
     }
     requestAnimationFrame(() => {
       inputRef.current?.focus();
+      setQuery('');
     });
   };
 
