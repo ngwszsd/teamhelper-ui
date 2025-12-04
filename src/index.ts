@@ -276,7 +276,10 @@ export { message } from './components/enhance-ui/Message';
 export { Modal } from './components/enhance-ui/Modal';
 export { EnhancedPagination } from './components/enhance-ui/Pagination';
 export { EnhancedPopover } from './components/enhance-ui/Popover';
-export { EnhancedSelect } from './components/enhance-ui/Select';
+export {
+  EnhancedSelect,
+  type EnhancedSelectOption,
+} from './components/enhance-ui/Select';
 export { EnhancedSlider } from './components/enhance-ui/Slider';
 export { EnhancedSpinner } from './components/enhance-ui/Spinner';
 export { EnhancedTable } from './components/enhance-ui/Table';

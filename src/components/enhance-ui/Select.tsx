@@ -5,24 +5,23 @@ import { cn } from '../../lib/utils';
 import { XIcon, Check, ChevronDown } from 'lucide-react';
 import { List } from './List';
 
-export type EnhancedSelectOption = {
+export type EnhancedSelectOption<
+  T = string | number,
+  Extra = Record<string, any>,
+> = {
   /** 选项显示的文本 */
   label: string;
   /** 选项值（需唯一，用于受控 value） */
-  value: string;
+  value: T;
   /** 是否禁用该选项 */
   disabled?: boolean;
-};
+} & Extra;
 
-type SingleProps = {
+export type EnhancedSelectProps<T = string | number> = {
   /** 选项数据源 */
-  options: EnhancedSelectOption[];
-  /** 当前选中值（受控） */
-  value?: string;
-  /** 值变化回调；单选：返回选中 option；清除：返回 null */
-  onChange: (value?: string, option?: EnhancedSelectOption | null) => void;
-  /** 模式（单选），默认 "single" */
-  mode?: 'single';
+  options: EnhancedSelectOption<T>[];
+  /** 模式：单选或多选，默认 "single" */
+  mode?: 'single' | 'multiple';
   /** 占位文案 */
   placeholder?: string;
   /** 外层容器类名 */
@@ -33,7 +32,7 @@ type SingleProps = {
   matchTriggerWidth?: boolean;
   /** 弹层自定义宽度（优先生效），如 360 或 "28rem" */
   contentWidth?: number | string;
-  /** 多选标签最多显示数量（单选无需） */
+  /** 多选标签最多显示数量，默认 3 */
   maxTagCount?: number;
   /** 是否可搜索，默认 true */
   searchable?: boolean;
@@ -42,7 +41,7 @@ type SingleProps = {
   /** 是否禁用 */
   disabled?: boolean;
   /** 自定义选项渲染 */
-  renderLabel?: (option: EnhancedSelectOption) => React.ReactNode;
+  renderLabel?: (option: EnhancedSelectOption<T>) => React.ReactNode;
   /** 列表容器高度（虚拟滚动） */
   listHeight?: number | string;
   /** 预估项高度（虚拟滚动） */
@@ -50,54 +49,32 @@ type SingleProps = {
   inputClassName?: string;
   listItemClassName?: string;
   showCheck?: boolean;
-};
-
-type MultipleProps = {
-  /** 选项数据源 */
-  options: EnhancedSelectOption[];
-  /** 当前选中值数组（受控） */
-  value?: string[];
-  /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
-  onChange: (value?: string[], option?: EnhancedSelectOption[]) => void;
-  /** 模式（多选） */
-  mode: 'multiple';
-  /** 占位文案 */
-  placeholder?: string;
-  /** 外层容器类名 */
-  className?: string;
-  /** 弹层内容容器类名 */
-  contentClassName?: string;
-  /** 弹层宽度是否匹配触发器宽度，默认 true */
-  matchTriggerWidth?: boolean;
-  /** 弹层自定义宽度（优先生效），如 360 或 "28rem" */
-  contentWidth?: number | string;
-  /** 标签最多显示数量；超出以 +N 展示 */
-  maxTagCount?: number;
-  /** 是否可搜索，默认 true */
-  searchable?: boolean;
-  /** 是否允许清除，默认 true */
-  allowClear?: boolean;
-  /** 是否禁用 */
-  disabled?: boolean;
-  /** 自定义选项渲染 */
-  renderLabel?: (option: EnhancedSelectOption) => React.ReactNode;
-  /** 列表容器高度（虚拟滚动） */
-  listHeight?: number | string;
-  /** 预估项高度（虚拟滚动） */
-  estimatedItemSize?: number;
-  inputClassName?: string;
-  listItemClassName?: string;
-  showCheck?: boolean;
-};
-
-/** 增强型 Select 组件的 props（单选与多选模式联合） */
-export type EnhancedSelectProps = SingleProps | MultipleProps;
+} & (
+  | {
+      /** 模式（单选） */
+      mode?: 'single';
+      /** 当前选中值（受控） */
+      value?: T;
+      /** 值变化回调；单选：返回选中 option；清除：返回 undefined */
+      onChange: (value?: T, option?: EnhancedSelectOption<T> | null) => void;
+    }
+  | {
+      /** 模式（多选） */
+      mode: 'multiple';
+      /** 当前选中值数组（受控） */
+      value?: T[];
+      /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
+      onChange: (value?: T[], option?: EnhancedSelectOption<T>[]) => void;
+    }
+);
 
 /**
  * 增强型选择组件：支持搜索（不区分大小写）、清除选择、虚拟列表优化
  * 继承基础 Select 能力（Radix Select 封装），并整合 Input 控制能力
  */
-export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
+export const EnhancedSelect = <T extends string | number = string | number>(
+  props: EnhancedSelectProps<T>
+) => {
   const {
     options,
     placeholder = '请选择',
@@ -115,8 +92,9 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
     inputClassName,
     listItemClassName,
     showCheck = true,
+    mode = 'single',
   } = props;
-  const isMultiple = props.mode === 'multiple';
+  const isMultiple = mode === 'multiple';
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -136,18 +114,19 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
     const q = normalized(query.trim());
     return options.filter(
       (opt) =>
-        normalized(opt.label).includes(q) || normalized(opt.value).includes(q)
+        normalized(opt.label).includes(q) ||
+        normalized(String(opt.value)).includes(q)
     );
   }, [options, query, searchable]);
 
   const selectedValues = React.useMemo(() => {
-    if (isMultiple) return (props.value as string[] | undefined) ?? [];
-    const v = props.value as string | undefined;
-    return v ? [v] : [];
+    if (isMultiple) return (props.value as T[] | undefined) ?? [];
+    const v = props.value as T | undefined;
+    return v !== undefined ? [v] : [];
   }, [props.value, isMultiple]);
 
   const labelMap = React.useMemo(() => {
-    const m = new Map<string, string>();
+    const m = new Map<T, string>();
     options.forEach((o) => m.set(o.value, String(o.label)));
     return m;
   }, [options]);
@@ -161,18 +140,28 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
 
   const clearable = allowClear && selectedValues.length > 0 && !disabled;
 
-  const handleSelect = (opt: EnhancedSelectOption) => {
+  const handleSelect = (opt: EnhancedSelectOption<T>) => {
     if (opt.disabled) return;
     if (isMultiple) {
-      const curr = (props.value as string[] | undefined) ?? [];
+      const curr = (props.value as T[] | undefined) ?? [];
       const set = new Set(curr);
       if (set.has(opt.value)) set.delete(opt.value);
       else set.add(opt.value);
       const arr = Array.from(set);
       const arrOptions = options.filter((o) => arr.includes(o.value));
-      (props as MultipleProps).onChange(arr.length ? arr : [], arrOptions);
+      (
+        props.onChange as (
+          value?: T[],
+          option?: EnhancedSelectOption<T>[]
+        ) => void
+      )(arr.length ? arr : [], arrOptions);
     } else {
-      (props as SingleProps).onChange(opt.value, opt);
+      (
+        props.onChange as (
+          value?: T,
+          option?: EnhancedSelectOption<T> | null
+        ) => void
+      )(opt.value, opt);
       setOpen(false);
       requestAnimationFrame(() => {
         inputRef.current?.focus();
@@ -182,8 +171,21 @@ export const EnhancedSelect: React.FC<EnhancedSelectProps> = (props) => {
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isMultiple) (props as MultipleProps).onChange([], []);
-    else (props as SingleProps).onChange(undefined, null);
+    if (isMultiple) {
+      (
+        props.onChange as (
+          value?: T[],
+          option?: EnhancedSelectOption<T>[]
+        ) => void
+      )([], []);
+    } else {
+      (
+        props.onChange as (
+          value?: T,
+          option?: EnhancedSelectOption<T> | null
+        ) => void
+      )(undefined, null);
+    }
     requestAnimationFrame(() => {
       inputRef.current?.focus();
     });
