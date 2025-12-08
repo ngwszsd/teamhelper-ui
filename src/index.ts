@@ -356,6 +356,7 @@ export type {
 } from './components/enhance-ui/Radio';
 export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
 export type { DirectoryTreeProps } from './components/enhance-ui/DirectoryTree';
+export type { Crumb } from './components/enhance-ui/Breadcrumb';
 
 // Utilities (Re-export for convenience)
 export { toast, useSonner } from 'sonner';

@@ -7,7 +7,8 @@ import {
   BreadcrumbSeparator,
 } from '../ui/breadcrumb';
 
-type Crumb = {
+export type Crumb = {
+  key?: string | number;
   label: React.ReactNode;
   to?: string; // 推荐：SPA 跳转
   href?: string; // 备选：原生超链接
@@ -18,7 +19,8 @@ const Breadcrumb: React.FC<{
   items: Crumb[];
   separator?: React.ReactNode;
   className?: string;
-}> = ({ items, separator = '/', className }) => {
+  onClick?: (crumb: Crumb) => void;
+}> = ({ items, separator = '/', className, onClick }) => {
   return (
     <BreadcrumbContainer className={className}>
       <BreadcrumbList>
@@ -32,6 +34,7 @@ const Breadcrumb: React.FC<{
                   e.preventDefault();
                   e.stopPropagation();
                   item.onClick?.(item);
+                  onClick?.(item);
                 }}
               >
                 {item.label}
@@ -39,7 +42,10 @@ const Breadcrumb: React.FC<{
             ) : item.href ? (
               <BreadcrumbLink
                 href={item.href}
-                onClick={() => item.onClick?.(item)}
+                onClick={() => {
+                  item.onClick?.(item);
+                  onClick?.(item);
+                }}
               >
                 {item.label}
               </BreadcrumbLink>
@@ -49,6 +55,7 @@ const Breadcrumb: React.FC<{
                   e.preventDefault();
                   e.stopPropagation();
                   item?.onClick?.(item);
+                  onClick?.(item);
                 }}
                 className="cursor-pointer"
               >
@@ -60,7 +67,7 @@ const Breadcrumb: React.FC<{
           );
 
           return (
-            <BreadcrumbItem key={index}>
+            <BreadcrumbItem key={item?.key || index}>
               {content}
               {!isLast && (
                 <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
