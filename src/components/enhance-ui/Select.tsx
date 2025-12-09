@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '../../lib/utils';
 import { XIcon, Check, ChevronDown } from 'lucide-react';
 import { List } from './List';
+import { ClassValue } from 'clsx';
 
 export type EnhancedSelectOption<
   T = string | number,
@@ -25,7 +26,7 @@ export type EnhancedSelectProps<T = string | number> = {
   /** 占位文案 */
   placeholder?: string;
   /** 外层容器类名 */
-  className?: string;
+  className?: ClassValue;
   /** 弹层内容容器类名 */
   contentClassName?: string;
   /** 弹层宽度是否匹配触发器宽度，默认 true */
@@ -46,8 +47,8 @@ export type EnhancedSelectProps<T = string | number> = {
   listHeight?: number | string;
   /** 预估项高度（虚拟滚动） */
   estimatedItemSize?: number;
-  inputClassName?: string;
-  listItemClassName?: string;
+  inputClassName?: ClassValue;
+  listItemClassName?: ClassValue;
   showCheck?: boolean;
 } & (
   | {
@@ -192,25 +193,31 @@ export const EnhancedSelect = <T extends string | number = string | number>(
     });
   };
 
+  const hasValue = isMultiple
+    ? selectedValues.length > 0
+    : displayText.length > 0;
+
   return (
     <div className={cn('relative inline-block w-full', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Input
-            ref={inputRef}
-            readOnly
-            disabled={disabled}
-            value={displayText}
-            placeholder={placeholder}
-            onClick={() => {
-              if (!disabled) setOpen(true);
-            }}
-            className={cn(
-              'pr-8 focus:ring-1 focus:ring-ring shadow-none text-left font-normal',
-              inputClassName,
-              disabled && 'cursor-not-allowed'
-            )}
-          />
+          <div className="relative w-full">
+            <Input
+              ref={inputRef}
+              readOnly
+              disabled={disabled}
+              value={hasValue ? displayText : ''}
+              placeholder={placeholder}
+              onClick={() => {
+                if (!disabled) setOpen(true);
+              }}
+              className={cn(
+                'pr-8 shadow-none text-left font-normal cursor-pointer',
+                inputClassName,
+                disabled && 'cursor-not-allowed'
+              )}
+            />
+          </div>
         </PopoverTrigger>
         <PopoverContent
           className={cn('p-2', contentClassName)}
@@ -265,21 +272,28 @@ export const EnhancedSelect = <T extends string | number = string | number>(
         </PopoverContent>
       </Popover>
       {isMultiple && selectedValues.length > 0 && (
-        <div className="pointer-events-none absolute inset-y-0 left-3 right-8 flex items-center gap-1 overflow-hidden">
-          {selectedValues.slice(0, maxTagCount).map((v) => (
-            <span
-              key={v}
-              className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground"
-            >
-              {labelMap.get(v) ?? v}
-            </span>
-          ))}
-          {selectedValues.length > maxTagCount && (
-            <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-              +{selectedValues.length - maxTagCount}
-            </span>
-          )}
-        </div>
+        <>
+          {/* 隐藏 placeholder */}
+          <div className="pointer-events-none absolute inset-y-0 left-3 right-8 flex items-center">
+            <span className="text-transparent select-none">{placeholder}</span>
+          </div>
+          {/* 显示选中的标签 */}
+          <div className="pointer-events-none absolute inset-y-0 left-3 right-8 flex items-center gap-1 overflow-hidden">
+            {selectedValues.slice(0, maxTagCount).map((v) => (
+              <span
+                key={v}
+                className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground"
+              >
+                {labelMap.get(v) ?? v}
+              </span>
+            ))}
+            {selectedValues.length > maxTagCount && (
+              <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+                +{selectedValues.length - maxTagCount}
+              </span>
+            )}
+          </div>
+        </>
       )}
       {clearable ? (
         <button
