@@ -10,12 +10,12 @@ import {
   TableCell,
 } from '../ui/table';
 import { Checkbox } from '../ui/checkbox';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { EnhancedSpinner } from './Spinner';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Empty } from './Empty';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { EnhancedTooltip } from './Tooltip';
 
 export interface ColumnType<T = any> {
   title?: React.ReactNode;
@@ -555,12 +555,12 @@ const Table = <T extends Record<string, any> = any>({
           {...(column.onCell?.(record, index) || {})}
         >
           {column.ellipsis ? (
-            <Tooltip>
-              <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
-              <TooltipContent>
-                <> {cellContent}</>
-              </TooltipContent>
-            </Tooltip>
+            <EnhancedTooltip
+              title={cellContent}
+              overlayClassName="max-w-[280px]"
+            >
+              <div className="truncate">{cellContent}</div>
+            </EnhancedTooltip>
           ) : (
             <>{cellContent}</>
           )}
