@@ -233,7 +233,7 @@ export function UploadDragger({
         onDragLeave={onDragLeave}
         className={cn(
           'relative flex flex-col items-center justify-center rounded-md border-2 border-dashed text-center select-none cursor-pointer',
-          listType === 'card' ? 'p-0 overflow-hidden' : 'p-8 h-40',
+          listType === 'card' ? 'p-0 overflow-hidden' : '',
           disabled && 'opacity-50 cursor-not-allowed',
           dragging
             ? 'border-primary/80 bg-primary/5'
@@ -260,14 +260,13 @@ export function UploadDragger({
           // 默认模式或无图片时：显示上传区域
           <>
             {children ?? (
-              <>
-                <div className="mb-4 h-10 w-10 text-primary">
-                  <FolderUp className="w-full h-full" />
-                </div>
+              <div className="flex flex-col items-center gap-4 p-8 min-h-40">
+                <FolderUp className="w-10 h-auto text-primary" />
+
                 <div className="text-sm text-muted-foreground font-medium">
                   {descriptionNode}
                 </div>
-              </>
+              </div>
             )}
           </>
         )}
