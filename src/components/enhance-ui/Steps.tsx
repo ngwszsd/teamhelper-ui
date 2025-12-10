@@ -3,6 +3,7 @@ import { Check, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 export interface StepItem {
+  key?: React.Key;
   title?: React.ReactNode;
   subTitle?: React.ReactNode;
   description?: React.ReactNode;
@@ -23,7 +24,7 @@ export interface StepsProps {
   size?: 'default' | 'small';
   status?: 'wait' | 'process' | 'finish' | 'error';
   items?: StepItem[];
-  onChange?: (current: number) => void;
+  onChange?: (current: number, info: StepItem) => void;
 }
 
 export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
@@ -145,7 +146,7 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
                 >
                   <div
                     className={iconWrapperClass}
-                    onClick={() => isClickable && onChange(index)}
+                    onClick={() => isClickable && onChange(index, { ...item })}
                   >
                     {renderIcon()}
                   </div>
@@ -162,7 +163,9 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
                   <div className="flex items-center">
                     <div
                       className={titleClass}
-                      onClick={() => isClickable && onChange(index)}
+                      onClick={() =>
+                        isClickable && onChange(index, { ...item })
+                      }
                     >
                       {item.title}
                     </div>
@@ -209,7 +212,7 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
 
                 <div
                   className={iconWrapperClass}
-                  onClick={() => isClickable && onChange(index)}
+                  onClick={() => isClickable && onChange(index, { ...item })}
                 >
                   {renderIcon()}
                 </div>
@@ -229,7 +232,7 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
                 >
                   <div
                     className={titleClass}
-                    onClick={() => isClickable && onChange(index)}
+                    onClick={() => isClickable && onChange(index, { ...item })}
                   >
                     {item.title}
                   </div>
