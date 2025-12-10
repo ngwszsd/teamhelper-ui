@@ -301,6 +301,7 @@ export {
 export { DivSkeleton } from './components/enhance-ui/DivSkeleton';
 export { Steps } from './components/enhance-ui/Steps';
 export { DirectoryTree } from './components/enhance-ui/DirectoryTree';
+export { InputNumber } from './components/enhance-ui/InputNumber';
 
 export {
   openTipsModal,
@@ -358,6 +359,7 @@ export type {
 export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
 export type { DirectoryTreeProps } from './components/enhance-ui/DirectoryTree';
 export type { Crumb } from './components/enhance-ui/Breadcrumb';
+export type { InputNumberProps } from './components/enhance-ui/InputNumber';
 
 // Utilities (Re-export for convenience)
 export { toast, useSonner } from 'sonner';
