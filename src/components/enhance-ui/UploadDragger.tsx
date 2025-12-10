@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 export type ParseMode = 'json' | 'text' | 'arrayBuffer' | 'none';
 export type ListType = 'list' | 'card';
 
-export interface UploadProps {
+export interface UploadDraggerProps {
   accept?: string; // e.g. ".json,application/json"
   multiple?: boolean;
   maxSize?: number; // bytes，超出提示错误
@@ -54,7 +54,7 @@ export function UploadDragger({
   fileList,
   onFileListChange,
   renderFileItem,
-}: UploadProps) {
+}: UploadDraggerProps) {
   const { t, i18n } = useTranslation('components');
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = React.useState(false);
