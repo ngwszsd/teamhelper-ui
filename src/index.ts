@@ -348,6 +348,7 @@ export type {
   ParseMode,
   ListType,
   UploadDraggerProps,
+  UploadDraggerRef,
 } from './components/enhance-ui/UploadDragger';
 export type {
   RadioOption,

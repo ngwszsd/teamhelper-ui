@@ -3,8 +3,13 @@ import { FileIcon, Trash2, CircleX, FolderUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { Ref, useImperativeHandle } from 'react';
 export type ParseMode = 'json' | 'text' | 'arrayBuffer' | 'none';
 export type ListType = 'list' | 'card';
+
+export type UploadDraggerRef = {
+  emitTriggerSelect: () => void;
+};
 
 export interface UploadDraggerProps {
   accept?: string; // e.g. ".json,application/json"
@@ -29,6 +34,8 @@ export interface UploadDraggerProps {
     index: number,
     onRemove: () => void
   ) => React.ReactNode;
+  ref?: Ref<UploadDraggerRef>;
+  isCustomClick?: boolean;
 }
 
 /**
@@ -54,6 +61,8 @@ export function UploadDragger({
   fileList,
   onFileListChange,
   renderFileItem,
+  ref,
+  isCustomClick = false,
 }: UploadDraggerProps) {
   const { t, i18n } = useTranslation('components');
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -73,6 +82,14 @@ export function UploadDragger({
   const [internalFiles, setInternalFiles] = React.useState<File[]>([]);
   const isControlled = fileList !== undefined;
   const currentFiles = isControlled ? fileList! : internalFiles;
+
+  useImperativeHandle(ref, () => {
+    return {
+      emitTriggerSelect() {
+        triggerSelect();
+      },
+    };
+  }, []);
 
   const matchAccept = (file: File) => {
     if (!acceptTokens?.length) return true;
@@ -226,7 +243,11 @@ export function UploadDragger({
       <div
         role="button"
         tabIndex={0}
-        onClick={triggerSelect}
+        onClick={() => {
+          if (isCustomClick) return;
+
+          triggerSelect();
+        }}
         onKeyDown={(e) => (e.key === 'Enter' ? triggerSelect() : undefined)}
         onDrop={onDrop}
         onDragOver={onDragOver}
