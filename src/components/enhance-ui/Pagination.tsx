@@ -20,7 +20,7 @@ import { cn } from '../../lib/utils';
 import type { ButtonProps } from '../ui/button';
 import { useTranslation } from 'react-i18next';
 export interface EnhancedPaginationProps {
-  /** 当前页码（从 1 开始） */
+  /** 当前页码（默认从 1 开始，如果 startFromZero 为 true 则从 0 开始） */
   current: number;
   /** 每页显示条数 */
   pageSize: number;
@@ -48,6 +48,8 @@ export interface EnhancedPaginationProps {
   disabled?: boolean;
   /** 额外渲染在右侧的区域 */
   extra?: React.ReactNode;
+  /** 页码是否从 0 开始，默认 false（从 1 开始） */
+  startFromZero?: boolean;
 }
 
 const Pagination: React.FC<EnhancedPaginationProps> = ({
@@ -64,16 +66,21 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
   className,
   disabled,
   extra,
+  startFromZero = false,
 }) => {
   const { t } = useTranslation('components');
+
+  // 计算最小页码和最大页码
+  const minPage = startFromZero ? 0 : 1;
   const totalPages = React.useMemo(
     () => Math.max(1, Math.ceil((total ?? 0) / Math.max(1, pageSize ?? 1))),
     [total, pageSize]
   );
+  const maxPage = startFromZero ? totalPages - 1 : totalPages;
 
   const safeCurrent = React.useMemo(
-    () => clamp(current ?? 1, 1, totalPages),
-    [current, totalPages]
+    () => clamp(current ?? minPage, minPage, maxPage),
+    [current, minPage, maxPage]
   );
 
   const [quickValue, setQuickValue] = React.useState<string>(
@@ -83,14 +90,16 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     setQuickValue(String(safeCurrent));
   }, [safeCurrent]);
 
-  const rangeStart = total === 0 ? 0 : (safeCurrent - 1) * pageSize + 1;
-  const rangeEnd = total === 0 ? 0 : Math.min(total, safeCurrent * pageSize);
+  // 计算显示范围时需要转换为从1开始的页码
+  const displayPage = startFromZero ? safeCurrent + 1 : safeCurrent;
+  const rangeStart = total === 0 ? 0 : (displayPage - 1) * pageSize + 1;
+  const rangeEnd = total === 0 ? 0 : Math.min(total, displayPage * pageSize);
 
   const isDisabled = !!disabled || totalPages <= 0;
 
   const handlePageChange = (nextPage: number) => {
     if (isDisabled) return;
-    const page = clamp(nextPage, 1, totalPages);
+    const page = clamp(nextPage, minPage, maxPage);
     if (page !== safeCurrent) {
       onChange?.(page, pageSize);
     }
@@ -101,22 +110,26 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     const sizeNum = Number(val);
     if (!Number.isFinite(sizeNum) || sizeNum <= 0) return;
     onShowSizeChange?.(safeCurrent, sizeNum);
-    // Common UX: reset to page 1 on size change
-    onChange?.(1, sizeNum);
+    // Common UX: reset to first page on size change
+    onChange?.(minPage, sizeNum);
   };
 
   const handleQuickJump = (val?: string) => {
     const v = (val ?? quickValue).trim();
-    const next = clamp(Number(v), 1, totalPages);
+    // 快速跳转输入的是显示页码（从1开始），需要转换为实际页码
+    const displayPageInput = Number(v);
+    const actualPage = startFromZero ? displayPageInput - 1 : displayPageInput;
+    const next = clamp(actualPage, minPage, maxPage);
     if (Number.isFinite(next)) {
-      setQuickValue(String(next));
+      const displayValue = startFromZero ? next + 1 : next;
+      setQuickValue(String(displayValue));
       handlePageChange(next);
     }
   };
 
   const pages = React.useMemo(
-    () => buildRange(safeCurrent, totalPages),
-    [safeCurrent, totalPages]
+    () => buildRange(displayPage, totalPages),
+    [displayPage, totalPages]
   );
 
   const renderTotal = () => {
@@ -125,7 +138,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     return (
       <div className="text-sm text-muted-foreground">
         显示第
-        <span className="font-medium mx-1">{safeCurrent}</span>页
+        <span className="font-medium mx-1">{displayPage}</span>页
         <span className="font-medium mx-1">{pageCount}</span>
         条结果, 共<span className="font-medium mx-1">{total}</span>条
       </div>
@@ -193,7 +206,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
             <PaginationPrevious
               href="#"
               size={size}
-              aria-disabled={isDisabled || safeCurrent <= 1}
+              aria-disabled={isDisabled || safeCurrent <= minPage}
               onClick={(e) => {
                 e.preventDefault();
                 handlePageChange(safeCurrent - 1);
@@ -210,11 +223,15 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
                 <PaginationLink
                   href="#"
                   size={size}
-                  isActive={p === safeCurrent}
-                  aria-current={p === safeCurrent ? 'page' : undefined}
+                  isActive={p === displayPage}
+                  aria-current={p === displayPage ? 'page' : undefined}
                   onClick={(e) => {
                     e.preventDefault();
-                    handlePageChange(Number(p));
+                    // 页面按钮显示的是从1开始的页码，需要转换为实际页码
+                    const actualPage = startFromZero
+                      ? Number(p) - 1
+                      : Number(p);
+                    handlePageChange(actualPage);
                   }}
                 >
                   {String(p)}
@@ -227,7 +244,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
             <PaginationNext
               href="#"
               size={size}
-              aria-disabled={isDisabled || safeCurrent >= totalPages}
+              aria-disabled={isDisabled || safeCurrent >= maxPage}
               onClick={(e) => {
                 e.preventDefault();
                 handlePageChange(safeCurrent + 1);
@@ -257,6 +274,7 @@ function buildRange(
   current: number,
   totalPages: number
 ): Array<number | 'ellipsis'> {
+  // 始终使用从1开始的显示页码来构建范围
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
