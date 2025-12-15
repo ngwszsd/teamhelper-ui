@@ -91,7 +91,6 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
             <div
               className={cn(
                 'absolute flex pointer-events-none',
-                'mx-0.5',
                 vertical ? 'flex-col h-full left-2' : 'top-0'
               )}
               style={{ width: 'calc(100% - 4px * 2)' }}
