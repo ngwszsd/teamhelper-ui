@@ -207,7 +207,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
               readOnly
               disabled={disabled}
               value={hasValue ? displayText : ''}
-              placeholder={placeholder}
+              placeholder={hasValue ? '' : placeholder}
               onClick={() => {
                 if (!disabled) setOpen(true);
               }}
