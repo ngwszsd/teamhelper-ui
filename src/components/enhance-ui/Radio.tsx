@@ -12,19 +12,18 @@ export type RadioOption = {
   className?: string;
 };
 
-export interface EnhancedRadioGroupProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof BaseRadioGroup>,
-    'value' | 'onValueChange' | 'onChange'
-  > {
+export interface EnhancedRadioGroupProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof BaseRadioGroup>,
+  'value' | 'onValueChange' | 'onChange'
+> {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
   options: RadioOption[];
   direction?: 'horizontal' | 'vertical';
-  gap?: number;
   itemClassName?: string;
   labelClassName?: string;
+  optionClassName?: string;
 }
 
 const StyledRadioItem = React.forwardRef<
@@ -58,11 +57,11 @@ const Group = React.forwardRef<
       onChange,
       options,
       direction = 'horizontal',
-      gap = 24,
       itemClassName,
       labelClassName,
       className,
       name,
+      optionClassName,
       ...props
     },
     ref
@@ -100,30 +99,23 @@ const Group = React.forwardRef<
               key={opt.value}
               htmlFor={id}
               className={cn(
-                'inline-flex items-center select-none',
-                direction === 'horizontal'
-                  ? `mr-[${gap}px] last:mr-0`
-                  : `mb-[${gap / 2}px] last:mb-0`,
+                'inline-flex items-center select-none gap-[14px]',
                 opt.disabled
                   ? 'opacity-50 cursor-not-allowed'
                   : 'cursor-pointer',
+                optionClassName,
                 opt.className
               )}
-              style={
-                direction === 'horizontal'
-                  ? { marginRight: idx === options.length - 1 ? 0 : gap }
-                  : { marginBottom: idx === options.length - 1 ? 0 : gap / 2 }
-              }
             >
               <StyledRadioItem
                 id={id}
                 value={opt.value}
                 disabled={opt.disabled}
-                className={cn(itemClassName)}
+                className={cn('shrink-0', itemClassName)}
               />
               <div
                 className={cn(
-                  'ml-2 text-sm leading-5 text-foreground font-normal',
+                  'text-sm leading-5 text-foreground font-normal',
                   labelClassName
                 )}
               >
@@ -138,11 +130,10 @@ const Group = React.forwardRef<
 );
 Group.displayName = 'EnhancedRadioGroup';
 
-export interface EnhancedRadioProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof BaseRadioItem>,
-    'value' | 'onChange'
-  > {
+export interface EnhancedRadioProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof BaseRadioItem>,
+  'value' | 'onChange'
+> {
   label?: React.ReactNode;
   value: string;
   onChange?: (e: { target: { value: string } }) => void;
@@ -170,7 +161,7 @@ const Radio = React.forwardRef<
           id={generatedId}
           value={value}
           onClick={handleClick}
-          className={cn(className)}
+          className={cn('shrink-0', className)}
           {...props}
         />
         {label && (
