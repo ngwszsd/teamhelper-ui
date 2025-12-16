@@ -3,7 +3,7 @@ import { FileIcon, Trash2, CircleX, FolderUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { Ref, useImperativeHandle } from 'react';
+import { type Ref, useImperativeHandle } from 'react';
 export type ParseMode = 'json' | 'text' | 'arrayBuffer' | 'none';
 export type ListType = 'list' | 'card';
 

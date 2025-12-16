@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '../../lib/utils';
 import { XIcon, Check, ChevronDown } from 'lucide-react';
 import { List } from './List';
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 
 export type EnhancedSelectOption<
   T = string | number,
