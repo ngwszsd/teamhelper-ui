@@ -119,7 +119,7 @@ function flatten(tree: TreeNode[], expanded: Set<React.Key>): FlatNode[] {
     nodes.forEach((n, idx) => {
       const path = [...parentPath, idx];
       const key = getNodeKey(n, path);
-      const isLeaf = !n.children || n.children.length === 0;
+      const isLeaf = !n.children;
       result.push({
         key,
         node: n,
