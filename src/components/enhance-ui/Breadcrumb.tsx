@@ -10,6 +10,7 @@ import {
 import { Dropdown as EnhancedDropdown } from './Dropdown';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { EnhancedTooltip } from './Tooltip';
 
 export type Crumb = {
   key?: string | number;
@@ -53,14 +54,16 @@ const Breadcrumb: React.FC<{
 
   const renderItemContent = (item: Crumb, isLast: boolean) => {
     const content = (
-      <span
-        className={cn(
-          'truncate max-w-auto inline-block align-bottom',
-          contentClassName
-        )}
-      >
-        {item.label}
-      </span>
+      <EnhancedTooltip title={item?.label} overlayClassName="max-w-[280px]">
+        <span
+          className={cn(
+            'truncate max-w-auto inline-block align-bottom',
+            contentClassName
+          )}
+        >
+          {item?.label}
+        </span>
+      </EnhancedTooltip>
     );
 
     const handleClick = (e: React.MouseEvent) => {
