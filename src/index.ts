@@ -301,6 +301,7 @@ export {
 export { DivSkeleton } from './components/enhance-ui/DivSkeleton';
 export { Steps } from './components/enhance-ui/Steps';
 export { DirectoryTree } from './components/enhance-ui/DirectoryTree';
+export { TreeSelect } from './components/enhance-ui/TreeSelect';
 export { InputNumber } from './components/enhance-ui/InputNumber';
 
 export {
