@@ -82,6 +82,10 @@ const TipsModal: FC<TipsModalProps> = ({
   const [remainingTime, setRemainingTime] = useState(countdown);
 
   useEffect(() => {
+    setRemainingTime(countdown);
+  }, [countdown, setRemainingTime]);
+
+  useEffect(() => {
     let timer = null;
     if (modal?.visible) {
       if (remainingTime > 0) {
