@@ -58,7 +58,10 @@ export interface EnhancedTableProps<T = any> {
       selectedRows: T[],
       changeRows: T[]
     ) => void;
-    getCheckboxProps?: (record: T) => { disabled?: boolean };
+    getCheckboxProps?: (record: T) => {
+      disabled?: boolean;
+      onClick?: (e: React.MouseEvent) => void;
+    };
   };
   scroll?: { x?: number | string; y?: number | string };
   size?: 'small' | 'middle' | 'large';
