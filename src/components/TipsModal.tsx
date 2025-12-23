@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import type { NiceModalHocProps } from '@ebay/nice-modal-react';
@@ -53,6 +53,10 @@ export interface TipsModalProps extends Omit<NiceModalHocProps, 'id'> {
   isShowFooter?: boolean;
   classNames?: Partial<Record<SemanticName, string | undefined>>;
   footerBtnPosition?: 'left' | 'center' | 'right' | 'block';
+  /**
+   * 倒计时时长（秒）
+   */
+  countdown?: number;
 }
 
 const TipsModal: FC<TipsModalProps> = ({
@@ -70,10 +74,30 @@ const TipsModal: FC<TipsModalProps> = ({
   isShowFooter = true,
   classNames,
   footerBtnPosition = 'right',
+  countdown = 0,
 }) => {
   const { t } = useTranslation('components');
   const modal = useModal();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(countdown);
+
+  useEffect(() => {
+    let timer = null;
+    if (modal?.visible) {
+      if (remainingTime > 0) {
+        timer = setTimeout(() => {
+          setRemainingTime((prev) => prev - 1);
+        }, 1000);
+      }
+    } else {
+      timer && clearTimeout(timer);
+      setRemainingTime(countdown);
+    }
+
+    return () => {
+      timer && clearTimeout(timer);
+    };
+  }, [remainingTime, setRemainingTime, modal.visible]);
 
   const titleText = title ?? t('tips.title');
   const okTextText = okText === null ? null : (okText ?? t('confirm'));
@@ -206,12 +230,13 @@ const TipsModal: FC<TipsModalProps> = ({
                   footerBtnPosition === 'block' && 'flex-1'
                 )}
                 onClick={onOk}
-                disabled={confirmLoading}
+                disabled={confirmLoading || remainingTime > 0}
                 danger={type === 'danger'}
                 type="primary"
               >
                 {confirmLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {okTextText}
+                {remainingTime > 0 && ` (${remainingTime}s)`}
               </Button>
             )}
           </DialogFooter>
