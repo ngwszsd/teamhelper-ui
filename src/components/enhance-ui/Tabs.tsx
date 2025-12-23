@@ -142,7 +142,11 @@ const Tabs = React.forwardRef<
               key={item.key}
               value={item.key}
               disabled={item.disabled}
-              className={cn(tabsTriggerClassName, 'relative group px-5')}
+              className={cn(
+                tabsTriggerClassName,
+                'relative group px-5 cursor-pointer',
+                'hover:text-primary'
+              )}
             >
               <span className="flex items-center">
                 {item.label}
