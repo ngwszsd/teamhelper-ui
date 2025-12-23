@@ -139,7 +139,7 @@ export const TreeSelect = <T extends React.Key = React.Key>({
               value={displayText}
               placeholder={placeholder}
               className={cn(
-                'pr-8 cursor-pointer shadow-none text-left font-normal bg-background',
+                'pr-8 cursor-pointer shadow-none text-left font-normal',
                 disabled && 'cursor-not-allowed opacity-50'
               )}
             />
