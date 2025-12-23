@@ -83,7 +83,7 @@ const TipsModal: FC<TipsModalProps> = ({
 
   useEffect(() => {
     setRemainingTime(countdown ?? 0);
-  }, [countdown, setRemainingTime]);
+  }, [countdown, modal?.visible]);
 
   useEffect(() => {
     let timer = null;
@@ -95,13 +95,12 @@ const TipsModal: FC<TipsModalProps> = ({
       }
     } else {
       timer && clearTimeout(timer);
-      setRemainingTime(countdown);
     }
 
     return () => {
       timer && clearTimeout(timer);
     };
-  }, [remainingTime, setRemainingTime, modal.visible]);
+  }, [remainingTime, modal?.visible, countdown]);
 
   const titleText = title ?? t('tips.title');
   const okTextText = okText === null ? null : (okText ?? t('confirm'));
