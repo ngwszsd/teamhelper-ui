@@ -82,7 +82,7 @@ const TipsModal: FC<TipsModalProps> = ({
   const [remainingTime, setRemainingTime] = useState(countdown);
 
   useEffect(() => {
-    setRemainingTime(countdown);
+    setRemainingTime(countdown ?? 0);
   }, [countdown, setRemainingTime]);
 
   useEffect(() => {
