@@ -282,7 +282,7 @@ export function UploadDragger({
           <>
             {children ?? (
               <div className="flex flex-col items-center gap-4 p-8 min-h-40">
-                <FolderUp className="w-10 h-auto text-primary" />
+                <FolderUp className="w-10 h-auto shrink-0 text-primary" />
 
                 <div className="text-sm text-muted-foreground font-medium">
                   {descriptionNode}
