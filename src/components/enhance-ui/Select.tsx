@@ -103,11 +103,23 @@ export const EnhancedSelect = <T extends string | number = string | number>(
 
   React.useLayoutEffect(() => {
     const update = () => {
-      if (inputRef.current) setMeasuredWidth(inputRef.current.offsetWidth);
+      if (inputRef.current && inputRef.current.offsetWidth > 0) {
+        setMeasuredWidth(inputRef.current.offsetWidth);
+      }
     };
     update();
+
+    let observer: ResizeObserver;
+    if (inputRef.current && typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(update);
+      observer.observe(inputRef.current);
+    }
+
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      observer?.disconnect();
+    };
   }, []);
   const normalized = (s: string) => s.toLowerCase();
   const filteredOptions = React.useMemo(() => {
