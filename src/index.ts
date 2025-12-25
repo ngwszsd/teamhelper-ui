@@ -58,6 +58,24 @@ export { Calendar22 } from './components/ui/date-picker';
 // Checkbox
 export { Checkbox } from './components/ui/checkbox';
 
+// Context Menu
+export {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuGroup,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuRadioGroup,
+} from './components/ui/context-menu';
+
 // Dialog
 export {
   Dialog,
