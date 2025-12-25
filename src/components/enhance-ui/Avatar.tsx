@@ -188,7 +188,8 @@ export const Avatar: React.FC<EnhancedAvatarProps> = ({
       ref={containerRef}
       className={cn(
         'inline-flex items-center justify-center overflow-hidden select-none align-middle',
-        'bg-foreground/30 text-card font-medium',
+        'text-card font-medium',
+        src ? 'bg-transparent' : 'bg-foreground/30',
         shape === 'circle' ? 'rounded-full' : 'rounded-md',
         size && typeof size === 'number' ? `text-lg ` : 'text-sm',
         size && typeof size === 'string' && sizeClasses[size],
