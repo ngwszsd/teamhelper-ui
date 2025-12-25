@@ -97,6 +97,10 @@ const Tabs = React.forwardRef<
       // 位置
       tabPosition === 'left' && 'flex-col h-auto w-auto',
       tabPosition === 'right' && 'flex-col h-auto w-auto',
+      // Grid layout for extra content to ensure centering
+      (tabBarExtraContent?.left || tabBarExtraContent?.right) &&
+        (tabPosition === 'top' || tabPosition === 'bottom') &&
+        'grid grid-cols-[1fr_auto_1fr] items-center gap-4',
       listClassName
     );
 
@@ -118,6 +122,33 @@ const Tabs = React.forwardRef<
       triggerClassName
     );
 
+    const renderTabsTriggers = () =>
+      items.map((item) => (
+        <TabsTrigger
+          key={item.key}
+          value={item.key}
+          disabled={item.disabled}
+          className={cn(
+            tabsTriggerClassName,
+            'relative group px-5 cursor-pointer',
+            'hover:text-primary'
+          )}
+        >
+          <span className="flex items-center">
+            {item.label}
+            {item.closable && onEdit && (
+              <button
+                className="ml-2 opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:text-primary-foreground rounded-sm w-4 h-4 flex items-center justify-center text-xs transition-opacity"
+                onClick={(e) => handleRemoveTab(item.key, e)}
+                type="button"
+              >
+                ×
+              </button>
+            )}
+          </span>
+        </TabsTrigger>
+      ));
+
     return (
       <BaseTabs
         ref={ref}
@@ -136,33 +167,26 @@ const Tabs = React.forwardRef<
         {...props}
       >
         <TabsList className={tabsListClassName}>
-          {tabBarExtraContent?.left}
-          {items.map((item) => (
-            <TabsTrigger
-              key={item.key}
-              value={item.key}
-              disabled={item.disabled}
-              className={cn(
-                tabsTriggerClassName,
-                'relative group px-5 cursor-pointer',
-                'hover:text-primary'
-              )}
-            >
-              <span className="flex items-center">
-                {item.label}
-                {item.closable && onEdit && (
-                  <button
-                    className="ml-2 opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:text-primary-foreground rounded-sm w-4 h-4 flex items-center justify-center text-xs transition-opacity"
-                    onClick={(e) => handleRemoveTab(item.key, e)}
-                    type="button"
-                  >
-                    ×
-                  </button>
-                )}
-              </span>
-            </TabsTrigger>
-          ))}
-          {tabBarExtraContent?.right}
+          {(tabBarExtraContent?.left || tabBarExtraContent?.right) &&
+          (tabPosition === 'top' || tabPosition === 'bottom') ? (
+            <>
+              <div className="flex items-center justify-start min-w-0 pl-4">
+                {tabBarExtraContent?.left}
+              </div>
+              <div className="flex items-center justify-center h-full">
+                {renderTabsTriggers()}
+              </div>
+              <div className="flex items-center justify-end min-w-0 pr-4">
+                {tabBarExtraContent?.right}
+              </div>
+            </>
+          ) : (
+            <>
+              {tabBarExtraContent?.left}
+              {renderTabsTriggers()}
+              {tabBarExtraContent?.right}
+            </>
+          )}
         </TabsList>
 
         {items.map((item) => (
