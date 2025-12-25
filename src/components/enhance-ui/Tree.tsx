@@ -322,6 +322,8 @@ export const Tree: React.FC<TreeProps> = ({
   );
 
   const renderToggleIcon = (flat: FlatNode) => {
+    const nodeChildren = flat?.node?.children || [];
+    const isChildren = Array.isArray(nodeChildren) && nodeChildren?.length;
     return (
       <button
         aria-label={expandedSet.has(flat.key) ? 'Collapse' : 'Expand'}
@@ -334,19 +336,29 @@ export const Tree: React.FC<TreeProps> = ({
         )}
         onClick={(e) => {
           e.stopPropagation();
+          if (!isChildren) return;
           toggle(flat.key);
         }}
         disabled={flat.node.disabled}
       >
-        {toggleIcon ? (
-          toggleIcon({
-            expanded: expandedSet.has(flat.key),
-            isLeaf: flat.isLeaf,
-          })
+        {isChildren ? (
+          <>
+            {toggleIcon ? (
+              toggleIcon({
+                expanded: expandedSet.has(flat.key),
+                isLeaf: flat.isLeaf,
+              })
+            ) : (
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 text-muted-foreground',
+                  toggleIconClassName
+                )}
+              />
+            )}
+          </>
         ) : (
-          <ChevronDown
-            className={cn('h-4 w-4 text-muted-foreground', toggleIconClassName)}
-          />
+          <div className="h-4 w-4" />
         )}
       </button>
     );
