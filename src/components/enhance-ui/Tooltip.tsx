@@ -1,10 +1,6 @@
 import * as React from 'react';
-import {
-  Tooltip as BaseTooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from '../ui/tooltip';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { TooltipTrigger, TooltipContent, TooltipProvider } from '../ui/tooltip';
 import { cn } from '../../lib/utils';
 
 export interface EnhancedTooltipProps {
@@ -148,7 +144,11 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
       <TooltipProvider
         delayDuration={trigger === 'hover' ? mouseEnterDelay * 1000 : 0}
       >
-        <BaseTooltip open={isOpen} onOpenChange={handleRadixOpenChange}>
+        <TooltipPrimitive.Root
+          open={isOpen}
+          onOpenChange={handleRadixOpenChange}
+          delayDuration={trigger === 'hover' ? mouseEnterDelay * 1000 : 0}
+        >
           <TooltipTrigger asChild>
             <div className={cn(triggerClassName)} {...triggerProps}>
               {children}
@@ -158,10 +158,8 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
           <TooltipContent
             side={side}
             align={align}
-            className={cn(
-              overlayClassName,
-              !arrow && '[&>svg]:hidden' // 隐藏箭头
-            )}
+            showArrow={arrow}
+            className={cn(overlayClassName)}
             style={{ ...overlayStyle, zIndex }}
             onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
             onPointerDownOutside={() => {
@@ -175,7 +173,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
           >
             {contentNode}
           </TooltipContent>
-        </BaseTooltip>
+        </TooltipPrimitive.Root>
       </TooltipProvider>
     </div>
   );
