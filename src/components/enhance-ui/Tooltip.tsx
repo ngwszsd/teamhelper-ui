@@ -3,6 +3,7 @@ import {
   Tooltip as BaseTooltip,
   TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
 } from '../ui/tooltip';
 import { cn } from '../../lib/utils';
 
@@ -55,7 +56,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
   triggerClassName,
 }) => {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen || false);
-  const [hoverTimeout, setHoverTimeout] = React.useState<ReturnType<
+  const [closeTimeout, setCloseTimeout] = React.useState<ReturnType<
     typeof setTimeout
   > | null>(null);
 
@@ -102,30 +103,26 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
 
   const { side, align } = getSideAndAlign();
 
-  const clearHoverTimeout = () => {
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
+  const clearCloseTimeout = () => {
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
     }
   };
 
-  const handleMouseEnter = () => {
+  const handleRadixOpenChange = (next: boolean) => {
     if (trigger === 'hover') {
-      clearHoverTimeout();
-      const timeout = setTimeout(() => {
+      if (next) {
+        clearCloseTimeout();
         handleOpenChange(true);
-      }, mouseEnterDelay * 1000);
-      setHoverTimeout(timeout);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (trigger === 'hover') {
-      clearHoverTimeout();
-      const timeout = setTimeout(() => {
-        handleOpenChange(false);
-      }, mouseLeaveDelay * 1000);
-      setHoverTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          handleOpenChange(false);
+        }, mouseLeaveDelay * 1000);
+        setCloseTimeout(timeout);
+      }
+    } else if (trigger === 'focus') {
+      handleOpenChange(next);
     }
   };
 
@@ -133,46 +130,53 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
     const baseProps: any = {};
 
     if (trigger === 'hover') {
-      baseProps.onMouseEnter = handleMouseEnter;
-      baseProps.onMouseLeave = handleMouseLeave;
-    } else if (trigger === 'focus') {
-      baseProps.onFocus = () => handleOpenChange(true);
-      baseProps.onBlur = () => handleOpenChange(false);
+      baseProps.onMouseEnter = clearCloseTimeout;
     } else if (trigger === 'click') {
-      baseProps.onClick = () => handleOpenChange(!isOpen);
+      baseProps.onClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        handleOpenChange(!isOpen);
+      };
     }
 
     return baseProps;
-  }, [trigger, isOpen]);
+  }, [trigger, isOpen, closeTimeout]);
 
   const contentNode = React.isValidElement(title) ? title : <>{title}</>;
 
   return (
     <div className={cn('max-w-fit', className)}>
-      <BaseTooltip open={isOpen} onOpenChange={handleOpenChange}>
-        <TooltipTrigger asChild>
-          <div className={cn(triggerClassName)} {...triggerProps}>
-            {children}
-          </div>
-        </TooltipTrigger>
+      <TooltipProvider
+        delayDuration={trigger === 'hover' ? mouseEnterDelay * 1000 : 0}
+      >
+        <BaseTooltip open={isOpen} onOpenChange={handleRadixOpenChange}>
+          <TooltipTrigger asChild>
+            <div className={cn(triggerClassName)} {...triggerProps}>
+              {children}
+            </div>
+          </TooltipTrigger>
 
-        <TooltipContent
-          side={side}
-          align={align}
-          className={cn(
-            overlayClassName,
-            !arrow && '[&>svg]:hidden' // 隐藏箭头
-          )}
-          style={{ ...overlayStyle, zIndex }}
-          onMouseEnter={trigger === 'hover' ? handleMouseEnter : undefined}
-          onMouseLeave={trigger === 'hover' ? handleMouseLeave : undefined}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          {contentNode}
-        </TooltipContent>
-      </BaseTooltip>
+          <TooltipContent
+            side={side}
+            align={align}
+            className={cn(
+              overlayClassName,
+              !arrow && '[&>svg]:hidden' // 隐藏箭头
+            )}
+            style={{ ...overlayStyle, zIndex }}
+            onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
+            onPointerDownOutside={() => {
+              if (trigger === 'click') {
+                handleOpenChange(false);
+              }
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {contentNode}
+          </TooltipContent>
+        </BaseTooltip>
+      </TooltipProvider>
     </div>
   );
 };
