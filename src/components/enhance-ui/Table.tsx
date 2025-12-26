@@ -16,6 +16,7 @@ import { Empty } from './Empty';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { EnhancedTooltip } from './Tooltip';
+import { useLocale } from '../ConfigProvider';
 
 export interface ColumnType<T = any> {
   title?: React.ReactNode;
@@ -125,6 +126,11 @@ const Table = <T extends Record<string, any> = any>({
   onChange,
   stickyHeader = true,
 }: EnhancedTableProps<T>) => {
+  const localeFromContext = useLocale();
+  const mergedLocale = {
+    emptyText: localeFromContext.emptyText,
+    ...locale,
+  };
   // Fixed header + virtualization state
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const enableVirtual = React.useMemo(() => {
@@ -665,7 +671,9 @@ const Table = <T extends Record<string, any> = any>({
                     colSpan={columns.length + (rowSelection ? 1 : 0)}
                     className="text-center py-8"
                   >
-                    {locale.emptyText}
+                    {mergedLocale.emptyText || (
+                      <Empty description={mergedLocale.emptyText as string} />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : enableVirtual ? (

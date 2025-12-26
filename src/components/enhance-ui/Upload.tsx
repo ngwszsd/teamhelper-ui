@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { FileIcon, Trash2, Eye } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { UploadDragger } from './UploadDragger';
+import { useLocale } from '../ConfigProvider';
 
 export type UploadStatus = 'uploading' | 'done' | 'error';
 
@@ -111,6 +112,7 @@ const InternalUpload = ({
   style,
   children,
 }: EnhancedUploadProps) => {
+  const locale = useLocale();
   if (!children) return null;
 
   const isControlled = !!fileList;
@@ -346,7 +348,9 @@ const InternalUpload = ({
                   </span>
                 )}
                 {file.status === 'error' && (
-                  <span className="text-destructive">- 上传失败</span>
+                  <span className="text-destructive">
+                    - {locale.uploadError}
+                  </span>
                 )}
               </div>
               <div className="flex items-center gap-3">
@@ -357,7 +361,7 @@ const InternalUpload = ({
                   disabled={!file.url && !onPreview}
                 >
                   <Eye className="size-4" />
-                  预览
+                  {locale.previewFile}
                 </button>
                 <button
                   type="button"
@@ -365,7 +369,7 @@ const InternalUpload = ({
                   onClick={() => doRemove(file)}
                 >
                   <Trash2 className="size-4" />
-                  删除
+                  {locale.removeFile}
                 </button>
               </div>
             </div>

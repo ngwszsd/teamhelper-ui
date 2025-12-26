@@ -18,7 +18,7 @@ import {
 import { Input } from '../ui/input';
 import { cn } from '../../lib/utils';
 import type { ButtonProps } from '../ui/button';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from '../ConfigProvider';
 export interface EnhancedPaginationProps {
   /** 当前页码（默认从 1 开始，如果 startFromZero 为 true 则从 0 开始） */
   current: number;
@@ -68,7 +68,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
   extra,
   startFromZero = false,
 }) => {
-  const { t } = useTranslation('components');
+  const locale = useLocale();
 
   // 计算最小页码和最大页码
   const minPage = startFromZero ? 0 : 1;
@@ -134,13 +134,11 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
 
   const renderTotal = () => {
     if (showTotal) return showTotal(total, [rangeStart, rangeEnd]);
-    const pageCount = total > 0 ? rangeEnd - rangeStart + 1 : 0;
     return (
       <div className="text-sm text-muted-foreground">
-        显示第
-        <span className="font-medium mx-1">{displayPage}</span>页
-        <span className="font-medium mx-1">{pageCount}</span>
-        条结果, 共<span className="font-medium mx-1">{total}</span>条
+        {locale?.total || 'Total'}
+        <span className="font-medium mx-1">{total}</span>
+        {locale?.items || 'items'}
       </div>
     );
   };
@@ -150,11 +148,11 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">
-          {t('pagination.pageSizeLabel')}
+          {locale?.page_size}
         </span>
         <Select value={String(pageSize)} onValueChange={handleSizeChange}>
           <SelectTrigger className="w-[100px]">
-            <SelectValue placeholder={t('select')} />
+            <SelectValue placeholder={locale?.page_size} />
           </SelectTrigger>
           <SelectContent>
             {pageSizeOptions.map((opt) => (
@@ -174,7 +172,7 @@ const Pagination: React.FC<EnhancedPaginationProps> = ({
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">
-          {t('pagination.jumpToLabel')}
+          {locale?.jump_to || 'Jump to'}
         </span>
         <div className="w-[80px]">
           <Input

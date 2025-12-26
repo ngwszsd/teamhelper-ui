@@ -5,7 +5,7 @@ import type { NiceModalHocProps } from '@ebay/nice-modal-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogTitle, DialogFooter } from './ui/dialog';
 import { Loader2, X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from './ConfigProvider';
 import { Button } from './enhance-ui/Button';
 
 type SemanticName = 'content' | 'header' | 'body' | 'footer';
@@ -76,7 +76,7 @@ const TipsModal: FC<TipsModalProps> = ({
   footerBtnPosition = 'right',
   countdown = 0,
 }) => {
-  const { t } = useTranslation('components');
+  const locale = useLocale();
   const modal = useModal();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [remainingTime, setRemainingTime] = useState(countdown);
@@ -102,10 +102,10 @@ const TipsModal: FC<TipsModalProps> = ({
     };
   }, [remainingTime, modal?.visible, countdown]);
 
-  const titleText = title ?? t('tips.title');
-  const okTextText = okText === null ? null : (okText ?? t('confirm'));
+  const titleText = title ?? locale.tipsTitle;
+  const okTextText = okText === null ? null : (okText ?? locale.okText);
   const cancelTextText =
-    cancelText === null ? null : (cancelText ?? t('cancel'));
+    cancelText === null ? null : (cancelText ?? locale.cancelText);
 
   const onOk = async () => {
     setConfirmLoading(true);

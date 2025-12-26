@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 import { FileX, Inbox, PackageOpen } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from '../ConfigProvider';
 
 type SemanticName = 'root' | 'image' | 'title' | 'description' | 'footer';
 
@@ -45,7 +45,7 @@ const Empty: React.FC<EnhancedEmptyProps> & {
   children,
   classNames,
 }) => {
-  const { t } = useTranslation('components');
+  const locale = useLocale();
   const renderImage = () => {
     if (!image) return null;
 
@@ -76,7 +76,9 @@ const Empty: React.FC<EnhancedEmptyProps> & {
   };
 
   const renderDescription = () => {
-    if (!description) return null;
+    const emptyDescription = description ?? locale.emptyText;
+
+    if (!emptyDescription) return null;
 
     return (
       <div
@@ -85,7 +87,7 @@ const Empty: React.FC<EnhancedEmptyProps> & {
           classNames?.description
         )}
       >
-        {description ?? t('emptyDescription')}
+        {emptyDescription}
       </div>
     );
   };

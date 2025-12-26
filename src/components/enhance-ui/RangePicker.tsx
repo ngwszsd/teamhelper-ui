@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '../../lib/utils';
+import { useLocale } from '../ConfigProvider';
 import type { DateRange } from 'react-day-picker';
 
 export interface RangePickerProps {
@@ -73,26 +74,27 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   value,
   defaultValue,
   onChange,
-  placeholder = ['开始日期', '结束日期'],
+  placeholder,
   disabled = false,
   allowClear = true,
   className,
   format = 'YYYY-MM-DD',
   separator = ' ~ ',
-  open,
+  open: controlledOpen,
   onOpenChange,
   presets,
 }) => {
+  const locale = useLocale();
   const rangeDateRef = React.useRef<Array<string> | undefined>(undefined);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(() => {
-    const start = defaultValue?.[0];
-    const d = parseDate(start, format) ?? new Date();
+    const startValue = defaultValue?.[0];
+    const d = parseDate(startValue, format) ?? new Date();
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
 
   React.useEffect(() => {
-    const start = defaultValue?.[0];
-    const d = parseDate(start, format);
+    const startValue = defaultValue?.[0];
+    const d = parseDate(startValue, format);
     if (d) {
       setCurrentMonth(new Date(d.getFullYear(), d.getMonth(), 1));
     }
@@ -106,9 +108,9 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   const mergedValue = isControlled ? value : internalValue;
 
   // 受控/非受控 open
-  const isOpenControlled = open !== undefined;
+  const isOpenControlled = controlledOpen !== undefined;
   const [internalOpen, setInternalOpen] = React.useState(false);
-  const mergedOpen = isOpenControlled ? !!open : internalOpen;
+  const mergedOpen = isOpenControlled ? !!controlledOpen : internalOpen;
   const setOpenSafe = (next: boolean) => {
     if (!isOpenControlled) setInternalOpen(next);
     onOpenChange?.(next);
@@ -123,8 +125,11 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   const displayText = React.useMemo(() => {
     const start = formatDate(selectedRange?.from, format);
     const end = formatDate(selectedRange?.to, format);
-    return `${start || placeholder?.[0] || '开始日期'}${separator}${end || placeholder?.[1] || '结束日期'}`;
-  }, [selectedRange, placeholder, format, separator]);
+    const startPlaceholder =
+      placeholder?.[0] || locale.dateSelect || 'Start date';
+    const endPlaceholder = placeholder?.[1] || locale.dateSelect || 'End date';
+    return `${start || startPlaceholder}${separator}${end || endPlaceholder}`;
+  }, [selectedRange, placeholder, format, separator, locale]);
 
   const emitChange = (next?: [string, string]) => {
     if (!isControlled) {
@@ -153,15 +158,14 @@ export const RangePicker: React.FC<RangePickerProps> = ({
       const startDate = rangeDate?.[0];
       const endDate = rangeDate?.[1];
 
-      const startText = startDate > endDate ? endDate : startDate;
-      const endText = endDate < startDate ? startDate : endDate;
-
-      emitChange([startText, endText]);
-
-      // 仅完整选择时触发最终变更并关闭弹窗
-      if (startText && endText) {
+      if (startDate && endDate) {
+        const startText = startDate > endDate ? endDate : startDate;
+        const endText = endDate < startDate ? startDate : endDate;
+        emitChange([startText, endText]);
         // 延迟关闭，避免卡顿
         setTimeout(() => setOpenSafe(false), 0);
+      } else if (startDate) {
+        emitChange([startDate, '']);
       }
     },
     [format]
@@ -171,7 +175,9 @@ export const RangePicker: React.FC<RangePickerProps> = ({
     e.preventDefault();
     e.stopPropagation();
     if (disabled) return;
-    setInternalValue(undefined);
+    if (!isControlled) {
+      setInternalValue(undefined);
+    }
     onChange?.(undefined);
     rangeDateRef.current = undefined;
   };

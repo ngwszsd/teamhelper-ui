@@ -279,6 +279,13 @@ export type { ThemeProviderProps } from './components/ThemeProvider';
 
 export { ThemeToggle } from './components/ThemeToggle';
 
+export { ConfigProvider, useLocale } from './components/ConfigProvider';
+export type { ConfigProviderProps } from './components/ConfigProvider';
+
+export { default as zhCN } from './locale/zh_CN';
+export { default as enUS } from './locale/en_US';
+export type { Locale } from './locale/interface';
+
 // Enhanced UI Components (with Enhanced prefix for conflicts)
 export { EnhancedAlert } from './components/enhance-ui/Alert';
 export { Avatar as EnhancedAvatar } from './components/enhance-ui/Avatar';

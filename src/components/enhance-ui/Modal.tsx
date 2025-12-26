@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogFooter } from '../ui/dialog';
 import { X, Loader2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from '../ConfigProvider';
 import { Button } from './Button';
 
 type SemanticName = 'content' | 'header' | 'body' | 'footer';
@@ -59,10 +59,10 @@ export const Modal: React.FC<ModalProps> = ({
   isShowOk = true,
   delay = 300,
 }) => {
-  const { t } = useTranslation('components');
+  const locale = useLocale();
   const [okLoading, setOkLoading] = React.useState(false);
-  const okTextNode = okText ?? t('confirm');
-  const cancelTextNode = cancelText ?? t('cancel');
+  const okTextNode = okText ?? locale.okText;
+  const cancelTextNode = cancelText ?? locale.cancelText;
 
   const runBeforeAndAction = async (
     before?: () => boolean | void | Promise<boolean | void>,

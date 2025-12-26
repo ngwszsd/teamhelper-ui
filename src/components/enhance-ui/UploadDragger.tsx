@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FileIcon, Trash2, CircleX, FolderUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from '../ConfigProvider';
 import { type Ref, useImperativeHandle } from 'react';
 export type ParseMode = 'json' | 'text' | 'arrayBuffer' | 'none';
 export type ListType = 'list' | 'card';
@@ -64,7 +64,7 @@ export function UploadDragger({
   ref,
   isCustomClick = false,
 }: UploadDraggerProps) {
-  const { t, i18n } = useTranslation('components');
+  const locale = useLocale();
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = React.useState(false);
 
@@ -111,18 +111,18 @@ export function UploadDragger({
 
     files.forEach((file) => {
       if (maxSize && file.size > maxSize) {
-        errors.push(t('upload.error.size', { fileName: file.name }));
+        errors.push(locale.error_size.replace('{{fileName}}', file.name));
         return;
       }
       if (!matchAccept(file)) {
-        errors.push(t('upload.error.type', { fileName: file.name }));
+        errors.push(locale.error_type.replace('{{fileName}}', file.name));
         return;
       }
       valid.push(file);
     });
 
     if (errors.length) {
-      const sep = i18n.language?.startsWith('zh') ? '；' : '; ';
+      const sep = locale?.removeFile ? '；' : '; '; // Simple check for CJK
       const msg = errors.join(sep);
       onError?.(msg);
       toast.error(msg);
@@ -144,7 +144,7 @@ export function UploadDragger({
         onParsed?.(buf, file);
       }
     } catch (e) {
-      const msg = t('upload.error.parse', { fileName: file.name });
+      const msg = locale.error_parse.replace('{{fileName}}', file.name);
       onError?.(msg);
       toast.error(msg);
     }
@@ -236,7 +236,7 @@ export function UploadDragger({
     ? URL.createObjectURL(currentFiles[0])
     : null;
 
-  const descriptionNode = description ?? t('upload.dragDescription');
+  const descriptionNode = description ?? locale.dragDescription;
 
   return (
     <>
@@ -327,7 +327,7 @@ export function UploadDragger({
                   onClick={() => removeAt(idx)}
                 >
                   <Trash2 className="size-4" />
-                  {t('upload.remove')}
+                  {locale.removeFile}
                 </button>
               </div>
             )

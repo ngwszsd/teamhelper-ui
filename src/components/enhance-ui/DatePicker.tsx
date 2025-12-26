@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '../../lib/utils';
 import { RangePicker } from './RangePicker';
 import { Button } from './Button';
+import { useLocale } from '../ConfigProvider';
 
 export interface DatePickerProps {
   /**
@@ -81,12 +82,13 @@ type DatePickerComponent = React.FC<DatePickerProps> & {
 export const DatePicker: DatePickerComponent = ({
   value,
   onChange,
-  placeholder = '请选择日期',
+  placeholder,
   disabled = false,
   allowClear = true,
   className,
   defaultValue,
 }) => {
+  const locale = useLocale();
   const [open, setOpen] = React.useState(false);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(() => {
     const start = defaultValue || '';
@@ -144,14 +146,14 @@ export const DatePicker: DatePickerComponent = ({
   const displayText = React.useMemo(() => {
     return selectedDate
       ? selectedDate
-          .toLocaleDateString('zh-CN', {
+          .toLocaleDateString(locale.locale || 'zh-CN', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
           })
           .replace(/\//g, '-')
-      : placeholder;
-  }, [selectedDate, placeholder]);
+      : placeholder || locale.dateSelect || 'Select date';
+  }, [selectedDate, placeholder, locale]);
 
   return (
     <div className="relative inline-block w-fit">
