@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 
 /* Tailwind v4: 扫描 UI 包的组件目录 */
-@source "..";
+@source "../node_modules/@teamhelper/ui/dist";
 
 @custom-variant dark (&:is(.dark *));
 
