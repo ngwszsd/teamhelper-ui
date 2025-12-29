@@ -37,7 +37,7 @@ export interface EnhancedTooltipProps {
 const Tooltip: React.FC<EnhancedTooltipProps> = ({
   children,
   title,
-  trigger = 'hover',
+  trigger = 'click',
   placement = 'top',
   open,
   defaultOpen,
@@ -159,7 +159,7 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
             side={side}
             align={align}
             showArrow={arrow}
-            className={cn(overlayClassName)}
+            className={cn('break-all', overlayClassName)}
             style={{ ...overlayStyle, zIndex }}
             onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
             onPointerDownOutside={() => {
