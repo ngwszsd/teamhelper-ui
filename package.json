@@ -1,6 +1,6 @@
 {
   "name": "@teamhelper/ui",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Component library for Teamhelper",
   "author": "geekbook9533@gmail.com",
   "license": "MIT",
@@ -29,8 +29,7 @@
         "types": "./dist/*.d.ts",
         "import": "./dist/*.js",
         "require": "./dist/*.cjs"
-      },
-      "./tailwind": "./dist/styles/tailwind.css"
+      }
     }
   },
   "type": "module",
@@ -49,8 +48,7 @@
       "types": "./src/*.ts",
       "import": "./src/*.ts",
       "require": "./dist/*.cjs"
-    },
-    "./tailwind": "./src/styles/tailwind.css"
+    }
   },
   "types": "dist/index.d.ts",
   "files": [
