@@ -37,7 +37,7 @@ export interface EnhancedTooltipProps {
 const Tooltip: React.FC<EnhancedTooltipProps> = ({
   children,
   title,
-  trigger = 'click',
+  trigger = 'hover',
   placement = 'top',
   open,
   defaultOpen,
