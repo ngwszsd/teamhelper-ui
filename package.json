@@ -29,7 +29,8 @@
         "types": "./dist/*.d.ts",
         "import": "./dist/*.js",
         "require": "./dist/*.cjs"
-      }
+      },
+      "./tailwind": "./dist/styles/tailwind.css"
     }
   },
   "type": "module",
@@ -48,7 +49,8 @@
       "types": "./src/*.ts",
       "import": "./src/*.ts",
       "require": "./dist/*.cjs"
-    }
+    },
+    "./tailwind": "./src/styles/tailwind.css"
   },
   "types": "dist/index.d.ts",
   "files": [
