@@ -236,11 +236,15 @@ export function UploadDragger({
 
   React.useEffect(() => {
     let url: string | null = null;
-    const hasImage =
-      currentFiles.length > 0 && currentFiles[0].type.startsWith('image/');
+    const firstFile = currentFiles.length > 0 ? currentFiles[0] : null;
+    const hasImage = !!(
+      firstFile &&
+      firstFile.type &&
+      firstFile.type.startsWith('image/')
+    );
 
-    if (hasImage) {
-      url = URL.createObjectURL(currentFiles[0]);
+    if (hasImage && firstFile) {
+      url = URL.createObjectURL(firstFile);
       setImagePreviewUrl(url);
     } else {
       setImagePreviewUrl(null);
@@ -252,8 +256,6 @@ export function UploadDragger({
       }
     };
   }, [currentFiles]);
-
-  const hasImageFile = !!imagePreviewUrl;
 
   const descriptionNode = description ?? locale.dragDescription;
 
@@ -281,10 +283,15 @@ export function UploadDragger({
           className
         )}
       >
-        {listType === 'card' && hasImageFile && imagePreviewUrl ? (
+        {listType === 'card' &&
+        (imagePreviewUrl || (currentFiles[0] as any)?.url) ? (
           // Card模式：显示图片预览
           <>
-            <img src={imagePreviewUrl} alt="预览" className="object-cover" />
+            <img
+              src={imagePreviewUrl || (currentFiles[0] as any)?.url}
+              alt="预览"
+              className="object-cover w-full h-full"
+            />
             {/* 右上角清除按钮 */}
             <div
               onClick={(e) => {
