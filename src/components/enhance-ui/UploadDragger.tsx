@@ -230,11 +230,30 @@ export function UploadDragger({
   };
 
   // 检查是否有图片文件用于card模式预览
-  const hasImageFile =
-    currentFiles.length > 0 && currentFiles[0].type.startsWith('image/');
-  const imagePreviewUrl = hasImageFile
-    ? URL.createObjectURL(currentFiles[0])
-    : null;
+  const [imagePreviewUrl, setImagePreviewUrl] = React.useState<string | null>(
+    null
+  );
+
+  React.useEffect(() => {
+    let url: string | null = null;
+    const hasImage =
+      currentFiles.length > 0 && currentFiles[0].type.startsWith('image/');
+
+    if (hasImage) {
+      url = URL.createObjectURL(currentFiles[0]);
+      setImagePreviewUrl(url);
+    } else {
+      setImagePreviewUrl(null);
+    }
+
+    return () => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    };
+  }, [currentFiles]);
+
+  const hasImageFile = !!imagePreviewUrl;
 
   const descriptionNode = description ?? locale.dragDescription;
 
