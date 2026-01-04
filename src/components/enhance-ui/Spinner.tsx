@@ -8,6 +8,7 @@ export interface EnhancedSpinnerProps {
   delay?: number;
   indicator?: React.ReactNode;
   wrapperClassName?: string;
+  childrenClassName?: string;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -20,6 +21,7 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
   delay = 0,
   indicator,
   wrapperClassName,
+  childrenClassName,
   className,
   style,
   children,
@@ -94,7 +96,8 @@ const Spinner: React.FC<EnhancedSpinnerProps> = ({
         <div
           className={cn(
             'transition-opacity duration-200',
-            isSpinning && 'opacity-50 pointer-events-none'
+            isSpinning && 'opacity-50 pointer-events-none',
+            childrenClassName
           )}
         >
           {children}
