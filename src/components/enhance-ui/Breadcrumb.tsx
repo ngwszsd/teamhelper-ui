@@ -139,6 +139,7 @@ const Breadcrumb: React.FC<{
                   },
                 })),
               }}
+              itemClassName="text-sm"
             >
               <div className="flex items-center gap-1 outline-none cursor-pointer">
                 <BreadcrumbEllipsis className="h-4 w-4" />

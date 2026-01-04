@@ -58,6 +58,7 @@ export interface EnhancedDropdownProps {
   onOpenChange?: (open: boolean) => void;
   isSpan?: boolean;
   cursorPointer?: boolean;
+  itemClassName?: string;
 }
 
 const Dropdown: React.FC<EnhancedDropdownProps> = ({
@@ -73,6 +74,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
   dropdownRender,
   isSpan = true,
   cursorPointer = true,
+  itemClassName,
 }) => {
   const [internalOpen, setInternalOpen] = React.useState(false);
   const isControlled = open !== undefined;
@@ -145,6 +147,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
           <DropdownMenuSubTrigger
             className={cn(
               'text-xs',
+              itemClassName,
               item.disabled
                 ? 'opacity-50 cursor-not-allowed'
                 : (cursorPointer || item.cursorPointer) && 'cursor-pointer',
@@ -171,6 +174,7 @@ const Dropdown: React.FC<EnhancedDropdownProps> = ({
         <DropdownMenuItem
           className={cn(
             'text-xs',
+            itemClassName,
             item.disabled
               ? 'opacity-50 cursor-not-allowed'
               : (cursorPointer || item.cursorPointer) && 'cursor-pointer',
