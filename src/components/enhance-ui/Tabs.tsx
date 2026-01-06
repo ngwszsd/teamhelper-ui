@@ -170,15 +170,19 @@ const Tabs = React.forwardRef<
           {(tabBarExtraContent?.left || tabBarExtraContent?.right) &&
           (tabPosition === 'top' || tabPosition === 'bottom') ? (
             <>
-              <div className="flex items-center justify-start min-w-0 pl-4">
-                {tabBarExtraContent?.left}
-              </div>
+              {tabBarExtraContent?.left && (
+                <div className="flex items-center justify-start min-w-0 pl-0">
+                  {tabBarExtraContent?.left}
+                </div>
+              )}
               <div className="flex items-center justify-center h-full">
                 {renderTabsTriggers()}
               </div>
-              <div className="flex items-center justify-end min-w-0 pr-4">
-                {tabBarExtraContent?.right}
-              </div>
+              {tabBarExtraContent?.right && (
+                <div className="flex items-center justify-end min-w-0 pr-0">
+                  {tabBarExtraContent?.right}
+                </div>
+              )}
             </>
           ) : (
             <>
