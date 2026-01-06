@@ -121,7 +121,7 @@ export const Modal: React.FC<ModalProps> = ({
       return title;
     }
 
-    return <div>{title}</div>;
+    return <div className="truncate">{title}</div>;
   };
 
   return (
@@ -146,7 +146,7 @@ export const Modal: React.FC<ModalProps> = ({
             {closable && (
               <X
                 onClick={handleCancel}
-                className="w-6 h-6 text-muted-foreground cursor-pointer hover:text-muted-foreground/50"
+                className="w-6 h-6 text-muted-foreground cursor-pointer hover:text-muted-foreground/50 shrink-0"
               />
             )}
           </DialogTitle>
