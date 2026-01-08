@@ -29,7 +29,6 @@ export interface InputNumberProps extends Omit<
   formatter?: (value: number | undefined) => string;
   parser?: (displayValue: string | undefined) => number | undefined;
   inputClassName?: string;
-  isUpdateToMin?: boolean;
 }
 
 const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
@@ -53,7 +52,6 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       onBlur,
       onFocus,
       onKeyDown,
-      isUpdateToMin = false,
       ...props
     },
     ref
@@ -123,13 +121,13 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
 
       if (triggerChange) {
-        if (isUpdateToMin) {
-          finalVal = finalVal ?? min;
-        }
         if (!isControlled) {
           setInternalValue(finalVal);
         }
         lastEmittedValue.current = finalVal;
+        if (min !== Number.MIN_SAFE_INTEGER) {
+          finalVal = finalVal || min;
+        }
         onChange?.(finalVal);
       }
 
@@ -164,7 +162,10 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
         parsed = currentValue ?? null;
       }
 
-      const finalVal = updateValue(parsed, true);
+      let finalVal = updateValue(parsed, true);
+      if (min !== Number.MIN_SAFE_INTEGER) {
+        finalVal = finalVal || min;
+      }
 
       // Format display
       const formatted =
@@ -179,7 +180,10 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     const handleStep = (type: 'up' | 'down') => {
       if (disabled || readOnly) return;
 
-      const current = currentValue ?? 0;
+      let current = currentValue ?? 0;
+      if (min !== Number.MIN_SAFE_INTEGER) {
+        current = current || min;
+      }
       const stepNum = Number(step);
 
       let nextVal;
@@ -228,10 +232,12 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     }, [currentValue, max]);
 
     const isDisabledDown = useMemo(() => {
-      const bool =
-        currentValue !== null &&
-        currentValue !== undefined &&
-        currentValue <= min;
+      let bool = true;
+      if (min !== Number.MIN_SAFE_INTEGER) {
+        if (currentValue !== null && currentValue !== undefined) {
+          bool = currentValue <= min;
+        }
+      }
       return bool;
     }, [currentValue, min]);
 
