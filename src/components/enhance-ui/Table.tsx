@@ -104,6 +104,8 @@ export interface EnhancedTableProps<T = any> {
   ) => void;
   /** 表头固定配置：true/false 或配置对象（默认启用） */
   stickyHeader?: boolean | { top?: number; zIndex?: number };
+  /** 虚拟滚动开启阈值，默认 200 */
+  virtualScrollThreshold?: number;
 }
 
 const Table = <T extends Record<string, any> = any>({
@@ -125,6 +127,7 @@ const Table = <T extends Record<string, any> = any>({
   locale = { emptyText: <Empty description="暂无数据" /> },
   onChange,
   stickyHeader = true,
+  virtualScrollThreshold = 200,
 }: EnhancedTableProps<T>) => {
   const localeFromContext = useLocale();
   const mergedLocale = {
@@ -134,9 +137,9 @@ const Table = <T extends Record<string, any> = any>({
   // Fixed header + virtualization state
   const scrollContainerRef = React.useRef<HTMLDivElement | null>(null);
   const enableVirtual = React.useMemo(() => {
-    // 启用虚拟滚动的条件：存在纵向滚动容器，且数据量超过 200
-    return !!scroll?.y && dataSource.length > 200;
-  }, [scroll?.y, dataSource.length]);
+    // 启用虚拟滚动的条件：存在纵向滚动容器，且数据量超过阈值
+    return !!scroll?.y && dataSource.length > virtualScrollThreshold;
+  }, [scroll?.y, dataSource.length, virtualScrollThreshold]);
 
   const [sortedInfo, setSortedInfo] = React.useState<{
     columnKey?: string;
