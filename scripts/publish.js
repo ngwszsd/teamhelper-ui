@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = join(__dirname, '..');
 const packageJsonPath = join(rootDir, 'package.json');
+const readmePath = join(rootDir, 'README.md');
 
 // 读取 package.json
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
@@ -96,6 +97,22 @@ function restoreExportsForDev() {
     JSON.stringify(packageJson, null, 2) + '\n',
     'utf8'
   );
+}
+
+// 更新 README.md 中的版本号
+function updateReadmeVersion(targetVersion) {
+  console.log(`📝 更新 README.md 中的版本号到 ${targetVersion}...`);
+  try {
+    const readmeContent = readFileSync(readmePath, 'utf8');
+    const updatedContent = readmeContent.replace(
+      /!\[Version\]\(https:\/\/img\.shields\.io\/badge\/version-[\d\.]+-blue\.svg\)/,
+      `![Version](https://img.shields.io/badge/version-${targetVersion}-blue.svg)`
+    );
+    writeFileSync(readmePath, updatedContent, 'utf8');
+    console.log('✅ README.md 版本号更新成功');
+  } catch (error) {
+    console.warn('⚠️ README.md 版本号更新失败:', error.message);
+  }
 }
 
 async function main() {
@@ -187,11 +204,14 @@ async function main() {
       });
     } else {
       console.log(`📝 更新版本 (${versionType})...`);
-      execSync(`npm version ${versionType}`, {
+      execSync(`npm version ${versionType} --no-git-tag-version`, {
         cwd: rootDir,
         stdio: 'inherit',
       });
     }
+
+    // 更新 README.md
+    updateReadmeVersion(targetVersion);
 
     // 3.4 最终确认
     console.log('');

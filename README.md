@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.16-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![React](https://img.shields.io/badge/react-%3E%3D16.9.0-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/typescript-5.9.3-3178c6.svg)
@@ -26,7 +26,7 @@
 - 📦 **开箱即用** - 70+ 个精心设计的组件，涵盖从基础到业务场景
 - 🚀 **高性能** - 基于 rslib 打包，独立文件输出，优化加载性能
 - 💅 **Tailwind CSS** - 使用 Tailwind CSS v4，声明式高效样式系统
-- 📱 **响应式** - 所有组件都支持响应式设计，完美适配移动端
+- 📱 **响应式** - 所有原子组件都支持响应式设计，完美适配移动端
 
 ---
 
