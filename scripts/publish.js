@@ -241,6 +241,23 @@ async function main() {
       console.log('🎉 发布成功！');
       console.log(`📦 ${name}@${targetVersion} 已发布到 npm`);
       console.log('');
+
+      // 3.6 同步到 GitHub
+      console.log('📤 正在同步到 GitHub...');
+      try {
+        // subtree push 需要在项目根目录下执行
+        execSync('git subtree push --prefix=packages/ui github main', {
+          cwd: join(rootDir, '../..'),
+          stdio: 'inherit',
+        });
+        console.log('✅ GitHub 同步完成');
+      } catch (e) {
+        console.warn(
+          '⚠️ GitHub 同步失败，请检查远程配置或手动执行 npm run sync:github'
+        );
+      }
+
+      console.log('');
       console.log('🔗 后续操作：');
       console.log(`   查看包: npm view ${name}`);
       console.log(`   安装测试: npm install ${name}`);

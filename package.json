@@ -83,7 +83,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "storybook:dev": "storybook dev -p 6077",
     "storybook:build": "storybook build",
-    "docs:local": "pnpm storybook:build && live-server ./storybook-static"
+    "docs:local": "pnpm storybook:build && live-server ./storybook-static",
+    "sync:github": "git subtree push --prefix=packages/ui github main"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
