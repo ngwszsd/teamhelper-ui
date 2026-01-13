@@ -32,6 +32,7 @@ const localeValues: Locale = {
   error_size: 'File {{fileName}} exceeds size limit',
   error_type: 'File {{fileName}} format error',
   error_parse: 'File {{fileName}} parse failed',
+  preview: 'Preview',
 
   // Calendar
   today: 'Today',
@@ -46,6 +47,18 @@ const localeValues: Locale = {
   monthSelect: 'Choose a month',
   yearSelect: 'Choose a year',
   decadeSelect: 'Choose a decade',
+  start_date: 'Start date',
+  end_date: 'End date',
+
+  // Tree/Select
+  expand: 'Expand',
+  collapse: 'Collapse',
+  select_placeholder: 'Select',
+  search_placeholder: 'Search',
+  noMatch: 'No matching options',
+
+  // Timeline
+  pending: 'Pending...',
 };
 
 export default localeValues;

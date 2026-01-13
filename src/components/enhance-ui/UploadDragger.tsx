@@ -284,12 +284,12 @@ export function UploadDragger({
         )}
       >
         {listType === 'card' &&
-        (imagePreviewUrl || (currentFiles[0] as any)?.url) ? (
+          (imagePreviewUrl || (currentFiles[0] as any)?.url) ? (
           // Card模式：显示图片预览
           <>
             <img
               src={imagePreviewUrl || (currentFiles[0] as any)?.url}
-              alt="预览"
+              alt={locale.preview || 'Preview'}
               className="object-cover w-full h-full"
             />
             {/* 右上角清除按钮 */}

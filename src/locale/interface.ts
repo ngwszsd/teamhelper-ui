@@ -37,6 +37,7 @@ export interface Locale {
   error_size: string;
   error_type: string;
   error_parse: string;
+  preview: string;
 
   // 日历/日期相关
   today: string;
@@ -51,4 +52,16 @@ export interface Locale {
   monthSelect: string;
   yearSelect: string;
   decadeSelect: string;
+  start_date: string;
+  end_date: string;
+
+  // 树形/选择器相关
+  expand: string;
+  collapse: string;
+  select_placeholder: string;
+  search_placeholder: string;
+  noMatch: string;
+
+  // 时间轴
+  pending: string;
 }

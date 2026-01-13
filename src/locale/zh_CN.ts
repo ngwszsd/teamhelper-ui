@@ -32,6 +32,7 @@ const localeValues: Locale = {
   error_size: '文件 {{fileName}} 大小超出限制',
   error_type: '文件 {{fileName}} 格式错误',
   error_parse: '文件 {{fileName}} 解析失败',
+  preview: '预览',
 
   // 日期
   today: '今天',
@@ -46,6 +47,18 @@ const localeValues: Locale = {
   monthSelect: '选择月份',
   yearSelect: '选择年份',
   decadeSelect: '选择年代',
+  start_date: '开始日期',
+  end_date: '结束日期',
+
+  // 树形/选择器
+  expand: '展开',
+  collapse: '收起',
+  select_placeholder: '请选择',
+  search_placeholder: '搜索',
+  noMatch: '无匹配选项',
+
+  // 时间轴
+  pending: '加载中...',
 };
 
 export default localeValues;

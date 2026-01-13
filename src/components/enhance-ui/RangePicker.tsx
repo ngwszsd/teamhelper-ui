@@ -126,8 +126,8 @@ export const RangePicker: React.FC<RangePickerProps> = ({
     const start = formatDate(selectedRange?.from, format);
     const end = formatDate(selectedRange?.to, format);
     const startPlaceholder =
-      placeholder?.[0] || locale.dateSelect || 'Start date';
-    const endPlaceholder = placeholder?.[1] || locale.dateSelect || 'End date';
+      placeholder?.[0] || locale.start_date || 'Start date';
+    const endPlaceholder = placeholder?.[1] || locale.end_date || 'End date';
     return `${start || startPlaceholder}${separator}${end || endPlaceholder}`;
   }, [selectedRange, placeholder, format, separator, locale]);
 

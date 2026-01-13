@@ -5,6 +5,7 @@ import { Tree, type TreeNode, type TreeSelectInfo } from './Tree';
 import { DirectoryTree } from './DirectoryTree';
 import { cn } from '../../lib/utils';
 import { ChevronDown, XIcon } from 'lucide-react';
+import { useLocale } from '../ConfigProvider';
 import type { ClassValue } from 'clsx';
 
 export interface TreeSelectProps<T extends React.Key = React.Key> {
@@ -38,7 +39,7 @@ export const TreeSelect = <T extends React.Key = React.Key>({
   treeData,
   value,
   onChange,
-  placeholder = '请选择',
+  placeholder,
   disabled,
   searchable = true,
   allowClear = true,
@@ -46,8 +47,11 @@ export const TreeSelect = <T extends React.Key = React.Key>({
   popupClassName,
   listHeight = 300,
   isDirectory = false,
-  searchPlaceholder = '搜索',
+  searchPlaceholder,
 }: TreeSelectProps<T>) => {
+  const locale = useLocale();
+  const mergedPlaceholder = placeholder ?? locale.select_placeholder;
+  const mergedSearchPlaceholder = searchPlaceholder ?? locale.search_placeholder;
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const triggerRef = React.useRef<HTMLDivElement>(null);
@@ -137,7 +141,7 @@ export const TreeSelect = <T extends React.Key = React.Key>({
               readOnly
               disabled={disabled}
               value={displayText}
-              placeholder={placeholder}
+              placeholder={mergedPlaceholder}
               className={cn(
                 'pr-8 cursor-pointer shadow-none text-left font-normal',
                 disabled && 'cursor-not-allowed opacity-50'
@@ -155,9 +159,9 @@ export const TreeSelect = <T extends React.Key = React.Key>({
                   'h-4 w-4 text-muted-foreground transition-all absolute',
                   open && 'rotate-180',
                   allowClear &&
-                    value !== undefined &&
-                    !disabled &&
-                    'group-hover:opacity-0'
+                  value !== undefined &&
+                  !disabled &&
+                  'group-hover:opacity-0'
                 )}
               />
             </div>
@@ -172,7 +176,7 @@ export const TreeSelect = <T extends React.Key = React.Key>({
           {searchable && (
             <div className="mb-2">
               <Input
-                placeholder={searchPlaceholder}
+                placeholder={mergedSearchPlaceholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="h-8 shadow-none"

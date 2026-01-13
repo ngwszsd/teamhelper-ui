@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { cn } from '../../lib/utils';
 import { XIcon, Check, ChevronDown } from 'lucide-react';
 import { List } from './List';
+import { useLocale } from '../ConfigProvider';
 import type { ClassValue } from 'clsx';
 
 export type EnhancedSelectOption<
@@ -51,7 +52,7 @@ export type EnhancedSelectProps<T = string | number> = {
   listItemClassName?: ClassValue;
   showCheck?: boolean;
 } & (
-  | {
+    | {
       /** 模式（单选） */
       mode?: 'single';
       /** 当前选中值（受控） */
@@ -59,7 +60,7 @@ export type EnhancedSelectProps<T = string | number> = {
       /** 值变化回调；单选：返回选中 option；清除：返回 undefined */
       onChange: (value?: T, option?: EnhancedSelectOption<T> | null) => void;
     }
-  | {
+    | {
       /** 模式（多选） */
       mode: 'multiple';
       /** 当前选中值数组（受控） */
@@ -67,7 +68,7 @@ export type EnhancedSelectProps<T = string | number> = {
       /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
       onChange: (value?: T[], option?: EnhancedSelectOption<T>[]) => void;
     }
-);
+  );
 
 /**
  * 增强型选择组件：支持搜索（不区分大小写）、清除选择、虚拟列表优化
@@ -78,7 +79,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
 ) => {
   const {
     options,
-    placeholder = '请选择',
+    placeholder,
     className,
     contentClassName,
     matchTriggerWidth = true,
@@ -95,6 +96,8 @@ export const EnhancedSelect = <T extends string | number = string | number>(
     showCheck = true,
     mode = 'single',
   } = props;
+  const locale = useLocale();
+  const mergedPlaceholder = placeholder ?? locale.select_placeholder;
   const isMultiple = mode === 'multiple';
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
@@ -219,7 +222,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
               readOnly
               disabled={disabled}
               value={hasValue ? displayText : ''}
-              placeholder={hasValue ? '' : placeholder}
+              placeholder={hasValue ? '' : mergedPlaceholder}
               onClick={() => {
                 if (!disabled) setOpen(true);
               }}
@@ -243,7 +246,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
           {searchable && (
             <div className="mb-2">
               <Input
-                placeholder="搜索"
+                placeholder={locale.search_placeholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="h-8"
@@ -278,7 +281,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
             />
           ) : (
             <div className="px-2 py-3 text-sm text-muted-foreground">
-              无匹配选项
+              {locale.noMatch}
             </div>
           )}
         </PopoverContent>

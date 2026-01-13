@@ -124,7 +124,7 @@ const Table = <T extends Record<string, any> = any>({
   onHeaderRow,
   className,
   style,
-  locale = { emptyText: <Empty description="暂无数据" /> },
+  locale = { emptyText: undefined },
   onChange,
   stickyHeader = true,
   virtualScrollThreshold = 200,

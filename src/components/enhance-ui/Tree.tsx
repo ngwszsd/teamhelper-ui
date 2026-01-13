@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '../../lib/utils';
 import { ChevronDown } from 'lucide-react';
+import { useLocale } from '../ConfigProvider';
 
 export interface TreeNode {
   /** 唯一标识（推荐提供），未提供时将根据路径自动生成 */
@@ -207,6 +208,7 @@ export const Tree: React.FC<TreeProps> = ({
   toggleIconPosition = 'left',
   getTreeItemClassName,
 }) => {
+  const locale = useLocale();
   const parentRef = React.useRef<HTMLDivElement | null>(null);
 
   // 非受控展开状态
@@ -326,7 +328,11 @@ export const Tree: React.FC<TreeProps> = ({
     const isChildren = Array.isArray(nodeChildren) && nodeChildren?.length;
     return (
       <button
-        aria-label={expandedSet.has(flat.key) ? 'Collapse' : 'Expand'}
+        aria-label={
+          expandedSet.has(flat.key)
+            ? locale.collapse || 'Collapse'
+            : locale.expand || 'Expand'
+        }
         className={cn(
           'inline-flex items-center justify-center rounded-sm',
           'transition-transform duration-200 ease-out',
@@ -393,8 +399,8 @@ export const Tree: React.FC<TreeProps> = ({
                   'px-3 py-2  flex items-center justify-between',
                   'transition-colors duration-150',
                   !flat.node.disabled &&
-                    selectable &&
-                    'cursor-pointer hover:bg-tabs/15',
+                  selectable &&
+                  'cursor-pointer hover:bg-tabs/15',
                   flat.isLeaf ? '' : 'bg-card/60',
                   selectedSet.has(flat.key) && 'bg-tabs/15 ',
                   flat.node.disabled && 'opacity-50 cursor-not-allowed',
@@ -404,8 +410,8 @@ export const Tree: React.FC<TreeProps> = ({
               >
                 <div className="flex items-center min-w-0 w-full">
                   {!flat?.isLeaf &&
-                  showToggleIcon &&
-                  toggleIconPosition === 'left'
+                    showToggleIcon &&
+                    toggleIconPosition === 'left'
                     ? renderToggleIcon(flat)
                     : null}
 
@@ -444,8 +450,8 @@ export const Tree: React.FC<TreeProps> = ({
                   </div>
 
                   {!flat?.isLeaf &&
-                  showToggleIcon &&
-                  toggleIconPosition === 'right'
+                    showToggleIcon &&
+                    toggleIconPosition === 'right'
                     ? renderToggleIcon(flat)
                     : null}
                 </div>
