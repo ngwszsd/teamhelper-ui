@@ -19,13 +19,14 @@
 ## ✨ 特性
 
 - 🎨 **现代化设计** - 基于 Radix UI，提供无障碍访问和优秀的用户体验
+- 🌍 **多语言支持 (i18n)** - 内置完善的国际化方案，组件库文案一键切换
 - 🎯 **TypeScript 支持** - 完整的类型定义，提供出色的开发体验
 - 🌳 **Tree-Shaking 优化** - 优秀的 tree-shaking 支持，按需导入，减小打包体积
-- 🎭 **主题定制** - 支持亮色/暗色主题，易于定制
-- 📦 **开箱即用** - 66+ 个精心设计的组件
+- 🎭 **主题定制** - 支持亮色/暗色主题，深度定制 CSS 变量
+- 📦 **开箱即用** - 70+ 个精心设计的组件，涵盖从基础到业务场景
 - 🚀 **高性能** - 基于 rslib 打包，独立文件输出，优化加载性能
-- 💅 **Tailwind CSS** - 使用 Tailwind CSS v4，灵活的样式系统
-- 📱 **响应式** - 所有组件都支持响应式设计
+- 💅 **Tailwind CSS** - 使用 Tailwind CSS v4，声明式高效样式系统
+- 📱 **响应式** - 所有组件都支持响应式设计，完美适配移动端
 
 ---
 
@@ -50,7 +51,7 @@ yarn add @teamhelper/ui
 npm install react react-dom
 ```
 
-> **注意**：其他工具库（如 `clsx`, `tailwind-merge` 等）会在安装组件库时自动安装，无需手动添加。
+> **注意**：其他工具库（如 `clsx`, `tailwind-merge` 等）作为组件库的依赖会被自动安装。**但在 pnpm 环境下**，如果你需要直接从原包名（如 `import { clsx } from 'clsx'`）导入，仍需手动在项目中安装。推荐直接从 `@teamhelper/ui` 导出这些工具（参见下文 [使用内置工具库](#4-使用内置工具库)）。
 
 ---
 
@@ -87,11 +88,186 @@ function App() {
 
 ### 3. 导入样式
 
-在你的全局 CSS 文件（如 `globals.css`）中导入 Tailwind CSS 配置，并添加 `@source` 指令以确保 Tailwind 能正确扫描组件库的样式：
+在你的全局 CSS 文件（如 `src/index.css`）中导入 Tailwind CSS 配置。为了确保 Tailwind v4 能扫描到组件库中的类名，你需要使用 `@source` 指令指向组件库的产物目录：
 
 ```css
 @import 'tailwindcss';
+
+/* 指向组件库的 dist 目录，确保 Tailwind v4 能扫描并生成对应的样式 */
 @source "../node_modules/@teamhelper/ui/dist";
+
+/* 注入全局主题变量 (详见下方 主题配置 章节) */
+@layer base {
+  :root {
+    --background: rgba(248, 249, 250, 1);
+    --foreground: rgba(45, 55, 72, 1);
+    --card: rgba(255, 255, 255, 1);
+    --card-foreground: rgba(45, 55, 72, 1);
+    --primary: rgba(25, 75, 251, 1);
+    --primary-foreground: rgba(250, 250, 250, 1);
+    --border: rgba(244, 244, 244, 1);
+    --input: rgba(226, 232, 240, 1);
+    --ring: var(--primary);
+    --radius: 0.625rem;
+    /* ... 更多变量建议参考下方 [主题配置] 章节 */
+  }
+}
+```
+
+> **提示**：如果你的 CSS 文件不在 `src` 目录下，请根据实际位置调整相对于 `node_modules` 的路径。
+
+---
+
+## 🎨 主题配置
+
+本组件库基于 CSS 变量进行样式驱动。为了获得最佳视觉效果（尤其是明暗模式切换），请在你的全局 CSS 中配置以下变量：
+
+### 核心 CSS 变量
+
+```css
+:root {
+  --background: rgba(248, 249, 250, 1);
+  --foreground: rgba(45, 55, 72, 1);
+  --card: rgba(255, 255, 255, 1);
+  --card-foreground: rgba(45, 55, 72, 1);
+  --primary: rgba(25, 75, 251, 1);
+  --primary-foreground: rgba(250, 250, 250, 1);
+  --tabs: rgba(160, 174, 192, 1);
+  --tabs-foreground: rgba(255, 255, 255, 1);
+  --muted: rgba(248, 249, 250, 1);
+  --muted-foreground: rgba(113, 128, 150, 1);
+  --accent: rgba(248, 249, 250, 1);
+  --accent-foreground: rgba(45, 55, 72, 1);
+  --destructive: rgba(246, 81, 96, 1);
+  --destructive-foreground: rgba(250, 250, 250, 1);
+  --main-yellow: rgba(255, 140, 0, 1);
+  --main-yellow-foreground: rgba(255, 237, 237, 1);
+  --main-green: rgba(238, 255, 237, 1);
+  --main-green-foreground: rgba(37, 180, 59, 1);
+  --border: rgba(244, 244, 244, 1);
+  --under-line: rgba(226, 232, 240, 1);
+  --input: rgba(226, 232, 240, 1);
+  --ring: var(--primary);
+  --radius: 0.625rem;
+  --tooltip: oklch(0.205 0 0);
+  --tooltip-foreground: rgba(250, 250, 250, 1);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.dark {
+  --background: rgba(26, 32, 44, 1);
+  --foreground: rgba(250, 250, 250, 1);
+  --card: rgba(35, 43, 56, 1);
+  --card-foreground: rgba(250, 250, 250, 1);
+  --primary: rgba(25, 75, 251, 1);
+  --primary-foreground: rgba(250, 250, 250, 1);
+  --tabs: rgba(113, 126, 143, 1);
+  --tabs-foreground: rgba(250, 250, 250, 1);
+  --muted: rgba(26, 32, 44, 1);
+  --muted-foreground: rgba(113, 128, 150, 1);
+  --accent: rgba(26, 32, 44, 1);
+  --accent-foreground: rgba(113, 128, 150, 1);
+  --destructive: rgba(246, 81, 96, 1);
+  --destructive-foreground: rgba(250, 250, 250, 1);
+  --main-yellow: rgba(255, 140, 0, 1);
+  --main-yellow-foreground: rgba(72, 55, 38, 1);
+  --main-green: rgba(37, 180, 59, 1);
+  --main-green-foreground: rgba(11, 65, 31, 1);
+  --border: rgba(42, 49, 60, 1);
+  --under-line: rgba(61, 68, 77, 1);
+  --input: var(--border);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
+```
+
+### Tailwind v4 主题映射
+
+在 Tailwind v4 中，建议使用 `@theme inline` 将 CSS 变量映射为系统颜色：
+
+```css
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-tabs: var(--tabs);
+  --color-tabs-foreground: var(--tabs-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-under-line: var(--under-line);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-main-green: var(--main-green);
+  --color-main-green-foreground: var(--main-green-foreground);
+  --color-main-yellow: var(--main-yellow);
+  --color-main-yellow-foreground: var(--main-yellow-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+}
+```
+
+---
+
+## 🎨 主题定制 (Logic)
+
+### 使用主题提供者
+
+```tsx
+import { ThemeProvider, useTheme, ThemeToggle } from '@teamhelper/ui';
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="ui-theme">
+      <YourApp />
+      <ThemeToggle />
+    </ThemeProvider>
+  );
+}
+
+// 在组件中使用主题
+function Component() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+      切换主题
+    </button>
+  );
+}
+```
+
+### 自定义样式
+
+所有组件都支持通过 `className` 属性结合 Tailwind 类名进行即时定制：
+
+```tsx
+<Button className="bg-linear-to-r from-purple-500 to-pink-500 text-white">
+  渐变按钮
+</Button>
 ```
 
 ### 4. 使用内置工具库
@@ -99,17 +275,19 @@ function App() {
 组件库已经内置并导出了常用的工具库，你可以直接使用，无需额外安装：
 
 ```tsx
-import { toast, clsx, twMerge, Icons } from '@teamhelper/ui';
+import { toast, useSonner, clsx, twMerge, cva, cx } from '@teamhelper/ui';
 
 // 使用 Toast
 toast.success('操作成功');
 
-// 使用图标
-<Icons.User className="w-4 h-4" />;
-
 // 使用样式合并
 const className = twMerge(clsx('base-class', condition && 'active'));
+
+// 使用 CVA 定义变体
+const button = cva('base', { variants: { size: { sm: 'p-1', lg: 'p-4' } } });
 ```
+
+> **📦 关于依赖的说明**：由于本组件库是基于 `pnpm` 工作的，为了避免 `pnpm` 环境下找不到 `clsx` 或 `tailwind-merge` 等包的问题，我们已经在 `@teamhelper/ui` 中完整导出了这些工具。**强烈建议**直接从本库导入，而不是单独安装它们。
 
 ---
 
@@ -122,7 +300,7 @@ const className = twMerge(clsx('base-class', condition && 'active'));
 
 #### 表单组件
 
-- **Button** - 按钮组件
+- **Button** / **ButtonGroup** - 按钮及按钮组
 - **Input** - 输入框
 - **Checkbox** - 复选框
 - **RadioGroup** - 单选框组
@@ -167,7 +345,10 @@ const className = twMerge(clsx('base-class', condition && 'active'));
 #### 布局组件
 
 - **AspectRatio** - 宽高比容器
-- **ResizablePanel** - 可调整大小的面板
+- **ResizablePanel** / **ResizableHandle** - 可调整大小的面板
+- **ContextMenu** - 右键菜单
+- **Menubar** - 菜单栏
+- **NavigationMenu** - 导航菜单
 
 </details>
 
@@ -178,23 +359,29 @@ const className = twMerge(clsx('base-class', condition && 'active'));
 
 - **EnhancedButton** - 增强按钮
 - **EnhancedCard** - 增强卡片
-- **EnhancedInput** / **SearchInput** - 增强输入框
-- **EnhancedTable** - 增强表格
-- **EnhancedSelect** - 增强选择器
+- **EnhancedInput** / **SearchInput** / **InputNumber** - 增强输入框系列
+- **EnhancedTable** - 增强表格（支持虚拟滚动、固定列、排序、选择）
+- **EnhancedSelect** - 增强选择器（支持搜索、虚拟列表、多选）
+- **TreeSelect** - 树形选择器（支持搜索、异步加载、目录模式）
 - **EnhancedPagination** - 增强分页
 - **EnhancedTabs** - 增强标签页
 - **EnhancedCheckbox** / **EnhancedCheckboxGroup** - 增强复选框
 - **EnhancedRadio** / **EnhancedRadioGroup** - 增强单选框
-- **DatePicker** / **RangePicker** - 日期选择器
-- **Upload** / **UploadDragger** - 文件上传
-- **Tree** - 树形控件
+- **DatePicker** / **DatePicker.RangePicker** - 日期/日期范围选择器
+- **Upload** / **Upload.Dragger** - 文件上传及拖拽上传
+- **Tree** / **DirectoryTree** - 树形控件及目录树
 - **Timeline** - 时间轴
-- **Modal** - 模态框
-- **Dropdown** - 下拉菜单
-- **Empty** - 空状态
-- **List** - 列表
-- **DivSkeleton** - 骨架屏
-- 更多...
+- **Steps** - 步骤条
+- **message** - 全局提示（单例调用）
+- **EnhancedAlert** - 增强警告提示
+- **Modal** - 模态框（增强版 Dialog）
+- **Dropdown** - 增强下拉菜单
+- **Empty** - 空状态（多场景支持）
+- **List** - 虚拟滚动列表
+- **DivSkeleton** - 通用骨架屏插槽
+- **ErrorBoundary** - 错误边界组件
+- **TipsModal** - 命令式模态框 (`openTipsModal`, `openModalError` 等)
+- 更多业务场景组件持续增加中...
 
 </details>
 
@@ -334,43 +521,37 @@ import * as UI from '@teamhelper/ui';
 
 ---
 
-## 🎨 主题定制
+</Button>
+```
 
-### 使用主题提供者
+---
+
+## 🌍 国际化 (i18n)
+
+组件库内置了国际化支持，通过 `ConfigProvider` 统一配置。
+
+### 使用方法
 
 ```tsx
-import { ThemeProvider, useTheme, ThemeToggle } from '@teamhelper/ui';
+import { ConfigProvider, enUS, zhCN } from '@teamhelper/ui';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="ui-theme">
+    // locale 默认为 zhCN
+    <ConfigProvider locale={enUS}>
       <YourApp />
-      <ThemeToggle />
-    </ThemeProvider>
-  );
-}
-
-// 在组件中使用主题
-function Component() {
-  const { theme, setTheme } = useTheme();
-
-  return (
-    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-      切换主题
-    </button>
+    </ConfigProvider>
   );
 }
 ```
 
-### 自定义样式
+### 覆盖组件文案
 
-所有组件都支持通过 `className` 属性自定义样式：
+你可以通过 `locale` 属性覆盖特定组件的文案，或者通过 `ConfigProvider` 局部调整。
 
-```tsx
-<Button className="bg-gradient-to-r from-purple-500 to-pink-500">
-  渐变按钮
-</Button>
-```
+### 支持的组件
+
+所有 `Enhanced` 系列组件以及 `Upload`, `Tree`, `Table`, `DatePicker`, `Empty`, `Modal`, `Select`, `TreeSelect`, `Timeline` 等均已支持国际化。
 
 ---
 
@@ -479,7 +660,7 @@ MIT © [Teamhelper](https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhel
 
 ## 📊 项目统计
 
-- **组件数量**: 66+
+- **组件数量**: 70+
 - **TypeScript 覆盖率**: 100%
 - **Tree-Shaking 支持**: ⭐⭐⭐⭐⭐
 - **打包体积**: 单组件 ~29 KB (压缩后)
