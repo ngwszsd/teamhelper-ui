@@ -517,7 +517,7 @@ import * as UI from '@teamhelper/ui';
 
 查看完整的 tree-shaking 分析和优化建议：
 
-📄 **[Tree-Shaking 详细说明](./README_TREE_SHAKING.md)**
+📄 **[Tree-Shaking 详细说明](README_TREE_SHAKING.md)**
 
 ---
 

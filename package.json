@@ -1,6 +1,6 @@
 {
   "name": "@teamhelper/ui",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Component library for Teamhelper",
   "author": "geekbook9533@gmail.com",
   "license": "MIT",
@@ -8,6 +8,11 @@
     "url": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web"
   },
   "homepage": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web.git",
+    "directory": "packages/ui"
+  },
   "keywords": [
     "react",
     "components",
