@@ -88,33 +88,37 @@ function App() {
 
 ### 3. 导入样式
 
-在你的全局 CSS 文件（如 `src/index.css`）中导入 Tailwind CSS 配置。为了确保 Tailwind v4 能扫描到组件库中的类名，你需要使用 `@source` 指令指向组件库的产物目录：
+在你的全局 CSS 文件中导入 Tailwind CSS 配置。为了确保 Tailwind v4 能扫描到组件库中的类名，并正确生成样式，你需要使用 `@source` 指令指向组件库目录。
+
+#### 方案 A：在子目录中导入（如 `src/index.css`）
+
+这种方式通常需要通过相对路径指向 `node_modules`：
 
 ```css
 @import 'tailwindcss';
 
-/* 指向组件库的 dist 目录，确保 Tailwind v4 能扫描并生成对应的样式 */
-@source "../node_modules/@teamhelper/ui/dist";
+/* 指向组件库目录，确保 Tailwind v4 能扫描并生成对应的样式 */
+@source "../node_modules/@teamhelper/ui";
 
-/* 注入全局主题变量 (详见下方 主题配置 章节) */
-@layer base {
-  :root {
-    --background: rgba(248, 249, 250, 1);
-    --foreground: rgba(45, 55, 72, 1);
-    --card: rgba(255, 255, 255, 1);
-    --card-foreground: rgba(45, 55, 72, 1);
-    --primary: rgba(25, 75, 251, 1);
-    --primary-foreground: rgba(250, 250, 250, 1);
-    --border: rgba(244, 244, 244, 1);
-    --input: rgba(226, 232, 240, 1);
-    --ring: var(--primary);
-    --radius: 0.625rem;
-    /* ... 更多变量建议参考下方 [主题配置] 章节 */
-  }
-}
+/* ... 其余基础变量配置 */
 ```
 
-> **提示**：如果你的 CSS 文件不在 `src` 目录下，请根据实际位置调整相对于 `node_modules` 的路径。
+#### 方案 B：在根目录中导入（优雅推荐 ✨）
+
+在 Tailwind v4 版本中，**CSS 文件本身就是配置文件**。就像以前 `tailwind.config.js` 必须放在项目根目录一样，现在将带有 `@source` 的全局 CSS 放在根目录，可以为 Oxide 扫描引擎提供一个最清晰、没有干扰的物理坐标系。
+
+如果你将这个 CSS 文件移到根目录（如 `./global.css`），就可以直接使用更简洁的导入：
+
+```css
+@import 'tailwindcss';
+
+/* 在根目录下，可以直接指向 node_modules，路径更优雅 */
+@source "node_modules/@teamhelper/ui";
+
+/* ... 其余基础变量配置 */
+```
+
+> **提示**：Tailwind v4 具有智能探测功能，通常指向 `node_modules/@teamhelper/ui` 即可自动识别其产物目录（无需精确到 `/dist`）。
 
 ---
 
