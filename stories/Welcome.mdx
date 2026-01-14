@@ -1,0 +1,339 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Welcome/Get Started" />
+
+<style>
+  {`
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 强制重置所有 Storybook Docs 容器的样式 */
+    .sbdocs-content,
+    .sbdocs-wrapper,
+    .sbdocs-wrapper.css-3rewwu,
+    .sbdocs-wrapper > div {
+      max-width: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+    }
+
+    .sb-container {
+      margin: 0;
+      /* 宽度保底方案：强行撑开到视口宽度 */
+      width: 100% !important;
+      min-width: 100% !important;
+      padding: 80px 40px;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(-45deg, #f8fafc, #eff6ff, #fdf4ff, #f0f9ff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      width: 100%;
+      color: #1e293b;
+      box-sizing: border-box;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 64px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.05em;
+      background: linear-gradient(to right, #194BFB, #7C3AED);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      color: #475569;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 80px 0 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: #194BFB;
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .feature-card {
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #194BFB;
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: #eff6ff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 24px;
+      color: #194BFB;
+    }
+
+    .feature-name {
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-desc {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #64748b;
+    }
+
+    .install-box {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .step-item {
+      margin-bottom: 32px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: #194BFB;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .stat-bar {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(25, 75, 251, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 48px;
+      border-radius: 24px;
+      margin-top: 80px;
+      text-align: center;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
+    .stat-item h3 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #194BFB;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-item p {
+      font-size: 1rem;
+      color: #64748b;
+      font-weight: 600;
+      margin: 8px 0 0;
+    }
+
+    /* Code block styling */
+    pre, code {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+    
+    /* 针对代码块内部文本的颜色微调，确保在浅色背景上清晰 */
+    pre code span {
+      /* 如果需要强制某些代码颜色，可以在这里写 */
+    }
+
+    .install-box pre {
+      margin: 8px 0 0 48px !important; /* 对齐步骤数字后的文字 */
+    }
+  `}
+</style>
+
+<div className="sb-container">
+  <div className="hero-section">
+    <h1 className="hero-title">Teamhelper UI</h1>
+    <p className="hero-subtitle">现代化的 React UI 组件库，基于 Radix UI 和 Tailwind CSS 构建，为您打造极致的开发体验。</p>
+    <div className="badge-row">
+      <img src="https://img.shields.io/badge/version-1.0.18-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" />
+      <img src="https://img.shields.io/badge/react-%3E%3D16.9.0-61dafb.svg" alt="React" />
+      <img src="https://img.shields.io/badge/typescript-5.9.3-3178c6.svg" alt="TypeScript" />
+      <img src="https://img.shields.io/badge/tree--shaking-✓-success.svg" alt="Tree Shaking" />
+    </div>
+  </div>
+
+  <h2 className="section-title">✨ 核心特性</h2>
+  
+  <div className="feature-grid">
+    <div className="feature-card">
+      <div className="feature-icon">🎨</div>
+      <div className="feature-name">现代化设计</div>
+      <div className="feature-desc">基于 Radix UI，提供无障碍访问和优秀的用户体验，支持完全自定义样式。</div>
+    </div>
+    <div className="feature-card">
+      <div className="feature-icon">🌍</div>
+      <div className="feature-name">多语言支持</div>
+      <div className="feature-desc">内置完善的 i18n 国际化方案，通过 ConfigProvider 一键切换组件库文案。</div>
+    </div>
+    <div className="feature-card">
+      <div className="feature-icon">🌳</div>
+      <div className="feature-name">Tree-Shaking</div>
+      <div className="feature-desc">优秀的 Tree-shaking 支持，每个组件独立打包，按需导入，最大限度减小体积。</div>
+    </div>
+    <div className="feature-card">
+      <div className="feature-icon">🎭</div>
+      <div className="feature-name">主题定制</div>
+      <div className="feature-desc">支持亮色/暗色模式，深度定制 CSS 变量，完美适配 Tailwind CSS v4。</div>
+    </div>
+    <div className="feature-card">
+      <div className="feature-icon">📦</div>
+      <div className="feature-name">开箱即用</div>
+      <div className="feature-desc">70+ 个精心设计的组件，从基础原子组件到复杂的业务组件应有尽有。</div>
+    </div>
+    <div className="feature-card">
+      <div className="feature-icon">🚀</div>
+      <div className="feature-name">极速性能</div>
+      <div className="feature-desc">基于 rslib 高性能打包工具，独立文件输出，优化首屏加载与运行时性能。</div>
+    </div>
+  </div>
+
+  <h2 className="section-title">📦 快速安装</h2>
+
+  <div className="install-box">
+    <div className="step-item">
+      <div className="step-header">
+        <div className="step-number">1</div>
+        <div className="step-title">使用包管理器安装</div>
+      </div>
+      ```bash
+      pnpm add @teamhelper/ui
+      ```
+    </div>
+    
+    <div className="step-item">
+      <div className="step-header">
+        <div className="step-number">2</div>
+        <div className="step-title">配置 Tailwind CSS v4</div>
+      </div>
+      ```css
+      @import 'tailwindcss';
+      @source "node_modules/@teamhelper/ui";
+      ```
+    </div>
+
+    <div className="step-item">
+      <div className="step-header">
+        <div className="step-number">3</div>
+        <div className="step-title">开始使用组件</div>
+      </div>
+      ```tsx
+      import { Button } from '@teamhelper/ui';
+
+      export default () => (
+        <Button variant="primary" size="lg">
+          Hello Teamhelper
+        </Button>
+      );
+      ```
+    </div>
+  </div>
+
+  <div className="stat-bar">
+    <div className="stat-item">
+      <h3>70+</h3>
+      <p>精选组件</p>
+    </div>
+    <div className="stat-item">
+      <h3>100%</h3>
+      <p>TypeScript 覆盖</p>
+    </div>
+    <div className="stat-item">
+      <h3>~29 KB</h3>
+      <p>核心组件体积</p>
+    </div>
+    <div className="stat-item">
+      <h3>⭐⭐⭐⭐⭐</h3>
+      <p>Tree-Shaking 支持</p>
+    </div>
+  </div>
+
+  <div style={{ textAlign: 'center', marginTop: '80px', opacity: 0.5, fontSize: '0.875rem' }}>
+    使用 Tailwind CSS v4 和 TypeScript 构建
+  </div>
+</div>

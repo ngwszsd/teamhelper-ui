@@ -1,0 +1,33 @@
+<style>
+    /* 暴力清除所有 Storybook Docs 相关的边距和内边距 */
+    html,
+    body,
+    #root,
+    #root-inner,
+    .sbdocs-wrapper,
+    .sbdocs-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+    }
+
+    /* 针对你提到的具体类名和 Emotion 生成的类名 */
+    div.sbdocs.sbdocs-wrapper,
+    div.sbdocs-wrapper.css-3rewwu {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    /* 针对 Docs 内部内容的包裹层 */
+    .sbdocs-content {
+        max-width: none !important;
+        padding: 0 !important;
+    }
+
+    /* 强制隐藏可能出现的水平滚动条 */
+    body {
+        overflow-x: hidden !important;
+    }
+</style>
