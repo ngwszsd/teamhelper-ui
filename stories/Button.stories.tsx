@@ -20,13 +20,33 @@ const meta: Meta<typeof Button> = {
         'ghost',
         'link',
       ],
+      description: '按钮的变体样式',
+      table: {
+        defaultValue: { summary: 'default' },
+      },
     },
     size: {
       control: 'select',
       options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
+      description: '按钮的大小尺寸',
+      table: {
+        defaultValue: { summary: 'default' },
+      },
     },
     disabled: {
       control: 'boolean',
+      description: '是否禁用按钮',
+      table: {
+        defaultValue: { summary: 'false' },
+      },
+    },
+    children: {
+      control: 'text',
+      description: '按钮内容',
+    },
+    className: {
+      control: 'text',
+      description: '额外的 CSS 类名',
     },
   },
 };

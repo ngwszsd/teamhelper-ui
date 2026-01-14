@@ -12,6 +12,18 @@ const meta: Meta<typeof Badge> = {
     variant: {
       control: 'select',
       options: ['default', 'secondary', 'destructive', 'outline'],
+      description: '徽章的变体样式',
+      table: {
+        defaultValue: { summary: 'default' },
+      },
+    },
+    children: {
+      control: 'text',
+      description: '徽章内容',
+    },
+    className: {
+      control: 'text',
+      description: '额外的 CSS 类名',
     },
   },
 };

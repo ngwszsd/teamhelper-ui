@@ -10,6 +10,27 @@ const meta: Meta<typeof Switch> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    checked: {
+      control: 'boolean',
+      description: '开关是否开启状态',
+    },
+    onCheckedChange: {
+      description: '开关状态改变时的回调函数',
+      action: 'changed',
+    },
+    disabled: {
+      control: 'boolean',
+      description: '是否禁用开关',
+      table: {
+        defaultValue: { summary: 'false' },
+      },
+    },
+    className: {
+      control: 'text',
+      description: '额外的 CSS 类名',
+    },
+  },
 };
 
 export default meta;
