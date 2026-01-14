@@ -10,11 +10,10 @@ import { Meta } from '@storybook/addon-docs/blocks';
       100% { background-position: 0% 50%; }
     }
 
-    /* 强制重置所有 Storybook Docs 容器的样式 */
-    .sbdocs-content,
-    .sbdocs-wrapper,
-    .sbdocs-wrapper.css-3rewwu,
-    .sbdocs-wrapper > div {
+    /* 强制重置 Storybook Docs 容器的样式 - 仅当当前页包含 .sb-container 时生效 */
+    :root:has(.sb-container) .sbdocs-content,
+    :root:has(.sb-container) .sbdocs-wrapper,
+    :root:has(.sb-container) .sbdocs-wrapper > div {
       max-width: none !important;
       padding: 0 !important;
       margin: 0 !important;
@@ -23,10 +22,11 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
     .sb-container {
       margin: 0;
-      /* 宽度保底方案：强行撑开到视口宽度 */
       width: 100% !important;
-      min-width: 100% !important;
-      padding: 80px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 100px 40px;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: linear-gradient(-45deg, #f8fafc, #eff6ff, #fdf4ff, #f0f9ff);
       background-size: 400% 400%;
