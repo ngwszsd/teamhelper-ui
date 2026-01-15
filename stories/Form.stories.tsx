@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '../src/components/ui/button';
-import { Input } from '../src/components/ui/input';
 import {
   Form,
   FormControl,
@@ -11,46 +11,59 @@ import {
   FormLabel,
   FormMessage,
 } from '../src/components/ui/form';
+import { Input } from '../src/components/ui/input';
+import { Toaster } from '../src/components/ui/sonner';
 
 const meta: Meta<typeof Form> = {
   title: 'UI/Form',
   component: Form,
   tags: ['autodocs'],
-  parameters: {
-    layout: 'centered',
-  },
+  decorators: [
+    (Story) => (
+      <div className="flex min-h-[350px] w-full items-center justify-center p-8">
+        <Story />
+        <Toaster />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
 
 type Story = StoryObj<typeof Form>;
 
-const FormDemo = () => {
-  const form = useForm({
+interface FormValues {
+  username: string;
+}
+
+const ProfileForm = () => {
+  const form = useForm<FormValues>({
     defaultValues: {
       username: '',
-      email: '',
     },
   });
 
-  function onSubmit(data: any) {
-    alert(JSON.stringify(data, null, 2));
+  function onSubmit(data: FormValues) {
+    toast.success('You submitted the following values:', {
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    });
   }
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-[350px] space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
           name="username"
           rules={{
-            required: 'Username is required',
+            required: 'Username is required.',
             minLength: {
               value: 2,
-              message: 'Username must be at least 2 characters',
+              message: 'Username must be at least 2 characters.',
             },
           }}
           render={({ field }) => (
@@ -66,28 +79,6 @@ const FormDemo = () => {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="email"
-          rules={{
-            required: 'Email is required',
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Invalid email address',
-            },
-          }}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="m@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit">Submit</Button>
       </form>
     </Form>
@@ -95,5 +86,64 @@ const FormDemo = () => {
 };
 
 export const Default: Story = {
-  render: () => <FormDemo />,
+  render: () => <ProfileForm />,
+  parameters: {
+    docs: {
+      source: {
+        code: `
+interface FormValues {
+  username: string;
+}
+
+const ProfileForm = () => {
+  const form = useForm<FormValues>({
+    defaultValues: {
+      username: '',
+    },
+  });
+
+  function onSubmit(data: FormValues) {
+    toast.success('You submitted the following values:', {
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <FormField
+          control={form.control}
+          name="username"
+          rules={{
+            required: 'Username is required.',
+            minLength: {
+              value: 2,
+              message: 'Username must be at least 2 characters.',
+            },
+          }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+};`,
+      },
+    },
+  },
 };
