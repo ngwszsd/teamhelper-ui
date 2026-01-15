@@ -53,7 +53,7 @@ export { ButtonGroup, ButtonGroupText } from './components/ui/button-group';
 
 // Calendar and Date Picker
 export { Calendar, CalendarDayButton } from './components/ui/calendar';
-export { Calendar22 } from './components/ui/date-picker';
+export { DatePickerBase } from './components/ui/date-picker';
 
 // Checkbox
 export { Checkbox } from './components/ui/checkbox';
