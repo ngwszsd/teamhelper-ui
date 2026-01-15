@@ -159,7 +159,10 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
             side={side}
             align={align}
             showArrow={arrow}
-            className={cn('break-all', overlayClassName)}
+            className={cn(
+              'max-w-xl break-all whitespace-normal',
+              overlayClassName
+            )}
             style={{ ...overlayStyle, zIndex }}
             onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
             onPointerDownOutside={() => {
