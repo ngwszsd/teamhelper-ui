@@ -40,7 +40,7 @@ export const Default: Story = {
 };
 
 export const WithLabel: Story = {
-  render: () => (
+  render: (args) => (
     <div className="flex items-center space-x-2">
       <Switch id="airplane-mode" />
       <Label htmlFor="airplane-mode">Airplane Mode</Label>
