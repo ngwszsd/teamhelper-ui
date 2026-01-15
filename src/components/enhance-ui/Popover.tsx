@@ -157,7 +157,9 @@ const Popover: React.FC<EnhancedPopoverProps> = ({
   return (
     <BasePopover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <div {...triggerProps}>{children}</div>
+        <div className="w-fit" {...triggerProps}>
+          {children}
+        </div>
       </PopoverTrigger>
       <PopoverContent
         side={side}
