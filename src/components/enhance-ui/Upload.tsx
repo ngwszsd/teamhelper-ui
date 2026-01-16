@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { nanoid } from 'nanoid';
 import { FileIcon, Trash2, Eye } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { UploadDragger } from './UploadDragger';
@@ -70,9 +69,21 @@ export interface EnhancedUploadProps {
   children?: React.ReactNode;
 }
 
+function generateUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 function toUploadFile(file: File): UploadFile {
   return {
-    uid: nanoid(),
+    uid: generateUUID(),
     name: file.name,
     size: file.size,
     type: file.type,
