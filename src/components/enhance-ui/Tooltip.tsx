@@ -137,8 +137,6 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
     return baseProps;
   }, [trigger, isOpen, closeTimeout]);
 
-  const contentNode = React.isValidElement(title) ? title : <>{title}</>;
-
   return (
     <div className={cn('max-w-fit', className)}>
       <TooltipProvider
@@ -155,27 +153,29 @@ const Tooltip: React.FC<EnhancedTooltipProps> = ({
             </div>
           </TooltipTrigger>
 
-          <TooltipContent
-            side={side}
-            align={align}
-            showArrow={arrow}
-            className={cn(
-              'max-w-xl break-all whitespace-normal',
-              overlayClassName
-            )}
-            style={{ ...overlayStyle, zIndex }}
-            onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
-            onPointerDownOutside={() => {
-              if (trigger === 'click') {
-                handleOpenChange(false);
-              }
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            {contentNode}
-          </TooltipContent>
+          {title ? (
+            <TooltipContent
+              side={side}
+              align={align}
+              showArrow={arrow}
+              className={cn(
+                'max-w-xl break-all whitespace-normal',
+                overlayClassName
+              )}
+              style={{ ...overlayStyle, zIndex }}
+              onMouseEnter={trigger === 'hover' ? clearCloseTimeout : undefined}
+              onPointerDownOutside={() => {
+                if (trigger === 'click') {
+                  handleOpenChange(false);
+                }
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {title}
+            </TooltipContent>
+          ) : null}
         </TooltipPrimitive.Root>
       </TooltipProvider>
     </div>
