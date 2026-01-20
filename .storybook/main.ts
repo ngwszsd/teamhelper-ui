@@ -29,7 +29,14 @@ const config: StorybookConfig = {
   ],
   framework: {
     name: getAbsolutePath('storybook-react-rsbuild'),
-    options: {},
+    options: {
+      // @ts-ignore
+      rsbuildConfig: {
+        output: {
+          assetPrefix: './',
+        },
+      },
+    },
   },
   typescript: {
     reactDocgen: 'react-docgen-typescript',

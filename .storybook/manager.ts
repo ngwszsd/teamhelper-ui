@@ -8,7 +8,7 @@ addons.setConfig({
     base: 'light',
     brandTitle: 'Teamhelper UI',
     brandUrl: '/',
-    brandImage: '/logo@2x.webp',
+    brandImage: './logo@2x.webp',
     brandTarget: '_self',
   }),
 });
