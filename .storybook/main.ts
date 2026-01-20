@@ -29,14 +29,16 @@ const config: StorybookConfig = {
   ],
   framework: {
     name: getAbsolutePath('storybook-react-rsbuild'),
-    options: {
-      // @ts-ignore
-      rsbuildConfig: {
-        output: {
-          assetPrefix: './',
-        },
-      },
-    },
+    options: {},
+  },
+  rsbuildFinal: (config) => {
+    if (process.env.NODE_ENV === 'production') {
+      config.output = {
+        ...config.output,
+        assetPrefix: '/teamhelper-ui/',
+      };
+    }
+    return config;
   },
   typescript: {
     reactDocgen: 'react-docgen-typescript',
