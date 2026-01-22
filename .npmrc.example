@@ -1,0 +1,5 @@
+# 官方 Registry 地址
+registry=https://registry.npmjs.org/
+
+# 身份验证令牌
+//registry.npmjs.org/:_authToken=npm_xxxxxxxxxx
