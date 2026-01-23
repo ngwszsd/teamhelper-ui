@@ -52,7 +52,7 @@ export type EnhancedSelectProps<T = string | number> = {
   listItemClassName?: ClassValue;
   showCheck?: boolean;
 } & (
-    | {
+  | {
       /** 模式（单选） */
       mode?: 'single';
       /** 当前选中值（受控） */
@@ -60,7 +60,7 @@ export type EnhancedSelectProps<T = string | number> = {
       /** 值变化回调；单选：返回选中 option；清除：返回 undefined */
       onChange: (value?: T, option?: EnhancedSelectOption<T> | null) => void;
     }
-    | {
+  | {
       /** 模式（多选） */
       mode: 'multiple';
       /** 当前选中值数组（受控） */
@@ -68,7 +68,7 @@ export type EnhancedSelectProps<T = string | number> = {
       /** 值变化回调；多选：返回所有选中 options；清除：返回 [] */
       onChange: (value?: T[], option?: EnhancedSelectOption<T>[]) => void;
     }
-  );
+);
 
 /**
  * 增强型选择组件：支持搜索（不区分大小写）、清除选择、虚拟列表优化

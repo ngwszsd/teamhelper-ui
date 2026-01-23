@@ -81,44 +81,44 @@ const TimelineItem: React.FC<
   index = 0,
   isShowLine,
 }) => {
-    // 优先使用显式的 position；否则根据 mode 判断，alternate 模式按索引奇偶交替
-    const isRight = position
-      ? position === 'right'
-      : mode === 'right' || (mode === 'alternate' && index % 2 === 1);
+  // 优先使用显式的 position；否则根据 mode 判断，alternate 模式按索引奇偶交替
+  const isRight = position
+    ? position === 'right'
+    : mode === 'right' || (mode === 'alternate' && index % 2 === 1);
 
-    const leftCol = isRight ? children : label;
-    const rightCol = isRight ? label : children;
+  const leftCol = isRight ? children : label;
+  const rightCol = isRight ? label : children;
 
-    return (
-      <li
-        className={cn(
-          'relative grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
-          'mb-3',
-          className
-        )}
-        style={style}
-      >
-        {isShowLine ? (
-          <div
-            className="pointer-events-none absolute top-0 bottom-0 z-0 w-px bg-border h-full"
-            style={{
-              left: 'var(--timeline-line-left)',
-              top: 'var(--timeline-line-top)',
-            }}
-          />
-        ) : null}
-        <div className="relative flex items-center justify-center col-start-1 row-start-1">
-          <Dot color={color} dot={dot} />
-        </div>
-        <div className="text-sm text-muted-foreground text-left col-start-2 row-start-1">
-          {leftCol}
-        </div>
-        <div className="text-sm text-left col-start-2 row-start-2">
-          {rightCol}
-        </div>
-      </li>
-    );
-  };
+  return (
+    <li
+      className={cn(
+        'relative grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
+        'mb-3',
+        className
+      )}
+      style={style}
+    >
+      {isShowLine ? (
+        <div
+          className="pointer-events-none absolute top-0 bottom-0 z-0 w-px bg-border h-full"
+          style={{
+            left: 'var(--timeline-line-left)',
+            top: 'var(--timeline-line-top)',
+          }}
+        />
+      ) : null}
+      <div className="relative flex items-center justify-center col-start-1 row-start-1">
+        <Dot color={color} dot={dot} />
+      </div>
+      <div className="text-sm text-muted-foreground text-left col-start-2 row-start-1">
+        {leftCol}
+      </div>
+      <div className="text-sm text-left col-start-2 row-start-2">
+        {rightCol}
+      </div>
+    </li>
+  );
+};
 
 const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   items,
@@ -149,7 +149,10 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
       ...list,
       {
         label: undefined,
-        children: typeof pending === 'boolean' ? locale.pending || 'Pending...' : pending,
+        children:
+          typeof pending === 'boolean'
+            ? locale.pending || 'Pending...'
+            : pending,
         color: 'gray',
         dot: (
           <span className="size-2.5 rounded-full bg-muted-foreground animate-pulse" />

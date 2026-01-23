@@ -399,8 +399,8 @@ export const Tree: React.FC<TreeProps> = ({
                   'px-3 py-2  flex items-center justify-between',
                   'transition-colors duration-150',
                   !flat.node.disabled &&
-                  selectable &&
-                  'cursor-pointer hover:bg-tabs/15',
+                    selectable &&
+                    'cursor-pointer hover:bg-tabs/15',
                   flat.isLeaf ? '' : 'bg-card/60',
                   selectedSet.has(flat.key) && 'bg-tabs/15 ',
                   flat.node.disabled && 'opacity-50 cursor-not-allowed',
@@ -410,8 +410,8 @@ export const Tree: React.FC<TreeProps> = ({
               >
                 <div className="flex items-center min-w-0 w-full">
                   {!flat?.isLeaf &&
-                    showToggleIcon &&
-                    toggleIconPosition === 'left'
+                  showToggleIcon &&
+                  toggleIconPosition === 'left'
                     ? renderToggleIcon(flat)
                     : null}
 
@@ -450,8 +450,8 @@ export const Tree: React.FC<TreeProps> = ({
                   </div>
 
                   {!flat?.isLeaf &&
-                    showToggleIcon &&
-                    toggleIconPosition === 'right'
+                  showToggleIcon &&
+                  toggleIconPosition === 'right'
                     ? renderToggleIcon(flat)
                     : null}
                 </div>

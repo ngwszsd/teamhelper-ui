@@ -12,11 +12,10 @@ export type CheckboxOption = {
   className?: string;
 };
 
-export interface EnhancedCheckboxProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof BaseCheckbox>,
-    'checked' | 'onCheckedChange' | 'onChange'
-  > {
+export interface EnhancedCheckboxProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof BaseCheckbox>,
+  'checked' | 'onCheckedChange' | 'onChange'
+> {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (e: {

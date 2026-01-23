@@ -8,8 +8,10 @@ import {
 } from '../ui/card';
 import { cn } from '../../lib/utils';
 
-export interface EnhancedCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface EnhancedCardProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'title'
+> {
   title?: React.ReactNode;
   extra?: React.ReactNode;
   cover?: React.ReactNode;

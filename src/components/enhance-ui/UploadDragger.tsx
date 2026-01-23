@@ -284,7 +284,7 @@ export function UploadDragger({
         )}
       >
         {listType === 'card' &&
-          (imagePreviewUrl || (currentFiles[0] as any)?.url) ? (
+        (imagePreviewUrl || (currentFiles[0] as any)?.url) ? (
           // Card模式：显示图片预览
           <>
             <img

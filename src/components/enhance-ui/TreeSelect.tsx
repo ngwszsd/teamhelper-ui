@@ -51,7 +51,8 @@ export const TreeSelect = <T extends React.Key = React.Key>({
 }: TreeSelectProps<T>) => {
   const locale = useLocale();
   const mergedPlaceholder = placeholder ?? locale.select_placeholder;
-  const mergedSearchPlaceholder = searchPlaceholder ?? locale.search_placeholder;
+  const mergedSearchPlaceholder =
+    searchPlaceholder ?? locale.search_placeholder;
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const triggerRef = React.useRef<HTMLDivElement>(null);
@@ -159,9 +160,9 @@ export const TreeSelect = <T extends React.Key = React.Key>({
                   'h-4 w-4 text-muted-foreground transition-all absolute',
                   open && 'rotate-180',
                   allowClear &&
-                  value !== undefined &&
-                  !disabled &&
-                  'group-hover:opacity-0'
+                    value !== undefined &&
+                    !disabled &&
+                    'group-hover:opacity-0'
                 )}
               />
             </div>

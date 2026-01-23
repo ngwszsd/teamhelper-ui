@@ -30,8 +30,10 @@ const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
 );
 InternalInput.displayName = 'EnhancedInput';
 
-export interface EnhancedInputSearchProps
-  extends Omit<React.ComponentProps<'input'>, 'size'> {
+export interface EnhancedInputSearchProps extends Omit<
+  React.ComponentProps<'input'>,
+  'size'
+> {
   value?: string;
   defaultValue?: string;
   allowClear?: boolean;
