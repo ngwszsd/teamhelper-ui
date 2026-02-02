@@ -10,6 +10,7 @@ export interface MessageConfig {
   icon?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  closeButton?: boolean;
 }
 
 export type MessageType = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -80,6 +81,7 @@ class MessageApi {
         className,
         style,
         icon: defaultIcon,
+        closeButton: Boolean(config?.closeButton),
       };
 
       if (type === 'success') {

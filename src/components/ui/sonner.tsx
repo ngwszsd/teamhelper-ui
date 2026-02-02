@@ -16,7 +16,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={actualTheme as ToasterProps['theme']}
       className="toaster group"
       position="top-center"
-      closeButton
+      closeButton={false}
       toastOptions={{
         classNames: {
           closeButton: '!left-auto !right-0 !translate-x-[35%]',
