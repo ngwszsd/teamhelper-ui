@@ -328,6 +328,7 @@ export { Steps } from './components/enhance-ui/Steps';
 export { DirectoryTree } from './components/enhance-ui/DirectoryTree';
 export { TreeSelect } from './components/enhance-ui/TreeSelect';
 export { InputNumber } from './components/enhance-ui/InputNumber';
+export { EnhancedTextarea } from './components/enhance-ui/Textarea';
 
 export {
   openTipsModal,
@@ -386,6 +387,7 @@ export type { StepItem, StepsProps } from './components/enhance-ui/Steps';
 export type { DirectoryTreeProps } from './components/enhance-ui/DirectoryTree';
 export type { Crumb } from './components/enhance-ui/Breadcrumb';
 export type { InputNumberProps } from './components/enhance-ui/InputNumber';
+export type { EnhancedTextareaProps } from './components/enhance-ui/Textarea';
 
 // Utilities (Re-export for convenience)
 export { toast, useSonner } from 'sonner';

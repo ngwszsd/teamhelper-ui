@@ -42,6 +42,20 @@ export const Sizes: Story = {
   ),
 };
 
+export const WithCount: Story = {
+  render: (args) => (
+    <div className="flex flex-col gap-4 max-w-sm">
+      <EnhancedInput
+        {...args}
+        showCount
+        maxLength={20}
+        placeholder="With max length"
+      />
+      <EnhancedInput {...args} showCount placeholder="Without max length" />
+    </div>
+  ),
+};
+
 export const SearchDefault: StoryObj<typeof SearchInput> = {
   render: (args) => (
     <div className="flex flex-col gap-4 max-w-sm">

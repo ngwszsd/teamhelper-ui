@@ -4,6 +4,7 @@ import { type ClassValue } from 'clsx';
 import { Input as BaseInput } from '../ui/input';
 import { Button } from './Button';
 import { Search as SearchIcon, X as XIcon, Loader2 } from 'lucide-react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 type InputSize = 'small' | 'middle' | 'large';
 
@@ -15,16 +16,79 @@ const sizeClasses: Record<InputSize, string> = {
 
 export type InternalInputProps = Omit<React.ComponentProps<'input'>, 'size'> & {
   size?: InputSize;
+  showCount?: boolean;
 };
 
 const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
-  ({ className, size = 'middle', ...props }, ref) => {
+  (
+    { className, size = 'middle', showCount = true, onChange, ...props },
+    ref
+  ) => {
+    const [uncontrolledValue, setUncontrolledValue] = useState(
+      props.defaultValue ?? ''
+    );
+    const suffixRef = useRef<HTMLSpanElement>(null);
+    const [paddingRight, setPaddingRight] = useState<number | undefined>(
+      undefined
+    );
+
+    const isControlled = props.value !== undefined;
+    const value = isControlled ? props.value : uncontrolledValue;
+    const valueLength = String(value ?? '').length;
+
+    useLayoutEffect(() => {
+      if (suffixRef.current) {
+        setPaddingRight(suffixRef.current.offsetWidth + 12 * 2);
+      }
+    }, [valueLength, props.maxLength, showCount]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isControlled) {
+        setUncontrolledValue(e.target.value);
+      }
+      onChange?.(e);
+    };
+
+    if (!showCount || !props?.maxLength) {
+      return (
+        <BaseInput
+          ref={ref}
+          className={cn(
+            'shadow-none',
+            sizeClasses[size as InputSize],
+            className
+          )}
+          onChange={onChange}
+          {...props}
+        />
+      );
+    }
+
     return (
-      <BaseInput
-        ref={ref}
-        className={cn('shadow-none', sizeClasses[size as InputSize], className)}
-        {...props}
-      />
+      <div className="relative w-full">
+        <BaseInput
+          ref={ref}
+          className={cn(
+            'shadow-none',
+            sizeClasses[size as InputSize],
+            paddingRight === undefined ? 'pr-16' : undefined,
+            className
+          )}
+          style={{
+            ...props.style,
+            ...(paddingRight !== undefined ? { paddingRight } : {}),
+          }}
+          onChange={handleChange}
+          {...props}
+        />
+        <span
+          ref={suffixRef}
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground"
+        >
+          {valueLength}
+          {props.maxLength ? ` / ${props.maxLength}` : null}
+        </span>
+      </div>
     );
   }
 );
@@ -40,6 +104,7 @@ export interface EnhancedInputSearchProps extends Omit<
   enterButton?: boolean | React.ReactNode;
   loading?: boolean;
   size?: InputSize;
+  showCount?: boolean;
   inputClassName?: ClassValue;
   className?: string;
   onSearch?: (
