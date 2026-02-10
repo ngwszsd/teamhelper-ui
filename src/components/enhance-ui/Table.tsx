@@ -508,6 +508,9 @@ const Table = <T extends Record<string, any> = any>({
   const renderColumns = (cols: ColumnType<T>[], isFixed?: 'left' | 'right') => {
     return cols.map((column, index) => {
       const columnKey = column.key || column.dataIndex || index;
+      const isLastLeftFixed = isFixed === 'left' && index === cols.length - 1;
+      const isFirstRightFixed = isFixed === 'right' && index === 0;
+
       return (
         <TableHead
           key={columnKey}
@@ -517,7 +520,11 @@ const Table = <T extends Record<string, any> = any>({
             column.sorter && 'cursor-pointer select-none hover:bg-muted/50',
             isFixed && 'sticky bg-background z-10',
             isFixed === 'left' && 'left-0',
-            isFixed === 'right' && 'right-0'
+            isFixed === 'right' && 'right-0',
+            isLastLeftFixed &&
+              "after:absolute after:top-0 after:right-0 after:bottom-0 after:w-[10px] after:translate-x-full after:bg-gradient-to-r after:from-black/5 after:to-transparent after:pointer-events-none after:content-['']",
+            isFirstRightFixed &&
+              "after:absolute after:top-0 after:left-0 after:bottom-0 after:w-[10px] after:-translate-x-full after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none after:content-['']"
           )}
           style={{
             width: column.width,
@@ -550,15 +557,23 @@ const Table = <T extends Record<string, any> = any>({
         ? column.render(value, record, index)
         : value;
 
+      const isLastLeftFixed =
+        isFixed === 'left' && colIndex === cols.length - 1;
+      const isFirstRightFixed = isFixed === 'right' && colIndex === 0;
+
       return (
         <TableCell
           key={columnKey}
           className={cn(
             getAlignClass(column.align),
             column.ellipsis && 'truncate max-w-0',
-            isFixed && 'sticky bg-background z-10',
+            isFixed && 'sticky bg-card z-10',
             isFixed === 'left' && 'left-0',
-            isFixed === 'right' && 'right-0'
+            isFixed === 'right' && 'right-0',
+            isLastLeftFixed &&
+              "after:absolute after:top-0 after:right-0 after:bottom-0 after:w-[10px] after:translate-x-full after:bg-gradient-to-r after:from-black/5 after:to-transparent after:pointer-events-none after:content-['']",
+            isFirstRightFixed &&
+              "after:absolute after:top-0 after:left-0 after:bottom-0 after:w-[10px] after:-translate-x-full after:bg-gradient-to-l after:from-black/5 after:to-transparent after:pointer-events-none after:content-['']"
           )}
           style={{
             ...(isFixed === 'left' && { left: rowSelection ? 48 : 0 }),
