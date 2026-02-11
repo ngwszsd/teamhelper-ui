@@ -55,7 +55,10 @@ export interface EnhancedUploadProps {
   defaultFileList?: UploadFile[];
 
   // 事件
-  beforeUpload?: (file: File, fileList: File[]) => boolean | Promise<boolean>;
+  beforeUpload?: (
+    file: File,
+    fileList: File[]
+  ) => boolean | File | Promise<boolean | File>;
   onChange?: (info: UploadChangeInfo) => void;
   onRemove?: (file: UploadFile) => boolean | Promise<boolean>;
   onPreview?: (file: UploadFile) => void;
@@ -288,12 +291,17 @@ const InternalUpload = ({
     const passList: File[] = [];
     for (const f of sliced) {
       let pass = true;
+      let fileToAdd = f;
       if (beforeUpload) {
         // eslint-disable-next-line no-await-in-loop
         const res = await beforeUpload(f, sliced);
-        pass = res !== false;
+        if (res === false) {
+          pass = false;
+        } else if (res instanceof File) {
+          fileToAdd = res;
+        }
       }
-      if (pass) passList.push(f);
+      if (pass) passList.push(fileToAdd);
     }
     if (!passList.length) return;
 
