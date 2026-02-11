@@ -51,15 +51,21 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
   className,
   showMarkText,
   showMarkDot,
+  thumbChildren,
+  thumbClassName,
   ...props
 }) => {
   const [internalValue, setInternalValue] = React.useState<number[]>(
     defaultValue || (range ? [0, 0] : [0])
   );
 
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [isHovering, setIsHovering] = React.useState(false);
+
   const currentValue = value !== undefined ? value : internalValue;
 
   const handleValueChange = (newValue: number[]) => {
+    setIsDragging(true);
     if (value === undefined) {
       setInternalValue(newValue);
     }
@@ -67,7 +73,51 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
   };
 
   const handleValueCommit = (newValue: number[]) => {
+    setIsDragging(false);
     onAfterChange?.(newValue);
+  };
+
+  const renderThumbWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (!tooltip) return children;
+
+    // 劫持 Thumb 的事件以控制 Hover 状态
+    return React.isValidElement(children)
+      ? React.cloneElement(children as React.ReactElement<any>, {
+          onMouseEnter: (e: React.MouseEvent) => {
+            setIsHovering(true);
+            (children as any).props.onMouseEnter?.(e);
+          },
+          onMouseLeave: (e: React.MouseEvent) => {
+            setIsHovering(false);
+            (children as any).props.onMouseLeave?.(e);
+          },
+        })
+      : children;
+  };
+
+  const renderTooltip = () => {
+    if (!tooltip) return null;
+
+    const { formatter, open, placement = 'top' } = tooltip;
+    const val = currentValue[0];
+    const content = formatter ? formatter(val) : val;
+    const isOpen = open ?? (isDragging || isHovering);
+
+    if (!isOpen) return null;
+
+    return (
+      <div
+        className={cn(
+          'absolute z-50 flex items-center justify-center whitespace-nowrap rounded-md border bg-card px-2 py-1 text-xs text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95',
+          placement === 'top' && '-top-8 left-1/2 -translate-x-1/2',
+          placement === 'bottom' && '-bottom-8 left-1/2 -translate-x-1/2',
+          placement === 'left' && 'right-full mr-2 top-1/2 -translate-y-1/2',
+          placement === 'right' && 'left-full ml-2 top-1/2 -translate-y-1/2'
+        )}
+      >
+        {content}
+      </div>
+    );
   };
 
   return (
@@ -81,6 +131,14 @@ export const EnhancedSlider: React.FC<EnhancedSliderProps> = ({
         step={step || 1}
         disabled={disabled}
         orientation={vertical ? 'vertical' : 'horizontal'}
+        thumbChildren={
+          <>
+            {thumbChildren}
+            {renderTooltip()}
+          </>
+        }
+        renderThumb={renderThumbWrapper}
+        thumbClassName={cn(thumbClassName, 'relative')} // 确保 Tip 相对于 Thumb 定位
         className={cn(
           'relative flex w-full touch-none select-none items-center',
           vertical && 'h-full flex-col',

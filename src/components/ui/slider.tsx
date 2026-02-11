@@ -11,6 +11,7 @@ const Slider = React.forwardRef<
     thumbClassName?: string;
     markContent?: React.ReactNode;
     thumbChildren?: React.ReactNode;
+    renderThumb?: (props: { children: React.ReactNode }) => React.ReactNode;
   }
 >(
   (
@@ -21,31 +22,12 @@ const Slider = React.forwardRef<
       thumbClassName,
       markContent,
       thumbChildren,
+      renderThumb,
       ...props
     },
     ref
-  ) => (
-    <SliderPrimitive.Root
-      ref={ref}
-      className={cn(
-        'relative flex w-full touch-none select-none items-center',
-        className
-      )}
-      {...props}
-    >
-      <SliderPrimitive.Track
-        className={cn(
-          'relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20',
-          trackClassName
-        )}
-      >
-        <SliderPrimitive.Range
-          className={cn('absolute h-full bg-primary', rangeClassName)}
-        />
-      </SliderPrimitive.Track>
-
-      {markContent}
-
+  ) => {
+    const thumb = (
       <SliderPrimitive.Thumb
         className={cn(
           'block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
@@ -54,8 +36,34 @@ const Slider = React.forwardRef<
       >
         {thumbChildren}
       </SliderPrimitive.Thumb>
-    </SliderPrimitive.Root>
-  )
+    );
+
+    return (
+      <SliderPrimitive.Root
+        ref={ref}
+        className={cn(
+          'relative flex w-full touch-none select-none items-center',
+          className
+        )}
+        {...props}
+      >
+        <SliderPrimitive.Track
+          className={cn(
+            'relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20',
+            trackClassName
+          )}
+        >
+          <SliderPrimitive.Range
+            className={cn('absolute h-full bg-primary', rangeClassName)}
+          />
+        </SliderPrimitive.Track>
+
+        {markContent}
+
+        {renderThumb ? renderThumb({ children: thumb }) : thumb}
+      </SliderPrimitive.Root>
+    );
+  }
 );
 Slider.displayName = SliderPrimitive.Root.displayName;
 
