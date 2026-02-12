@@ -57,6 +57,11 @@ export interface TipsModalProps extends Omit<NiceModalHocProps, 'id'> {
    * 倒计时时长（秒）
    */
   countdown?: number;
+
+  /**
+   * 是否允许点击遮罩关闭
+   */
+  maskClosable?: boolean;
 }
 
 const TipsModal: FC<TipsModalProps> = ({
@@ -75,6 +80,7 @@ const TipsModal: FC<TipsModalProps> = ({
   classNames,
   footerBtnPosition = 'right',
   countdown = 0,
+  maskClosable = true,
 }) => {
   const locale = useLocale();
   const modal = useModal();
@@ -172,6 +178,11 @@ const TipsModal: FC<TipsModalProps> = ({
       }}
     >
       <DialogContent
+        onInteractOutside={(e) => {
+          if (!maskClosable) {
+            e.preventDefault();
+          }
+        }}
         className={cn(
           `max-h-[90vh] flex flex-col`,
           'min-w-[400px] w-auto p-0 gap-0',
