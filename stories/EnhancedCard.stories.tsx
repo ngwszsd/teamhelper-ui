@@ -24,6 +24,9 @@ const meta: Meta<typeof Card> = {
       options: ['default', 'small'],
       description: '卡片尺寸',
     },
+    headerClassName: { control: 'text', description: '头部类名' },
+    contentClassName: { control: 'text', description: '内容区类名' },
+    footerClassName: { control: 'text', description: '底部类名' },
   },
 };
 
@@ -128,5 +131,22 @@ export const WithActions: Story = {
       </Button>,
     ],
     className: 'w-[350px]',
+  },
+};
+
+export const WithCustomStyles: Story = {
+  args: {
+    title: 'Custom Styled Card',
+    extra: <span className="text-blue-500">Extra</span>,
+    headerClassName: 'bg-blue-50 border-b border-blue-100',
+    contentClassName: 'bg-gray-50 p-6',
+    footerClassName: 'bg-blue-50 border-t border-blue-100',
+    actions: [
+      <Button variant="ghost" size="sm" className="w-full text-blue-600">
+        Action
+      </Button>,
+    ],
+    children: <p>Card with custom styles for header, content and footer.</p>,
+    className: 'w-[350px] border-blue-100',
   },
 };

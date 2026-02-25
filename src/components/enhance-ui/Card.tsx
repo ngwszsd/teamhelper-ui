@@ -20,6 +20,9 @@ export interface EnhancedCardProps extends Omit<
   bordered?: boolean;
   size?: 'default' | 'small';
   loading?: boolean;
+  headerClassName?: string;
+  contentClassName?: string;
+  footerClassName?: string;
 }
 
 const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
@@ -34,6 +37,9 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
       bordered = true,
       size = 'default',
       loading = false,
+      headerClassName,
+      contentClassName,
+      footerClassName,
       children,
       ...props
     },
@@ -54,7 +60,9 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
         {cover && <div className="rounded-t-xl overflow-hidden">{cover}</div>}
 
         {(title || extra) && (
-          <BaseCardHeader className={cn(size === 'small' && 'p-4')}>
+          <BaseCardHeader
+            className={cn(size === 'small' && 'p-4', headerClassName)}
+          >
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 {title && (
@@ -74,7 +82,8 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
           <BaseCardContent
             className={cn(
               size === 'small' && 'p-4 pt-0',
-              !title && !extra && size === 'small' && 'pt-4'
+              !title && !extra && size === 'small' && 'pt-4',
+              contentClassName
             )}
           >
             {loading ? (
@@ -92,7 +101,8 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
           <BaseCardFooter
             className={cn(
               'flex justify-end space-x-2',
-              size === 'small' && 'p-4 pt-0'
+              size === 'small' && 'p-4 pt-0',
+              footerClassName
             )}
           >
             {actions.map((action, index) => (

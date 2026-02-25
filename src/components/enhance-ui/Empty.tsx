@@ -27,7 +27,7 @@ const EmptyImages = {
     </div>
   ),
   PRESENTED_IMAGE_OPEN: (
-    <div className="flex items-center justify-center w-12 h-12 bg-muted rounded-xl">
+    <div className="flex items-center justify-center w-12 h-12 bg-foreground/6 rounded-xl">
       <PackageOpen className="w-6 h-6 text-foreground" />
     </div>
   ),
