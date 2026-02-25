@@ -687,7 +687,7 @@ const Table = <T extends Record<string, any> = any>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length + (rowSelection ? 1 : 0)}
-                    className="text-center py-8"
+                    className="text-center py-8!"
                   >
                     {mergedLocale.emptyText || (
                       <Empty description={mergedLocale.emptyText as string} />
