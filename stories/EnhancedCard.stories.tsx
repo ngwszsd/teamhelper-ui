@@ -25,6 +25,10 @@ const meta: Meta<typeof Card> = {
       description: '卡片尺寸',
     },
     headerClassName: { control: 'text', description: '头部类名' },
+    headerWrapperClassName: { control: 'text', description: '头部包装类名' },
+    titleWrapperClassName: { control: 'text', description: '标题包装类名' },
+    titleClassName: { control: 'text', description: '标题类名' },
+    extraClassName: { control: 'text', description: '额外内容类名' },
     contentClassName: { control: 'text', description: '内容区类名' },
     footerClassName: { control: 'text', description: '底部类名' },
   },
@@ -148,5 +152,17 @@ export const WithCustomStyles: Story = {
     ],
     children: <p>Card with custom styles for header, content and footer.</p>,
     className: 'w-[350px] border-blue-100',
+  },
+};
+
+export const WithDetailedCustomStyles: Story = {
+  args: {
+    title: 'Detailed Custom Styled Card',
+    extra: <span>Extra Info</span>,
+    headerWrapperClassName: 'flex-row-reverse bg-gray-100 p-2 rounded',
+    titleClassName: 'text-red-500 font-bold',
+    extraClassName: 'text-green-500 italic',
+    children: <p>Card with detailed custom styles for header elements.</p>,
+    className: 'w-[350px]',
   },
 };

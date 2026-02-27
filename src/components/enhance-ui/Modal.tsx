@@ -34,6 +34,7 @@ export interface ModalProps {
   isShowCancel?: boolean;
   isShowOk?: boolean;
   delay?: number;
+  autoFocus?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -58,6 +59,7 @@ export const Modal: React.FC<ModalProps> = ({
   isShowCancel = true,
   isShowOk = true,
   delay = 300,
+  autoFocus = true,
 }) => {
   const locale = useLocale();
   const [okLoading, setOkLoading] = React.useState(false);
@@ -128,6 +130,11 @@ export const Modal: React.FC<ModalProps> = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
+        onOpenAutoFocus={(e) => {
+          if (!autoFocus) {
+            e.preventDefault();
+          }
+        }}
         className={cn(
           `max-h-[90vh] flex flex-col p-0 `,
           className,

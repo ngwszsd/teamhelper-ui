@@ -21,6 +21,10 @@ export interface EnhancedCardProps extends Omit<
   size?: 'default' | 'small';
   loading?: boolean;
   headerClassName?: string;
+  headerWrapperClassName?: string;
+  titleWrapperClassName?: string;
+  titleClassName?: string;
+  extraClassName?: string;
   contentClassName?: string;
   footerClassName?: string;
 }
@@ -38,6 +42,10 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
       size = 'default',
       loading = false,
       headerClassName,
+      headerWrapperClassName,
+      titleWrapperClassName,
+      titleClassName,
+      extraClassName,
       contentClassName,
       footerClassName,
       children,
@@ -63,17 +71,29 @@ const Card = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
           <BaseCardHeader
             className={cn(size === 'small' && 'p-4', headerClassName)}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
+            <div
+              className={cn(
+                'flex items-center justify-between',
+                headerWrapperClassName
+              )}
+            >
+              <div className={cn('flex-1', titleWrapperClassName)}>
                 {title && (
                   <BaseCardTitle
-                    className={cn(size === 'small' && 'text-base')}
+                    className={cn(
+                      size === 'small' && 'text-base',
+                      titleClassName
+                    )}
                   >
                     {title}
                   </BaseCardTitle>
                 )}
               </div>
-              {extra && <div className="shrink-0 ml-4">{extra}</div>}
+              {extra && (
+                <div className={cn('shrink-0 ml-4', extraClassName)}>
+                  {extra}
+                </div>
+              )}
             </div>
           </BaseCardHeader>
         )}
