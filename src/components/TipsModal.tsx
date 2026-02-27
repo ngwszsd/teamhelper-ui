@@ -178,6 +178,7 @@ const TipsModal: FC<TipsModalProps> = ({
       }}
     >
       <DialogContent
+        aria-describedby={undefined}
         onInteractOutside={(e) => {
           if (!maskClosable) {
             e.preventDefault();

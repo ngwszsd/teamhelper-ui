@@ -129,6 +129,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
+        aria-describedby={undefined}
         onInteractOutside={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           if (!autoFocus) {
