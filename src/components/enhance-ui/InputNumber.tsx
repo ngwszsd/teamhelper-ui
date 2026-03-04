@@ -232,13 +232,11 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     }, [currentValue, max]);
 
     const isDisabledDown = useMemo(() => {
-      let bool = true;
-      if (min !== Number.MIN_SAFE_INTEGER) {
-        if (currentValue !== null && currentValue !== undefined) {
-          bool = currentValue <= min;
-        }
-      }
-      return bool;
+      return (
+        currentValue !== null &&
+        currentValue !== undefined &&
+        currentValue <= min
+      );
     }, [currentValue, min]);
 
     return (
