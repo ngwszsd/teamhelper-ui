@@ -83,7 +83,7 @@ const InternalInput = React.forwardRef<HTMLInputElement, InternalInputProps>(
         />
         <span
           ref={suffixRef}
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground"
+          className="pointer-events-none absolute right-3 top-1/2! -translate-y-1/2! text-xs text-muted-foreground"
         >
           {valueLength}
           {props.maxLength ? ` / ${props.maxLength}` : null}

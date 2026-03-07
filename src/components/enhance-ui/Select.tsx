@@ -331,7 +331,7 @@ export const EnhancedSelect = <T extends string | number = string | number>(
       ) : (
         <ChevronDown
           className={cn(
-            'absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground',
+            'absolute right-2 top-1/2! -translate-y-1/2! h-4 w-4 text-muted-foreground',
             disabled && 'cursor-not-allowed text-muted-foreground/50'
           )}
           onClick={(e) => {
