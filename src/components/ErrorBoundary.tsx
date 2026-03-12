@@ -11,6 +11,37 @@ interface GlobalErrorBoundaryState {
   errorInfo: React.ErrorInfo | null;
 }
 
+const getErrorMessage = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  if (value instanceof Error) {
+    return value.message;
+  }
+
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'message' in value &&
+    typeof (value as { message?: unknown }).message === 'string'
+  ) {
+    return (value as { message: string }).message;
+  }
+
+  return '';
+};
+
+const isResizeObserverLoopError = (value: unknown): boolean => {
+  const message = getErrorMessage(value);
+
+  return (
+    message.includes(
+      'ResizeObserver loop completed with undelivered notifications'
+    ) || message.includes('ResizeObserver loop limit exceeded')
+  );
+};
+
 export class ErrorBoundary extends Component<
   GlobalErrorBoundaryProps,
   GlobalErrorBoundaryState
@@ -42,13 +73,20 @@ export class ErrorBoundary extends Component<
   }
 
   handleGlobalError = (event: ErrorEvent) => {
-    console.error('Global error caught:', event.error || event.message);
-    if (event.message.includes('ResizeObserver loop')) {
+    const message = event.message || getErrorMessage(event.error);
+
+    if (
+      isResizeObserverLoopError(message) ||
+      isResizeObserverLoopError(event.error)
+    ) {
+      event.preventDefault();
       return;
     }
+
+    console.error('Global error caught:', event.error || event.message);
     this.setState({
       hasError: true,
-      error: event.error || new Error(event.message),
+      error: event.error || new Error(message || 'Unknown global error'),
     });
   };
   componentWillUnmount() {
@@ -60,8 +98,19 @@ export class ErrorBoundary extends Component<
   }
 
   handlePromiseRejection = (event: PromiseRejectionEvent) => {
+    if (isResizeObserverLoopError(event.reason)) {
+      return;
+    }
+
+    const rejectionError =
+      event.reason instanceof Error
+        ? event.reason
+        : new Error(
+            getErrorMessage(event.reason) || 'Unhandled promise rejection'
+          );
+
     console.error('Unhandled promise rejection:', event.reason);
-    this.setState({ hasError: true, error: event.reason });
+    this.setState({ hasError: true, error: rejectionError });
   };
 
   handleReset = () => {
