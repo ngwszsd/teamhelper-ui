@@ -98,17 +98,25 @@ const TimelineItem: React.FC<
       )}
       style={style}
     >
-      {isShowLine ? (
+      <div className="relative col-start-1 row-start-1 row-span-2 self-stretch">
+        {isShowLine ? (
+          <div
+            className="pointer-events-none absolute bottom-0 z-0 h-full w-px -translate-x-1/2 bg-border"
+            style={{
+              left: 'var(--timeline-line-left, 50%)',
+              top: 'var(--timeline-line-top)',
+            }}
+          />
+        ) : null}
         <div
-          className="pointer-events-none absolute top-0 bottom-0 z-0 w-px bg-border h-full"
+          className="absolute z-10 -translate-x-1/2"
           style={{
-            left: 'var(--timeline-line-left)',
-            top: 'var(--timeline-line-top)',
+            left: 'var(--timeline-line-left, 50%)',
+            top: 'var(--timeline-dot-top, var(--timeline-line-top))',
           }}
-        />
-      ) : null}
-      <div className="relative flex items-center justify-center col-start-1 row-start-1">
-        <Dot color={color} dot={dot} />
+        >
+          <Dot color={color} dot={dot} />
+        </div>
       </div>
       <div className="text-sm text-muted-foreground text-left col-start-2 row-start-1">
         {leftCol}
@@ -129,7 +137,7 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   itemClassName,
   style,
   children,
-  lineLeft = 9.5,
+  lineLeft,
   lineTop = 8,
   isShowLastLine = true,
 }) => {
@@ -170,8 +178,11 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
       className={cn('relative', className)}
       style={{
         ...(style || {}),
-        ['--timeline-line-left' as any]: `${lineLeft}px`,
         ['--timeline-line-top' as any]: `${lineTop}px`,
+        ['--timeline-dot-top' as any]: `${lineTop}px`,
+        ...(typeof lineLeft === 'number'
+          ? { ['--timeline-line-left' as any]: `${lineLeft}px` }
+          : {}),
       }}
       role="list"
     >
