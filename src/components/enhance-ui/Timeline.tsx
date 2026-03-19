@@ -109,7 +109,7 @@ const TimelineItem: React.FC<
           />
         ) : null}
         <div
-          className="absolute z-10 -translate-x-1/2"
+          className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
           style={{
             left: 'var(--timeline-line-left, 50%)',
             top: 'var(--timeline-dot-top, var(--timeline-line-top))',
