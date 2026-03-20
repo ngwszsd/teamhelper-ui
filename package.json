@@ -5,13 +5,12 @@
   "author": "geekbook9533@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web"
+    "url": "https://github.com/ngwszsd/teamhelper-ui/issues"
   },
-  "homepage": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web",
+  "homepage": "https://github.com/ngwszsd/teamhelper-ui",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.teamhelper.cn/teamhelper-v4/front-end/teamhelper-v4-web.git",
-    "directory": "packages/ui"
+    "url": "git+https://github.com/ngwszsd/teamhelper-ui.git"
   },
   "keywords": [
     "react",
