@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '../../lib/utils';
 import { useLocale } from '../ConfigProvider';
 
@@ -27,7 +28,17 @@ export interface EnhancedTimelineProps {
   lineLeft?: number;
   lineTop?: number;
   isShowLastLine?: boolean;
+  /** 启用虚拟滚动（默认 false）。启用时需确保容器有固定高度。 */
+  virtual?: boolean;
+  /** 虚拟滚动预估项目高度（默认 80） */
+  estimatedItemSize?: number;
+  /** 虚拟滚动可视区外缓冲项数（默认 5） */
+  overscan?: number;
 }
+
+/* ------------------------------------------------------------------ */
+/*  共享：颜色映射 & 圆点                                              */
+/* ------------------------------------------------------------------ */
 
 const colorClassMap: Record<string, string> = {
   blue: 'bg-blue-500',
@@ -63,40 +74,37 @@ function Dot({
   );
 }
 
-const TimelineItem: React.FC<
-  TimelineItemProps & {
-    mode?: TimelineMode;
-    index?: number;
-    isShowLine?: boolean;
-  }
-> = ({
-  children,
-  label,
-  color,
-  dot,
-  position,
-  className,
-  style,
-  mode = 'left',
-  index = 0,
-  isShowLine,
-}) => {
-  // 优先使用显式的 position；否则根据 mode 判断，alternate 模式按索引奇偶交替
-  const isRight = position
-    ? position === 'right'
+/* ------------------------------------------------------------------ */
+/*  共享：单条 item 的 grid 内容（dot/line + label + children）          */
+/* ------------------------------------------------------------------ */
+
+/** item 间距，对应非虚拟模式下的 mb-3（12px） */
+const ITEM_GAP = 12;
+
+interface ItemGridProps {
+  item: TimelineItemProps;
+  mode: TimelineMode;
+  index: number;
+  isShowLine: boolean;
+  className?: string;
+}
+
+function ItemGrid({ item, mode, index, isShowLine, className }: ItemGridProps) {
+  const isRight = item.position
+    ? item.position === 'right'
     : mode === 'right' || (mode === 'alternate' && index % 2 === 1);
 
-  const leftCol = isRight ? children : label;
-  const rightCol = isRight ? label : children;
+  const leftCol = isRight ? item.children : item.label;
+  const rightCol = isRight ? item.label : item.children;
 
   return (
-    <li
+    <div
       className={cn(
         'relative grid grid-cols-[1.25rem_1fr] grid-rows-[auto_auto] gap-x-3 gap-y-1 items-center',
-        'mb-3',
-        className
+        className,
+        item.className,
       )}
-      style={style}
+      style={item.style}
     >
       <div className="relative col-start-1 row-start-1 row-span-2 self-stretch">
         {isShowLine ? (
@@ -117,7 +125,7 @@ const TimelineItem: React.FC<
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <Dot color={color} dot={dot} />
+          <Dot color={item.color} dot={item.dot} />
         </div>
       </div>
       <div className="text-sm text-muted-foreground text-left col-start-2 row-start-1">
@@ -126,9 +134,161 @@ const TimelineItem: React.FC<
       <div className="text-sm text-left col-start-2 row-start-2">
         {rightCol}
       </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  CSS 变量                                                            */
+/* ------------------------------------------------------------------ */
+
+function buildCssVars(
+  lineTop: number,
+  lineLeft?: number,
+): React.CSSProperties {
+  return {
+    ['--timeline-line-top' as string]: `${lineTop}px`,
+    ['--timeline-dot-top' as string]: `${lineTop}px`,
+    ...(typeof lineLeft === 'number'
+      ? { ['--timeline-line-left' as string]: `${lineLeft}px` }
+      : {}),
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  非虚拟渲染                                                          */
+/* ------------------------------------------------------------------ */
+
+const TimelineItem: React.FC<
+  TimelineItemProps & {
+    mode?: TimelineMode;
+    index?: number;
+    isShowLine?: boolean;
+  }
+> = ({
+  children,
+  label,
+  color,
+  dot,
+  position,
+  className,
+  style,
+  mode = 'left',
+  index = 0,
+  isShowLine,
+}) => {
+  const item: TimelineItemProps = {
+    children,
+    label,
+    color,
+    dot,
+    position,
+    className: undefined,
+    style,
+  };
+
+  return (
+    <li className={cn('mb-3', className)}>
+      <ItemGrid
+        item={item}
+        mode={mode}
+        index={index}
+        isShowLine={!!isShowLine}
+      />
     </li>
   );
 };
+
+/* ------------------------------------------------------------------ */
+/*  虚拟滚动渲染                                                        */
+/* ------------------------------------------------------------------ */
+
+interface TimelineVirtualProps {
+  list: TimelineItemProps[];
+  mode: TimelineMode;
+  className?: string;
+  itemClassName?: string;
+  style?: React.CSSProperties;
+  cssVars: React.CSSProperties;
+  isShowLastLine: boolean;
+  estimatedItemSize: number;
+  overscan: number;
+}
+
+const TimelineVirtual: React.FC<TimelineVirtualProps> = ({
+  list,
+  mode,
+  className,
+  itemClassName,
+  style,
+  cssVars,
+  isShowLastLine,
+  estimatedItemSize,
+  overscan,
+}) => {
+  const parentRef = React.useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: list.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => estimatedItemSize,
+    overscan,
+    gap: ITEM_GAP,
+    measureElement: (el) =>
+      el?.getBoundingClientRect().height ?? estimatedItemSize,
+  });
+
+  return (
+    <div
+      ref={parentRef}
+      className={cn('relative overflow-auto', className)}
+      style={{ ...style, ...cssVars }}
+      role="list"
+    >
+      <div
+        style={{
+          height: virtualizer.getTotalSize(),
+          width: '100%',
+          position: 'relative',
+        }}
+      >
+        {virtualizer.getVirtualItems().map((vi) => {
+          const it = list[vi.index];
+          const idx = vi.index;
+          const itemMode: TimelineMode = it.position
+            ? it.position === 'right'
+              ? 'right'
+              : 'left'
+            : mode;
+          const isShowLine = isShowLastLine || idx < list.length - 1;
+
+          return (
+            <div
+              key={vi.key}
+              ref={virtualizer.measureElement}
+              data-index={idx}
+              role="listitem"
+              className="absolute top-0 left-0 w-full"
+              style={{ transform: `translateY(${vi.start}px)` }}
+            >
+              <ItemGrid
+                item={it}
+                mode={itemMode}
+                index={idx}
+                isShowLine={isShowLine}
+                className={itemClassName}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/*  入口组件                                                            */
+/* ------------------------------------------------------------------ */
 
 const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   items,
@@ -142,6 +302,9 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
   lineLeft,
   lineTop = 8,
   isShowLastLine = true,
+  virtual = false,
+  estimatedItemSize = 80,
+  overscan = 5,
 }) => {
   const locale = useLocale();
   const childrenItems: TimelineItemProps[] = React.Children.toArray(children)
@@ -175,17 +338,28 @@ const TimelineBase: React.FC<EnhancedTimelineProps> = ({
     list = [...list].reverse();
   }
 
+  const cssVars = buildCssVars(lineTop, lineLeft);
+
+  if (virtual) {
+    return (
+      <TimelineVirtual
+        list={list}
+        mode={mode}
+        className={className}
+        itemClassName={itemClassName}
+        style={style}
+        cssVars={cssVars}
+        isShowLastLine={isShowLastLine}
+        estimatedItemSize={estimatedItemSize}
+        overscan={overscan}
+      />
+    );
+  }
+
   return (
     <ul
       className={cn('relative', className)}
-      style={{
-        ...(style || {}),
-        ['--timeline-line-top' as any]: `${lineTop}px`,
-        ['--timeline-dot-top' as any]: `${lineTop}px`,
-        ...(typeof lineLeft === 'number'
-          ? { ['--timeline-line-left' as any]: `${lineLeft}px` }
-          : {}),
-      }}
+      style={{ ...(style || {}), ...cssVars }}
       role="list"
     >
       {list.map((it, idx, arr) => (
