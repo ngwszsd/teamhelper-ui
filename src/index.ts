@@ -329,6 +329,7 @@ export { DirectoryTree } from './components/enhance-ui/DirectoryTree';
 export { TreeSelect } from './components/enhance-ui/TreeSelect';
 export { InputNumber } from './components/enhance-ui/InputNumber';
 export { EnhancedTextarea } from './components/enhance-ui/Textarea';
+export { SegmentedControl } from './components/enhance-ui/SegmentedControl';
 
 export {
   openTipsModal,
@@ -388,6 +389,10 @@ export type { DirectoryTreeProps } from './components/enhance-ui/DirectoryTree';
 export type { Crumb } from './components/enhance-ui/Breadcrumb';
 export type { InputNumberProps } from './components/enhance-ui/InputNumber';
 export type { EnhancedTextareaProps } from './components/enhance-ui/Textarea';
+export type {
+  SegmentedControlProps,
+  SegmentedOption,
+} from './components/enhance-ui/SegmentedControl';
 
 // Utilities (Re-export for convenience)
 export { toast, useSonner } from 'sonner';
