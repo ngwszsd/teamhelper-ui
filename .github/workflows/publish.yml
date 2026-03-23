@@ -1,0 +1,87 @@
+name: Publish to npm
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: "publish"
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check version change
+        id: version
+        run: |
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          OLD_VERSION=$(git show HEAD~1:package.json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).version" 2>/dev/null || echo "")
+          if [ "$NEW_VERSION" != "$OLD_VERSION" ] && [ -n "$OLD_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "🚀 Version changed: $OLD_VERSION → $NEW_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "⏭️ Version unchanged, skip publish"
+          fi
+
+      - name: Install pnpm
+        if: steps.version.outputs.changed == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        if: steps.version.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        if: steps.version.outputs.changed == 'true'
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Type check
+        if: steps.version.outputs.changed == 'true'
+        run: pnpm run type-check
+
+      - name: Build
+        if: steps.version.outputs.changed == 'true'
+        run: pnpm run build
+
+      - name: Modify exports for publish
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          node -e "
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          pkg.exports = {
+            '.': { types: './dist/index.d.ts', import: './dist/index.js', require: './dist/index.cjs' },
+            './*': { types: './dist/*.d.ts', import: './dist/*.js', require: './dist/*.cjs' }
+          };
+          if (pkg.publishConfig) delete pkg.publishConfig.exports;
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Publish to npm
+        if: steps.version.outputs.changed == 'true'
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create git tag
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
