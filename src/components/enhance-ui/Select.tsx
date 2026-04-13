@@ -324,14 +324,14 @@ export const EnhancedSelect = <T extends string | number = string | number>(
             handleClear(e);
             setOpen(false);
           }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 hover:opacity-100 transition-opacity flex items-center justify-center z-10 cursor-pointer"
+          className="absolute inset-y-0 right-2 z-10 flex items-center justify-center opacity-50 transition-opacity hover:opacity-100 cursor-pointer"
         >
           <XIcon className="h-3 w-3" />
         </button>
       ) : (
         <ChevronDown
           className={cn(
-            'absolute right-2 top-1/2! -translate-y-1/2! h-4 w-4 text-muted-foreground',
+            'absolute inset-y-0 right-2 my-auto h-4 w-4 text-muted-foreground',
             disabled && 'cursor-not-allowed text-muted-foreground/50'
           )}
           onClick={(e) => {
