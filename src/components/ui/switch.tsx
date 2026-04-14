@@ -27,7 +27,7 @@ function Switch({
     <SwitchPrimitives.Root
       data-slot="switch"
       className={cn(
-        'peer inline-flex h-4.5 w-8 shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+        'peer inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       style={{ backgroundColor: on ? 'var(--primary)' : 'var(--input)' }}
@@ -38,8 +38,8 @@ function Switch({
     >
       <SwitchPrimitives.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block h-3.5 w-3.5 rounded-full bg-background ring-0 transition-transform duration-200"
-        style={{ transform: on ? 'translateX(13px)' : 'translateX(1px)' }}
+        className="pointer-events-none block h-[14px] w-[14px] rounded-full bg-background ring-0 transition-transform duration-200"
+        style={{ transform: on ? 'translateX(16px)' : 'translateX(1px)' }}
       />
     </SwitchPrimitives.Root>
   );
