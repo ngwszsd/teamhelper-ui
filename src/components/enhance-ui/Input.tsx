@@ -9,9 +9,9 @@ import { useLayoutEffect, useRef, useState } from 'react';
 type InputSize = 'small' | 'middle' | 'large';
 
 const sizeClasses: Record<InputSize, string> = {
-  small: 'h-8 px-2 text-sm',
-  middle: 'h-9 px-3 text-base md:text-sm',
-  large: 'h-11 px-4 text-base',
+  small: 'h-8 px-2 text-sm leading-8',
+  middle: 'h-9 px-3 text-base md:text-sm leading-9',
+  large: 'h-11 px-4 text-base leading-11',
 };
 
 export type InternalInputProps = Omit<React.ComponentProps<'input'>, 'size'> & {
