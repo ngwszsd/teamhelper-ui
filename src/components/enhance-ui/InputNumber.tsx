@@ -29,6 +29,7 @@ export interface InputNumberProps extends Omit<
   formatter?: (value: number | undefined) => string;
   parser?: (displayValue: string | undefined) => number | undefined;
   inputClassName?: string;
+  emptyValueOnBlur?: number | null;
 }
 
 const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
@@ -47,6 +48,7 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       onChange,
       formatter,
       parser,
+      emptyValueOnBlur,
       disabled,
       readOnly,
       onBlur,
@@ -155,10 +157,14 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
       onBlur?.(e);
 
-      let parsed = parseValue(inputValue);
+      const isEmptyInput = inputValue === '' || inputValue === '-';
+      let parsed =
+        isEmptyInput && emptyValueOnBlur !== undefined
+          ? emptyValueOnBlur
+          : parseValue(inputValue);
 
       // If invalid input, revert to currentValue
-      if (inputValue !== '' && inputValue !== '-' && parsed === null) {
+      if (!isEmptyInput && parsed === null) {
         parsed = currentValue ?? null;
       }
 
