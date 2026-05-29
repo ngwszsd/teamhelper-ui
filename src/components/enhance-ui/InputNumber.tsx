@@ -165,7 +165,9 @@ const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
       // If invalid input, revert to currentValue
       if (!isEmptyInput && parsed === null) {
-        parsed = currentValue ?? null;
+        parsed =
+          currentValue ??
+          (emptyValueOnBlur !== undefined ? emptyValueOnBlur : null);
       }
 
       let finalVal = updateValue(parsed, true);
