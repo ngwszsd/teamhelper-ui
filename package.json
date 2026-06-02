@@ -80,6 +80,11 @@
     "prepublishOnly": "npm run build",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
+    "mcp:dev": "tsx mcp/server.ts",
+    "mcp:dev:py": "uv run --with mcp python mcp/server.py",
+    "mcp:smoke": "tsx mcp/smoke-test.ts",
+    "mcp:smoke:py": "uv run --with mcp python mcp/smoke-test.py",
+    "mcp:type-check": "tsc --noEmit --project tsconfig.mcp.json",
     "storybook:dev": "storybook dev -p 6077",
     "storybook:build": "storybook build",
     "docs:local": "pnpm storybook:build && live-server ./storybook-static",
@@ -90,6 +95,7 @@
     "react-dom": ">=16.9.0"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@rsbuild/core": "^1.7.2",
     "@rsbuild/plugin-react": "^1.4.3",
     "@rslib/core": "^0.19.2",
@@ -113,8 +119,10 @@
     "storybook-react-rsbuild": "3.2.1",
     "tailwindcss": "^4.1.18",
     "tslib": "^2.8.1",
+    "tsx": "^4.22.3",
     "tw-animate-css": "^1.4.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.3.6"
   },
   "dependencies": {
     "@ebay/nice-modal-react": "1.2.13",
