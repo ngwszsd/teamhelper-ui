@@ -6,6 +6,8 @@ import {
   TooltipTrigger,
 } from '../src/components/ui/tooltip';
 import { Button } from '../src/components/ui/button';
+import { Modal } from '../src/components/enhance-ui/Modal';
+import { useState } from 'react';
 
 const meta: Meta<typeof Tooltip> = {
   title: 'UI/Tooltip',
@@ -80,4 +82,33 @@ export const Controlled: Story = {
       </div>
     </TooltipProvider>
   ),
+};
+
+export const InsideModal: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          Open Modal
+        </Button>
+        <Modal
+          open={open}
+          onOpenChange={setOpen}
+          title="Tooltip Layer"
+          isShowFooter={false}
+        >
+          <Tooltip {...args}>
+            <TooltipTrigger asChild>
+              <Button variant="outline">Hover inside modal</Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={4}>
+              <p>This tooltip should render above the modal.</p>
+            </TooltipContent>
+          </Tooltip>
+        </Modal>
+      </>
+    );
+  },
 };
