@@ -1,6 +1,6 @@
 {
   "name": "@teamhelper/ui",
-  "version": "1.0.31",
+  "version": "1.0.34",
   "description": "Component library for Teamhelper",
   "author": "geekbook9533@gmail.com",
   "license": "MIT",
@@ -63,6 +63,7 @@
     "!dist/**/*.js.map",
     "!dist/build-info.json",
     "!dist/bundle-analysis.json",
+    ".agents",
     "README.md",
     "README_TREE_SHAKING.md"
   ],

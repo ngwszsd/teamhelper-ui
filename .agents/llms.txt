@@ -1,0 +1,25 @@
+# @teamhelper/ui
+
+> TeamHelper 的 React 组件库（已发布 npm，当前 v1.0.31）。基于 React + Radix + Tailwind v4，含 237 个导出。三层组件：基础层（shadcn/Radix 原语，裸名如 Button/Dialog）、增强层（antd 风封装，Enhanced* 前缀）、高级·命令式层（Modal/InputNumber/Tree/Upload/message/toast）。本 .agents 目录随 npm 包发布，供接入方 AI 直接读取。
+
+接入硬前提：① 所有组件从单一入口 `@teamhelper/ui` 导入；② 本包不打包 CSS，宿主须用 Tailwind v4 的 `@source` 扫描 dist；③ 不导出 cn（用 clsx/twMerge）；④ 认清三层同名组件（Button≠EnhancedButton）；⑤ 命令式 message/toast 需根部 Toaster。
+
+入口技能（先读）：[SKILL.md](./SKILL.md) —— 何时用、安装、Tailwind v4 配置、三层命名、反幻觉规则。
+
+## 参考资料
+
+- [API 参考](./references/api-reference.md): 全部 237 个导出按三层 + Provider/工具分组，含完整导出索引附录 —— API 唯一真相源
+- [组件清单](./references/components.md): 选型速查（我要做 X→用哪个）、三层同名组件辨析
+- [接入方式](./references/integration.md): Tailwind v4、ConfigProvider/国际化、Toaster/通知、主题、表格、命令式弹窗、子路径导入（8 配方）
+- [React 示例](./references/examples.md): 按钮+消息、Dialog、命令式弹窗、EnhancedTable、Select、Provider
+- [常见错误](./references/errors.md): 无样式、cn 不存在、同名组件拿错、message 不显示、locale 不生效
+- [最佳实践](./references/best-practices.md): Do / Don't（选层、样式、Provider、类型）
+
+## 关键事实（防幻觉）
+
+- 三层命名：基础(裸名 shadcn) / `Enhanced*`(增强) / 高级裸名+命令式(`Modal`/`message`/`openModal*`)。同名能力并存，不要混用。
+- 不导出 `cn`；类名用 `clsx`/`cx`/`twMerge`/`cva`。
+- 不产出 CSS 文件；样式靠宿主 Tailwind v4 `@source` 扫描本包 dist + 语义色 token（与 @teamhelper/ui-adapter 共用）。
+- Provider：`ConfigProvider`(locale: zhCN/enUS)、`ThemeProvider`、`Toaster`、`ErrorBoundary`。
+- peerDeps：react >=16.9（实际项目 React 19）。
+- 被 `@teamhelper/ui-adapter` 依赖（workspace），otter-flow 当前不依赖本库。
