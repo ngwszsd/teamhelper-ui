@@ -16,6 +16,19 @@
 
 ---
 
+## 🤖 给 AI 编码助手（Claude / Codex / Cursor 等）
+
+本包内置面向大模型的接入文档，安装后位于 `node_modules/@teamhelper/ui/.agents/`。**它不会被 AI 自动读取**，请用以下任一方式让你的 AI 工具读到它：
+
+- 在你项目根目录的 `AGENTS.md`、 `CLAUDE.md` 里加一行：`使用 @teamhelper/ui 前，先读 node_modules/@teamhelper/ui/.agents/SKILL.md`
+- 或在对话里直接引用：`@node_modules/@teamhelper/ui/.agents/SKILL.md`
+
+入口文件 [`.agents/SKILL.md`](./.agents/SKILL.md)：安装、Tailwind v4 配置、三层组件命名（`Button` / `EnhancedButton` / 命令式 `Modal`·`message`）、反幻觉规则；完整 API 见 `.agents/references/`。
+
+> 另有本地 **MCP server**（`mcp/`，`pnpm mcp:dev` 启动），可让 Codex/Cursor/Claude Desktop 运行时查询组件：`list_components` / `get_component` / `get_design_tokens`。
+
+---
+
 ## ✨ 特性
 
 - 🎨 **现代化设计** - 基于 Radix UI，提供无障碍访问和优秀的用户体验
